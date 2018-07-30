@@ -7,12 +7,15 @@
     	select * from club where isbeing = 1
     </select>
     
-    <select id="clubSeasonInfoList" parameterType="java.util.HashMap" resultType="club_season">
+    <select id="clubSeasonRankList" parameterType="java.util.HashMap" resultType="club_season">
     	select C.cname_short, C.emblem, CS.* 
     	from club_season CS, club C 
     	where CS.ccode = C.ccode and CS.seasoncode = #{seasoncode} and CS.lcode = #{lcode} 
     	order by (CS.win*3+CS.draw*1) desc,(CS.c_ggoal-CS.c_lgoal) desc, CS.c_ggoal desc, (CS.win+CS.draw+CS.lose) asc
+    	
     </select>
+    
+    
     
 </mapper>
 

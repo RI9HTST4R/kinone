@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminmapper">
+    
+    <select id="allLeague" resultType="java.lang.String">
+    	select * from league order by lcode
+    </select>
+    
+    <select id="topLeague" resultType="java.lang.String">
+    	select min(lcode) from league
+    </select>
+    
+    <select id="allSeason" resultType="java.lang.String">
+    	select * from season order by seasoncode desc
+    </select>
+    
+    <select id="topSeason" resultType="java.lang.String">
+    	select max(seasoncode) from season
+    </select>
+    
+    <select id="checkClub" parameterType="java.util.List" resultType="java.lang.Integer">
+    	select count(*) from club where ccode in 
+    	<foreach collection="list" item="ccode" open="(" close=")" separator=",">
+    	#{ccode}
+    	</foreach>
+    </select>
+    
+    <insert id="insertMatch" parameterType="java.util.List">
+		<foreach collection="list" item="match" open="INSERT ALL " separator=" " close=" SELECT * FROM DUAL" > 
+         into match values (#{match.mcode}, #{match.lcode}, #{match.mdate}, #{match.mround}, 0, #{match.ccode_home}, #{match.ccode_away}, null, null)
+         into match_detail values (#{match.mcode}, null, null)
+        </foreach>
+	</insert>
+    
+    <!-- <update id="changeMdate" parameterType="java.util.HashMap">
+    
+    </update> -->
+    
+    <select id="allMatchList" resultType="match">
+    	select * from (
+		select rownum rnum, M.* 
+		from (select * from match order by mdate desc) M)
+		where rnum <![CDATA[<]]>= 100
+    </select>
+    
+    
+    <select id="searchMatchList" parameterType="java.util.HashMap" resultType="match">
+    	select * from (
+		select rownum rnum, M.* 
+		from (select * from match order by mdate desc) M)
+		where rnum <![CDATA[<]]>= 100
+    	
+    </select>
+</mapper>
+
+
+
+
+
+
+
+

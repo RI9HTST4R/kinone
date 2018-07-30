@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="matchmapper">
+    
+    <select id="middleDay" parameterType="String" resultType="java.sql.Date">
+    	select mdate
+	  	from (select trunc(mdate) mdate 
+			  from match 
+			  where lcode = #{lcode}
+			  group by trunc(mdate) 
+			  order by abs(trunc(sysdate)-trunc(mdate)) asc, trunc(mdate) desc) 
+		where rownum = 1
+    </select>
+    
+    <select id="7MatchDays" parameterType="java.util.HashMap" resultType="java.sql.Date">
+    	select distinct trunc(mdate) mdate from match
+		where 
+		trunc(mdate) in (select mdate from
+							(select #{middleDay}-trunc(mdate), trunc(mdate) mdate
+							 from match
+							 where #{middleDay}-trunc(mdate) <![CDATA[<]]> 0 and lcode = #{lcode}
+							 group by #{middleDay}-trunc(mdate), trunc(mdate)
+							 order by #{middleDay}-trunc(mdate) desc)
+						 where rownum <![CDATA[<]]>= 3)
+		or trunc(mdate) in (select mdate from
+								(select #{middleDay}-trunc(mdate), trunc(mdate) mdate
+								 from match
+								 where #{middleDay}-trunc(mdate) <![CDATA[>]]>= 0 and lcode = #{lcode}
+								 group by #{middleDay}-trunc(mdate), trunc(mdate)
+								 order by #{middleDay}-trunc(mdate) asc)
+							where rownum <![CDATA[<]]>= 4)
+		order by trunc(mdate)
+    </select>
+    
+    <select id="totalMcountInDay" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    	select count(*) from match where lcode=#{lcode} and trunc(mdate) = #{mdate}
+    </select>
+    
+    <select id="matchInDay" parameterType="java.util.HashMap" resultType="match">
+    	select mcode, lcode, mdate, mround, mstatus, ccode_home, ccode_away, homescore, awayscore, cname_short_h, emblem_h, cname_short_a, emblem_a
+		from (select rownum rnum, V.* 
+			  from (select M.*, Ch.cname_short cname_short_h, Ch.emblem emblem_h, Ca.cname_short cname_short_a, Ca.emblem emblem_a
+					from match M, club Ch, club Ca
+					where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode and M.lcode = #{lcode} and to_char(trunc(M.mdate),'yyyy-mm-dd') = #{day}
+    				order by mdate) V)
+		where rnum <![CDATA[>]]>= #{start} and rnum <![CDATA[<]]>= #{end}
+	</select>
+	
+	<select id="matchList" parameterType="java.lang.String" resultType="match">
+    	select M.*, Ch.cname_short cname_short_h, Ca.cname_short cname_short_a
+		from match M, club Ch, club Ca
+		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode and M.lcode = #{lcode} and to_char(mdate,'yyyy') = #{seasoncode}
+		order by M.mdate desc, mround desc
+    </select>
+    
+</mapper>
+
+
+
+
+
+
+
+

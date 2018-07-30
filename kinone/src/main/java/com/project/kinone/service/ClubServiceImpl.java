@@ -1,5 +1,6 @@
 package com.project.kinone.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,11 +23,13 @@ public class ClubServiceImpl implements ClubServiceInter {
 	}
 	
 	@Override
-	public List<Club_season> getClubSeasonInfoList(int seasoncode, String lcode) {
+	public List<Club_season> getClubSeasonRankList(int seasoncode, String lcode) {
 		HashMap map = new HashMap();
 		map.put("seasoncode", seasoncode);
 		map.put("lcode", lcode);
 		
-		return clubDao.getClubSeasonInfoList(map);
+		return clubDao.getClubSeasonRankList(map);
 	}
+
+	
 }

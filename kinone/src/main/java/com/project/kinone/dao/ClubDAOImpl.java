@@ -22,7 +22,9 @@ public class ClubDAOImpl implements ClubDAOInter {
 	}
 	
 	@Override
-	public List<Club_season> getClubSeasonInfoList(HashMap map) {
-		return session.selectList("clubmapper.clubSeasonInfoList", map);
+	public List<Club_season> getClubSeasonRankList(HashMap map) {
+		return session.selectList("clubmapper.clubSeasonRankList", map);
 	}
+
+	
 }

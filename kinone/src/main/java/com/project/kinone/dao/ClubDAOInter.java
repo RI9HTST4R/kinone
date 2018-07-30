@@ -10,5 +10,5 @@ public interface ClubDAOInter {
 
 	public List<Club> getClubList();
 	
-	public List<Club_season> getClubSeasonInfoList(HashMap map);
+	public List<Club_season> getClubSeasonRankList(HashMap map);
 }
