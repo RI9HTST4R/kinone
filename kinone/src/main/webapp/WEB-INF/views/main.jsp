@@ -747,7 +747,7 @@ a#totalmatch {
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
 									</div>
-									<c:forEach var="amatch" items="${inDayMap['list']}" begin="${begin}" end="${end}" >
+									<c:forEach var="amatch" items="${inDayMap['list']}" begin="${begin}" end="${end}" varStatus="s2">
 									<div class="match <c:if test="${s2.count == 2}">match-center</c:if>">
 										<table class="match-table">
 											<tr class="match-top">

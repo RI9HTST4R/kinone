@@ -15,6 +15,7 @@ import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Player;
+import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
@@ -31,11 +32,14 @@ public class FrontController {
 	@Autowired
 	private MatchServiceImpl matchService;
 	
+	@Autowired
+	private AdminServiceImpl adminService;
+	
 	@RequestMapping(value="/main.do", method=RequestMethod.GET)
 	public String main(Model model) {
 		List<Club> clubList = clubService.getClubList();
 		System.out.println(clubList.toString());
-		int seasoncode = 2018;
+		String seasoncode = adminService.getTopSeason();
 		
 		List<Date> k1MatchDays = matchService.get7MatchDays("K1");
 		System.out.println("K1 리그 매치 날짜 : " + k1MatchDays);

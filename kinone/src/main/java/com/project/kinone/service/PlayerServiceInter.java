@@ -9,5 +9,5 @@ import com.project.kinone.model.Player;
 @Service
 public interface PlayerServiceInter {
 	
-	public List<Player> getPlayerSeasonRankList(int seasoncode, String lcode, String sort);
+	public List<Player> getPlayerSeasonRankList(String seasoncode, String lcode, String sort);
 }

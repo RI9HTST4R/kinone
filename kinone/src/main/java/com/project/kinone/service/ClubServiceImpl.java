@@ -23,7 +23,7 @@ public class ClubServiceImpl implements ClubServiceInter {
 	}
 	
 	@Override
-	public List<Club_season> getClubSeasonRankList(int seasoncode, String lcode) {
+	public List<Club_season> getClubSeasonRankList(String seasoncode, String lcode) {
 		HashMap map = new HashMap();
 		map.put("seasoncode", seasoncode);
 		map.put("lcode", lcode);

@@ -9,5 +9,5 @@ public interface ClubServiceInter {
 
 	public List<Club> getClubList();
 	
-	public List<Club_season> getClubSeasonRankList(int seasoncode, String lcode);
+	public List<Club_season> getClubSeasonRankList(String seasoncode, String lcode);
 }

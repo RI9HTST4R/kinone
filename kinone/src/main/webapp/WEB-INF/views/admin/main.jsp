@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="wrapper">
 		<h1 id="title">시즌 정보</h1>
-		<hr>
+		<hr> 
 		현재 시즌 : ${seasoncode}
 	</div>
 </div>

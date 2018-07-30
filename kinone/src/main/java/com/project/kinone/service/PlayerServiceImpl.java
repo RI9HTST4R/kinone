@@ -16,7 +16,7 @@ public class PlayerServiceImpl implements PlayerServiceInter {
 	private PlayerDAOImpl playerDao;
 	
 	@Override
-	public List<Player> getPlayerSeasonRankList(int seasoncode, String lcode, String sort) {
+	public List<Player> getPlayerSeasonRankList(String seasoncode, String lcode, String sort) {
 		HashMap map = new HashMap();
 		map.put("seasoncode", seasoncode);
 		map.put("lcode", lcode);
