@@ -3,6 +3,8 @@
 
 <mapper namespace="adminmapper">
     
+<!-- #####################################한동준############################################### -->    
+
     <select id="allLeague" resultType="java.lang.String">
     	select * from league order by lcode
     </select>
@@ -67,6 +69,70 @@
 		order by M.mdate desc, mround desc) V)
 		where rnum <![CDATA[<]]>= 200
     </select>
+<!-- ############################################################################################# -->    
+
+
+<!-- ########################################김동환########################################## -->    
+
+	<!-- 관리자 구단 생성 -->
+	<insert id="mngInsertClub">
+		<selectKey resultType="String" keyProperty="ccode"
+			order="BEFORE">
+			select 'K' || to_char(max(to_number(substr(ccode,2)))+1) from club
+		</selectKey>
+		insert into club(ccode, cname, cname_short, emblem, cmanager, isbeing)
+		values (#{ccode}, #{cname}, #{cname_short}, #{emblem}, #{cmanager}, 1)
+	</insert>
+
+	<!-- 관리자 구단 경기장 생성 -->
+	<insert id="mngInsertStadium" parameterType="club">
+		<selectKey resultType="String" keyProperty="ccode"
+			order="BEFORE">
+			select 'K' || to_char(max(to_number(substr(ccode,2)))) from club
+		</selectKey>
+		insert into stadium (ccode, sname, sphoto, capacity)
+		values (#{ccode}, #{sname}, #{sphoto}, #{capacity})
+	</insert>
+
+	<select id="mngClubCont" parameterType="String"
+		resultType="club">
+		select * from club where cname = #{cname}
+	</select>
+
+	<!-- 관리자 구단 삭제 -->
+	<update id="mngDeleteClub" parameterType="String">
+		update club set isbeing = 0 where cname = #{cname}
+	</update>
+
+	<!-- 관리자 경기장 삭제 -->
+	<delete id="mngDeleteStadium" parameterType="String">
+		delete from stadium where ccode = #{ccode}
+	</delete>
+
+	<!-- 상세정보 -->
+	<select id="mngClubDetail" resultType="club" parameterType="String">
+		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, s.sname, s.sphoto, s.capacity
+		from club c, stadium s 
+		where c.ccode = #{ccode} and c.ccode = s.ccode
+	</select>
+	
+	 <!-- 관리자 클럽 수정 -->	
+	 	<!-- 관리자 구단 수정 -->
+		<update id="mngUpdateClub" parameterType="club">
+			update club 
+			set cname=#{cname}, cname_short=#{cname_short}, emblem=#{emblem}, cmanager=#{cmanager}
+			where ccode = #{ccode}
+		</update>
+		
+		<!-- 관리자 경기장 수정 -->
+		<update id="mngUpdateStadium" parameterType="club">
+			update stadium 
+			set sname = #{sname}, sphoto = #{sphoto}, capacity = #{capacity}
+			where ccode = #{ccode}
+		</update>
+		
+<!-- ############################################################################################# -->    
+		
 </mapper>
 
 

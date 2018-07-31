@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 
 @Repository
@@ -14,6 +15,8 @@ public class AdminDAOImpl implements AdminDAOInter{
 
 	@Autowired
 	private SqlSessionTemplate session;
+	
+//////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
 	
 	// 등록된 모든 리그 리스트 가져옴
 	public List<String> getAllLeague() {
@@ -73,10 +76,58 @@ public class AdminDAOImpl implements AdminDAOInter{
 		return session.delete("adminmapper.deleteMatch", mcode);
 	}
 
-	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	
+//////////////////////////////////////////////김 동 환 /////////////////////////////////////////////////////////
 
+	public List<Club> getClubList() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList("clubmapper.clubList");
+	}
+	
+	public void insertClub(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println(mngClub.getCcode());
+		session.insert("adminmapper.mngInsertClub", mngClub);
+	}
+
+	public void insertStadium(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println(mngClub.getCcode());
+		session.insert("adminmapper.mngInsertStadium", mngClub);
+	}
+
+	public Club getClubCont(String cname) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("getClubCont cname"+cname);
+		return session.selectOne("adminmapper.mngClubCont", cname);
+	}
+	
+	public void deleteClub(String cname) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("deleteClub cname " + cname);
+		session.update("adminmapper.mngDeleteClub", cname);
+	}
+	
+	public Club getClubDetail(String ccode) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("getClubDetail ccode" + ccode);
+		return session.selectOne("adminmapper.mngClubDetail", ccode);
+	}
+
+
+	public void updateClub(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub		
+		System.out.println("updateClub " + mngClub.getCcode());
+		session.update("adminmapper.mngUpdateClub", mngClub);
+	}
+
+	public void updateStadium(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		session.update("adminmapper.mngUpdateStadium", mngClub);		
+	}
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 
 	

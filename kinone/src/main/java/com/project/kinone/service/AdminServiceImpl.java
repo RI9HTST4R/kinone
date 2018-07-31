@@ -1,17 +1,18 @@
 package com.project.kinone.service;
 
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.project.kinone.dao.AdminDAOImpl;
-import com.project.kinone.dao.MatchDAOImpl;
+import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.StringToTimestamp;
@@ -23,8 +24,7 @@ public class AdminServiceImpl implements AdminServiceInter{
 	@Autowired
 	private AdminDAOImpl adminDao;
 
-	@Autowired
-	private MatchDAOImpl matchDao;
+//////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
 	
 	// 등록된 모든 리그
 	public List<String> getAllLeague() {
@@ -172,9 +172,71 @@ public class AdminServiceImpl implements AdminServiceInter{
 	}
 
 	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////김 동 환 /////////////////////////////////////////////////////////
 	
+	public List<Club> getMngClubList() throws Exception {
+		// TODO Auto-generated method stub
+		return adminDao.getClubList();
+	}
 
+	public void insertClub(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println(mngClub);
+		adminDao.insertClub(mngClub);
+	}
+
+	public void insertStadium(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		adminDao.insertStadium(mngClub);
+	}
+
+	public int deleteClub(HttpServletResponse response, String cname, String cmanager) throws Exception {
+		// TODO Auto-generated method stub
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		System.out.println("delete service");
+
+		Club mclub = adminDao.getClubCont(cname);
+		int result = 0;
+		if (!mclub.getCmanager().equals(cmanager)) {
+			out.println("<script>");
+			out.println("alert('감독이 일치하지 않다!')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+			out.close();
+
+			return result;
+
+		} else {
+			adminDao.deleteClub(cname);
+
+			result = 1;
+		}
+		return result;
+	}
+
+	public Club getClubDetail(String ccode) throws Exception {
+		// TODO Auto-generated method stub
+		Club mngClub = adminDao.getClubDetail(ccode);
+
+		return mngClub;
+	}
+
+	public void updateClub(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("service입니다." + mngClub.getCcode());
+		adminDao.updateClub(mngClub);
+	}
+
+	public void updateStadium(Club mngClub) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println(mngClub.getCcode());
+		adminDao.updateStadium(mngClub);
+	}
 	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 }
