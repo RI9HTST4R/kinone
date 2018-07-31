@@ -79,7 +79,7 @@ h1#title {
 			}
 			
 			var testarr = [$("#line1").text(), $("#line2").text(), $("#line3").text(), $("#line4").text()];
-			alert(testarr.toString());
+		//	alert(testarr.toString());
 			var temp = 0;
 			for(var idx in testarr){
 				if(idx == 0){
@@ -115,8 +115,8 @@ h1#title {
 			
 			var homearr = homelist.split("\n");
 			var awayarr = awaylist.split("\n");
-			alert(homearr);
-			alert(awayarr);
+		//	alert(homearr);
+		//	alert(awayarr);
 			var concArr = homearr.concat(awayarr);
 
 			// ajax로 배열 데이터를 넘기기 위한 설정
@@ -127,7 +127,7 @@ h1#title {
 				type: "post",
 				dataType: "text",
 				success:function(bool){
-					alert(bool);
+				//	alert(bool);
 					
 					if(bool == "false"){
 						alert("입력하신 데이터에 존재하지 않는 구단이 있습니다.");

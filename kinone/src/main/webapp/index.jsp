@@ -9,7 +9,7 @@
 <title>메인페이지로 이동중입니다.</title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
-	$(window).load(function() {    
+	$(window).load(function() {
 	//	location.href="main.do";
 		location.href = "admin/main.do";
 	});	
@@ -30,13 +30,13 @@
   
 #loading-image {  
 	position: absolute;  
-	top: 50%;  
+	top: 45%;  
 	left: 47%; 
 	z-index: 100;
 }
 h1 {
 	position: absolute;
-	top: 60%;
+	top: 55%;
 	left: 38%;
 	z-index: 100;
 }

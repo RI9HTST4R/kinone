@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.project.kinone.dao.AdminDAOImpl;
 import com.project.kinone.dao.MatchDAOImpl;
@@ -17,7 +18,7 @@ import com.project.kinone.util.StringToTimestamp;
 
 
 @Service
-public class AdminServiceImpl {
+public class AdminServiceImpl implements AdminServiceInter{
 
 	@Autowired
 	private AdminDAOImpl adminDao;
@@ -131,33 +132,43 @@ public class AdminServiceImpl {
 	}
 
 	// 매치 날짜 변경 시 변경될 날짜로 인해 변경되는 mcode를 가진 데이터가 있는지 확인하는 메소드
-	public int mcodeDuplCheck(HashMap<String, String> params) {
-		String mcode = params.get("mcode");
-		String cdate = params.get("cdate");
-		System.out.println("mcode:"+mcode); // 변경하고자 하는 매치 코드
-		System.out.println("cdate:"+cdate); // 변경 될 날짜
-		String cmcode = McodeMaker.convert(mcode, cdate);
-		System.out.println("변경되는 mcode:"+ cmcode);
+	public int mcodeDuplCheck(HashMap params) {
+		String cdate = (String)params.get("cdate");
+		Timestamp cmdate = StringToTimestamp.convert(cdate);
 		
-		params.put("mcode", cmcode);
-		List<Match> matchList = adminDao.searchMatchList(params);
-		int count = matchList.size();
-		return count;
+		String mcode = (String)params.get("mcode");
+		String cmcode = McodeMaker.convert(mcode, cdate);
+		
+		System.out.println("변경되는 mcode:"+ cmcode);
+		System.out.println("변경되는 mdate:"+ cmdate);
+		
+		params.put("cmcode", cmcode);
+		params.put("cmdate", cmdate);
+		// 1이면 변경 불가, 0이면 변경 가능
+		int result = adminDao.mcodeDuplCheck(params);
+		return result;
 	}
 	
 	// 등록된 매치 리스트 페이지에서 매치 날짜를 변경하는 메소드
 	public int changeMdate(String mcode, String cdate) {
 		HashMap map = new HashMap();
 		
-		String cmcode = McodeMaker.convert(mcode, cdate);
-		System.out.println("변경되는 mcode:"+ cmcode);
-		
-		Timestamp mdate = StringToTimestamp.convert(cdate);
+		Timestamp cmdate = StringToTimestamp.convert(cdate);
 		map.put("mcode", mcode);
-		map.put("mdate", mdate);
-		map.put("cmcode", cmcode);
+		map.put("mdate", cmdate);
 		
-		return adminDao.changeMdate(map);
+		int result = adminDao.changeMdate(map);
+		
+		return result;
+	}
+
+	// 등록된 매치 리스트 페이지에서 매치를 삭제하는 메소드
+	public int deleteMatch(String[] array) {
+		int result = 0;
+		for(String mcode : array) {
+			result += adminDao.deleteMatch(mcode);
+		}
+		return result;
 	}
 
 	

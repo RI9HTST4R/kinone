@@ -33,24 +33,39 @@
         </foreach>
 	</insert>
     
-    <!-- <update id="changeMdate" parameterType="java.util.HashMap">
+    <insert id="changeMdate" parameterType="java.util.HashMap">
+    	update match set mdate = #{mdate} where mcode = #{mcode}
+    </insert>
     
-    </update> -->
+    <delete id="deleteMatch" parameterType="java.lang.String">
+    	delete from match where mcode = #{mcode}
+    </delete>
     
     <select id="allMatchList" resultType="match">
-    	select * from (
-		select rownum rnum, M.* 
-		from (select * from match order by mdate desc) M)
-		where rnum <![CDATA[<]]>= 100
+    	select * from
+		(select rownum rnum, V.* from
+		(select M.*, Ch.cname_short cname_short_h, Ca.cname_short cname_short_a
+		from match M, club Ch, club Ca
+		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode
+		order by M.mdate desc, mround desc) V)
+		where rnum <![CDATA[<]]>= 200
     </select>
     
+    <select id="mcodeDuplCheck" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    	select count(*) from match where mcode = #{cmcode} and mdate = #{cmdate}
+    </select>
     
     <select id="searchMatchList" parameterType="java.util.HashMap" resultType="match">
-    	select * from (
-		select rownum rnum, M.* 
-		from (select * from match order by mdate desc) M)
-		where rnum <![CDATA[<]]>= 100
-    	
+    	select * from
+		(select rownum rnum, V.* from
+		(select M.*, Ch.cname_short cname_short_h, Ca.cname_short cname_short_a
+		from match M, club Ch, club Ca
+		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode 
+		<if test="mcode != null">
+			and M.mcode = #{mcode}
+		</if>
+		order by M.mdate desc, mround desc) V)
+		where rnum <![CDATA[<]]>= 200
     </select>
 </mapper>
 

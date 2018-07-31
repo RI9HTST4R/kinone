@@ -48,7 +48,7 @@ public class AdminController {
 	@RequestMapping(value="/admin/insertMatch.do", method=RequestMethod.POST)
 	public String insertMatch(@RequestParam HashMap<String, String> params, Model model) {
 		
-		int result = adminService.insertMatch(params);
+		int result = adminService.insertMatch(params); 
 		
 		String msg = result + "건의 데이터가 입력되었습니다.";
 		String loc = "/kinone/admin/matchList.do";
@@ -74,10 +74,10 @@ public class AdminController {
 	
 	// 매치 리스트 페이지에서 매치 날짜 변경 시 변경될 날짜로 인해 변경되는 mcode를 가진 데이터가 있는지 확인
 	@RequestMapping(value="/admin/mcodeDuplCheck.do", method=RequestMethod.POST)
-	public String mcodeDuplCheck(@RequestParam HashMap<String, String> params, Model model) {
-		
-		int count = adminService.mcodeDuplCheck(params);
-		model.addAttribute("ajax", count);
+	public String mcodeDuplCheck(@RequestParam HashMap params, Model model) {
+		// 모든 조건이 같을 경우 1, 날짜까지 같고 시간이 다를 경우 0, 없을 경우 -1 리턴
+		int result = adminService.mcodeDuplCheck(params);
+		model.addAttribute("ajax", result);
 		return "ajax";
 	}
 	
@@ -93,4 +93,15 @@ public class AdminController {
 		model.addAttribute("ajax", result);
 		return "ajax";
 	}
+	
+	// 등록된 매치 리스트 페이지에서 매치 삭제
+	@RequestMapping(value="/admin/deleteMatch.do", method=RequestMethod.POST)
+	public String deleteMatch(@RequestParam String[] array, Model model) {
+		int total = array.length;
+		int result = adminService.deleteMatch(array);
+		String succrate = result+"/"+total;
+		model.addAttribute("ajax", succrate);
+		return "ajax";
+	}
+	
 }

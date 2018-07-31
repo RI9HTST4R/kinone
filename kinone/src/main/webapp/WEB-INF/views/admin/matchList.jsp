@@ -34,7 +34,9 @@ input[type="text"] {
 	border-radius: 2px;
 	margin: 0 5px;
 }
-
+.table {
+	width: auto;
+}
 .table>tbody>tr>td, .table>tbody>tr>th, 
 .table>tfoot>tr>td, .table>tfoot>tr>th, 
 .table>thead>tr>td, .table>thead>tr>th {
@@ -87,7 +89,6 @@ span.example {
 		var selectedvalue = $("select[name="+name+"]").val();
 	}
 	
-	
 	function cancel(obj){ // 날짜편집 창 끄기
 		var $tr = $(obj).parents().eq(1);
 		$tr.prev().find(".editDate").removeClass("active");
@@ -119,19 +120,19 @@ span.example {
 		var bool = validcheck($cdate);
 		if(bool){
 			var lcode = $("#lcode option:selected").text();
-			alert(league);
+			alert(lcode);
 			var cdate = $.trim($cdate.val());
 			$.ajax({
 				url:"/kinone/admin/mcodeDuplCheck.do",
-				data: {"mcode":mcode, "cdate":cdate, "lcode":lcode},
+				data: {"mcode":mcode, "cdate":cdate},
 				dataType: "text",
 				type: "post",
 				success: function(data){
 					alert(data);
 					var $result = $("#duplresult");
 					$result.empty();
-					var count = parseInt($.trim(data));
-					if(count === 0){
+					var result = parseInt($.trim(data));
+					if(result === 0){
 						$result.addClass("before-m");
 						$result.text("변경가능");
 					}else {
@@ -146,18 +147,71 @@ span.example {
 	function changeDate(obj){ // 매치 날짜 변경
 		var $cdate = $("#cdate");
 		var bool = validcheck($cdate);
+	//	alert(bool);
 		if(bool){
 			var cdate = $.trim($cdate.val());
 			var mcode = $(obj).parents().eq(1).prev().find(".mcode").text();
-			
-			alert(mcode);
+		//	alert(mcode);
 			$.ajax({
 				url:"/kinone/admin/changeMdate.do",
 				data: {"mcode":mcode, "cdate":cdate},
 				dataType: "text",
 				type: "post",
 				success: function(data){
-					alert(data);
+				//	alert(data);
+					if(data == 1){
+						alert("변경 완료!");
+						
+					}else {
+						alert("변경 실패..");
+					}
+					location.reload();
+				}
+			});
+		}
+	}
+	
+	function allcheckbox(bool){ // 전체 체크/체크 해제
+	//	alert(bool);
+		$("input:checkbox[name='match_checkbox']").prop("checked", bool);
+	}
+	
+	function getSelectedCheckboxValue(arr){ // 선택된 체크박스의 value값을 배열에 담는다
+		$("input:checkbox[name='match_checkbox']").each(function(){
+			if(this.checked){
+			//	alert(this.value);
+				arr.push(this.value);
+			}
+		});
+	}
+	
+	function matchDel(mcode){ // 삭제 버튼 눌렀을 때
+		var mcodearr = new Array();
+	//	alert(mcode);
+		if(mcode == undefined){
+			getSelectedCheckboxValue(mcodearr);
+			if(mcodearr.length === 0){
+				alert("삭제하실 매치를 선택하세요.");
+				return;
+			}
+		}else {
+			mcodearr.push(mcode);
+		}
+	//	alert(mcodearr);
+		
+		if(confirm("정말로 삭제하시겠습니까?")){
+			// 배열 형태의 데이터를 넘기기 위한 설정(반드시!)
+			jQuery.ajaxSettings.traditional = true;
+			$.ajax({
+				url: "/kinone/admin/deleteMatch.do",
+				data: {"array":mcodearr},
+				dataType: "text",
+				type: "post",
+				success: function(data){
+				//	alert(data);
+					var resultarr = data.split("/");
+					alert(resultarr[1] + "건의 매치 데이터 중 "+resultarr[0]+"건의 데이터가 삭제되었습니다.");
+					location.reload();
 				}
 			});
 		}
@@ -176,15 +230,17 @@ span.example {
 				'<tr class="match-change">'
 				+'<td></td>'
 				+'<td><span style="color: red; font-weight: bold;"><i class="fas fa-chevron-right"></i> 변경될 날짜</span></td>'
-				+'<td><input type="text" id="cdate" name="cdate" style="width: 130px; padding: 0;"/></td>'
+				+'<td><input type="text" class="form-control" id="cdate" name="cdate" style="width: 130px;"/></td>'
 				+'<td><a class="tbl-btn" onClick="duplcheck(this)">체크</a></td>'
-				+'<td colspan="2"><span id="duplresult"></span></td>'
-				+'<td class="last-td" colspan="2"><a class="tbl-btn" onClick="changeDate(this)">변경</a> <a class="tbl-btn" onClick="cancel(this)">취소</a> '
+				+'<td><span id="duplresult"></span></td>'
+				+'<td class="last-td" colspan="3"><a class="tbl-btn" onClick="changeDate(this)">변경</a> <a class="tbl-btn" onClick="cancel(this)">취소</a> '
 				+'<span class="example">예) 20180804 19:00</span>'
 				+'</td></tr>');
 				$(this).addClass("active");
 			});
 		});
+		
+		
 		
 	})
 </script>
@@ -220,7 +276,7 @@ span.example {
 				<select id="category" name="category" class="form-control">
 					<option value="mcode">매치코드</option>
 					<option value="ccode">구단코드</option>
-					<option value="ccode+mstatus">구단코드+상태</option>
+					<option value="cname_short">구단명</option>
 					<option value="mround">라운드</option>
 					<option value="mstatus">상태</option>
 				</select>
@@ -234,19 +290,20 @@ span.example {
 			<table class="table table-sm">
 				<thead>
 					<tr>
-						<th><input type="checkbox" id="allcheck"/></th>
+						<th><input type="checkbox" id="allcheck"  onChange="allcheckbox(this.checked)"/></th>
 						<th style="width: 190px;">매치 코드</th>
 						<th style="width: 180px;">매치 일시</th>
 						<th style="width: 83px;">홈</th>
 						<th style="width: 83px;">어웨이</th>
 						<th>라운드</th>
 						<th>상태</th>
+						<th style="text-align: right"><a class="tbl-btn" id="multiDel" onClick="matchDel()">선택 삭제</a></th>
 					</tr>
 				</thead>
 				<tbody>
 				<c:forEach var="match" items="${matchList}">
 					<tr class="match-info">
-						<td><c:if test="${match.mstatus == 0}"><input type="checkbox" id="" name=""/></c:if></td>
+						<td><c:if test="${match.mstatus == 0}"><input type="checkbox" name="match_checkbox" value="${match.mcode}"/></c:if></td>
 						<td class="mcode">${match.mcode}</td>
 						<td><fmt:formatDate value="${match.mdate}" pattern="yy/MM/dd HH:mm"/></td>
 						<td>${match.cname_short_h}(${match.ccode_home})</td>
@@ -254,7 +311,7 @@ span.example {
 						<td>${match.mround}</td>
 					<c:if test="${match.mstatus == 0}">
 						<td><span class="before-m">경기전</span></td>
-						<td class="last-td" colspan="2"><a class="tbl-btn editLineup">라인업 편집</a> <a class="tbl-btn editLineup">스코어 편집</a> <a class="tbl-btn editDate">날짜 변경</a> <a class="tbl-btn cancelMatch">삭제</a></td>
+						<td class="last-td" colspan="2"><a class="tbl-btn editLineup">라인업 편집</a> <a class="tbl-btn editLineup">스코어 편집</a> <a class="tbl-btn editDate">날짜 변경</a> <a class="tbl-btn cancelMatch" onClick="matchDel('${match.mcode}')">삭제</a></td>
 					</c:if>
 					<c:if test="${match.mstatus == 1}">
 						<td><a class="after-m" data-toggle="tooltip" data-placement="bottom" title="${match.homescore}:${match.awayscore}">경기종료</a></td>
