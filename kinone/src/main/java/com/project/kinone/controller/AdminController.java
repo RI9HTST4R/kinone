@@ -3,21 +3,33 @@ package com.project.kinone.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.project.kinone.model.ManagerClub;
 import com.project.kinone.model.Match;
+import com.project.kinone.service.AdminClubServiceImpl;
 import com.project.kinone.service.AdminServiceImpl;
 
 @Controller
 public class AdminController {
 	
+////////////////////////////////////////////// 한 동 준 /////////////////////////////////////////////////////////
 	@Autowired
 	private AdminServiceImpl adminService;
+
+	@Autowired
+	private AdminClubServiceImpl mngServ;
+	
 	
 	// 어드민 메인페이지
 	@RequestMapping(value="/admin/main.do", method=RequestMethod.GET)
@@ -93,4 +105,102 @@ public class AdminController {
 		model.addAttribute("ajax", result);
 		return "ajax";
 	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+////////////////////////////////////////////// 김 동 환 /////////////////////////////////////////////////////////
+
+	
+	// 리그 클럽 목록
+	@RequestMapping("/admin/club_view.do")
+	public String clubView(Model model) throws Exception {
+		System.out.println("리그 클럽 목록");
+		List<ManagerClub> mngClubList = mngServ.getMngClubList();
+		System.out.println(mngClubList.toString());
+		model.addAttribute("mngClubList", mngClubList);
+		
+		return "admin/club_view_manager";
+	}
+	
+	// 클럽 생성 페이지
+	@RequestMapping("/admin/create_club.do")
+	public String createClubView() {
+		System.out.println("클럽 생성 페이지");
+		return "admin/create_club_manager";
+	}
+ 
+	// 클럽 생성 페이지에서 클럽 생성
+	@RequestMapping("/admin/create_club_ok.do")
+	public String createClub(ManagerClub mngclub, MultipartHttpServletRequest mRequest, ModelMap model) throws Exception {
+		
+		System.out.println("클럽 생성 서비스");
+		
+		model.addAttribute("emblem", mngclub.getEmblem());
+		model.addAttribute("sphoto", mngclub.getSphoto());
+		
+		mngServ.insertClub(mngclub);
+		mngServ.insertStadium(mngclub);
+		
+		return "redirect:/admin/club_view.do";
+	}
+	
+	// 클럽 삭제 페이지
+	@RequestMapping("/admin/delete_club.do")
+	public String deleteClubView() {
+		System.out.println("클럽 삭제 페이지");
+		return "admin/delete_club_manager";
+	}
+	
+	// 클럽 삭제 페이지에서 클럽 삭제
+	@RequestMapping("/admin/delete_club_ok.do")
+	public String deleteClub(String cname, String cmanager, HttpServletResponse response) throws Exception{
+		System.out.println("클럽 삭제");
+		mngServ.deleteClub(response, cname, cmanager);
+//		mngServ.deleteStadium(ccode,);	//경기장 삭제
+		return "redirect:/admin/club_view.do";
+	}
+	
+	// 클럽정보 상세보기 페이지
+	@RequestMapping("/admin/detail_club.do")
+	public ModelAndView detailView(String ccode,HttpServletResponse response ) throws Exception {
+		System.out.println("클럽 상세 정보 페이지");
+		// 상세정보 가져오기
+		ManagerClub mngC = mngServ.getClubDetail(ccode);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("mngC", mngC);
+		mv.setViewName("admin/detail_club_manager");
+		
+		return mv;
+	}
+	
+	// 클럽 수정 페이지
+	@RequestMapping("/admin/update_club.do")
+	public ModelAndView updateclubView(String ccode, HttpServletResponse response ) throws Exception {
+		
+		System.out.println("클럽 수정 페이지");
+		ManagerClub mngC = mngServ.getClubDetail(ccode);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("mngC", mngC);
+		mv.setViewName("admin/update_club_manager");
+		
+		return mv;
+	}
+	
+	// 클럽 수정 페이지에서 클럽 수정
+	@RequestMapping("/admin/update_club_ok.do")
+	public String updateClub(ManagerClub mngClub) throws Exception{
+		
+		System.out.println("클럽 수정");
+		
+		mngServ.updateClub(mngClub);
+		mngServ.updateStadium(mngClub);
+		
+		return "redirect:/admin/club_view.do";
+		
+	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
 }

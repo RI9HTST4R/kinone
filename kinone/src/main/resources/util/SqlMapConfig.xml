@@ -9,6 +9,7 @@
 		<typeAlias alias="player" type="com.project.kinone.model.Player" />
 		<typeAlias alias="match" type="com.project.kinone.model.Match" />
 		<typeAlias alias="match_detail" type="com.project.kinone.model.Match_detail" />
+		<typeAlias alias="mngClub" type="com.project.kinone.model.ManagerClub"/>
 	</typeAliases>
 
 </configuration>
