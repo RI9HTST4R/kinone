@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<form action ="create_club_ok.do">
+<form action ="/kinone/admin/create_club_ok.do">
     <table>
         <tr>
             <td>클럽명(풀네임)</td>

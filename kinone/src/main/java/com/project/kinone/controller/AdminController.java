@@ -38,7 +38,7 @@ public class AdminController {
 	// 어드민 매치 등록 폼 페이지
 	@RequestMapping(value="/admin/matchForm.do", method=RequestMethod.GET)
 	public String matchForm() {
-		return "admin/matchForm";
+		return "admin/match_Form";
 	}
 	
 	// 매치 등록 폼 페이지에서 입력한 구단을 체크하는 메소드
@@ -77,7 +77,7 @@ public class AdminController {
 		model.addAttribute("leagueList", leagueList);
 		model.addAttribute("seasonList", seasonList);
 		model.addAttribute("matchList", matchList);
-		return "admin/matchList";
+		return "admin/match_List";
 	}
 	
 	// 매치 리스트 페이지에서 매치 날짜 변경 시 변경될 날짜로 인해 변경되는 mcode를 가진 데이터가 있는지 확인
@@ -126,14 +126,14 @@ public class AdminController {
 		System.out.println(mngClubList.toString());
 		model.addAttribute("mngClubList", mngClubList);
 		
-		return "admin/club_view_manager";
+		return "admin/club_view";
 	}
 	
 	// 클럽 생성 페이지
 	@RequestMapping("/admin/create_club.do")
 	public String createClubView() {
 		System.out.println("클럽 생성 페이지");
-		return "admin/create_club_manager";
+		return "admin/club_create";
 	}
  
 	// 클럽 생성 페이지에서 클럽 생성
@@ -155,7 +155,7 @@ public class AdminController {
 	@RequestMapping("/admin/delete_club.do")
 	public String deleteClubView() {
 		System.out.println("클럽 삭제 페이지");
-		return "admin/delete_club_manager";
+		return "admin/club_delete";
 	}
 	
 	// 클럽 삭제 페이지에서 클럽 삭제
@@ -175,7 +175,7 @@ public class AdminController {
 		Club mngC = adminService.getClubDetail(ccode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mngC", mngC);
-		mv.setViewName("admin/detail_club_manager");
+		mv.setViewName("admin/club_detail");
 		
 		return mv;
 	}
@@ -188,7 +188,7 @@ public class AdminController {
 		Club mngC = adminService.getClubDetail(ccode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mngC", mngC);
-		mv.setViewName("admin/update_club_manager");
+		mv.setViewName("admin/club_update");
 		
 		return mv;
 	}
