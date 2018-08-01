@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.kinone.dao.PlayerDAOImpl;
 import com.project.kinone.model.Player;
+import com.project.kinone.model.Player_detail;
 
 @Service
 public class PlayerServiceImpl implements PlayerServiceInter {
@@ -15,6 +16,7 @@ public class PlayerServiceImpl implements PlayerServiceInter {
 	@Autowired
 	private PlayerDAOImpl playerDao;
 	
+//////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
 	@Override
 	public List<Player> getPlayerSeasonRankList(String seasoncode, String lcode, String sort) {
 		HashMap map = new HashMap();
@@ -24,5 +26,8 @@ public class PlayerServiceImpl implements PlayerServiceInter {
 		
 		return playerDao.getPlayerSeasonRankList(map);
 	}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 
 }

@@ -7,6 +7,8 @@
 		<typeAlias alias="club" type="com.project.kinone.model.Club" />
 		<typeAlias alias="club_season" type="com.project.kinone.model.Club_season" />
 		<typeAlias alias="player" type="com.project.kinone.model.Player" />
+		<typeAlias alias="player_detail" type="com.project.kinone.model.Player_detail" />
+		<typeAlias alias="player_season" type="com.project.kinone.model.Player_season" />
 		<typeAlias alias="match" type="com.project.kinone.model.Match" />
 		<typeAlias alias="match_detail" type="com.project.kinone.model.Match_detail" />
 		<typeAlias alias="member" type="com.project.kinone.model.Member" />

@@ -17,6 +17,15 @@ public class Player {
 	private int p_ggoal;
 	private int p_assist;
 	
+	//page처리용
+	private int startRow;
+	private int endRow;
+	
+	//검색용
+	private String teamcode;
+	private String sposition;
+	private String keyword;
+	
 	public String getPcode() {
 		return pcode;
 	}
@@ -89,12 +98,43 @@ public class Player {
 	public void setP_assist(int p_assist) {
 		this.p_assist = p_assist;
 	}
+	public int getStartRow() {
+		return startRow;
+	}
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+	public int getEndRow() {
+		return endRow;
+	}
+	public void setEndRow(int endRow) {
+		this.endRow = endRow;
+	}
+	public String getTeamcode() {
+		return teamcode;
+	}
+	public void setTeamcode(String teamcode) {
+		this.teamcode = teamcode;
+	}
+	public String getSposition() {
+		return sposition;
+	}
+	public void setSposition(String sposition) {
+		this.sposition = sposition;
+	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
 	@Override
 	public String toString() {
 		return "Player [pcode=" + pcode + ", ccode=" + ccode + ", pno=" + pno + ", pname=" + pname + ", position="
 				+ position + ", photo=" + photo + ", rownum=" + rownum + ", cname_short=" + cname_short + ", emblem="
-				+ emblem + ", gamecount=" + gamecount + ", p_ggoal=" + p_ggoal + ", p_assist=" + p_assist + "]";
-	}
-	
+				+ emblem + ", gamecount=" + gamecount + ", p_ggoal=" + p_ggoal + ", p_assist=" + p_assist
+				+ ", startRow=" + startRow + ", endRow=" + endRow + ", teamcode=" + teamcode + ", sposition="
+				+ sposition + ", keyword=" + keyword + "]";
+	}	
 	
 }
