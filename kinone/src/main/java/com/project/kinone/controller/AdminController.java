@@ -1,5 +1,7 @@
 package com.project.kinone.controller;
 
+import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Player;
+import com.project.kinone.model.Player_detail;
+import com.project.kinone.model.Player_season;
 import com.project.kinone.service.AdminServiceImpl;
+import com.project.kinone.util.PagingPgm;
 
 @Controller
 public class AdminController {
@@ -237,6 +242,201 @@ public class AdminController {
 	}
 	
 	
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+//////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////	
+	
+	
+	
+	//선수 리스트 출력 페이지 이동
+	@RequestMapping("/admin/plist.do")
+	public String plist(String pageNum, Player player, Model model) throws Exception {
+		
+		System.out.println("plist");
+		if (pageNum==null||pageNum.equals("")) {
+			pageNum="1";
+		}
+		final int rowPerPage=10;
+		
+		int currentPage = Integer.parseInt(pageNum);
+		
+		int total= adminService.getPtotal(player);
+		int startRow =(currentPage -1)*rowPerPage+1;
+		int endRow = startRow + rowPerPage-1;
+		PagingPgm pp = new PagingPgm(total, rowPerPage, currentPage);
+		player.setStartRow(startRow);
+		player.setEndRow(endRow);
+		
+		int no = total-startRow + 1;
+		List<Player> list=adminService.plist(player);
+		model.addAttribute("list",list);
+		model.addAttribute("no",no);
+		model.addAttribute("pp",pp);
+		//검색
+		model.addAttribute("teamcode",player.getTeamcode());
+		model.addAttribute("sposition",player.getSposition());
+		model.addAttribute("keyword",player.getKeyword());
+		
+		return "admin/player_list";
+	}
+	
+	//선수 상세정보 페이지 이동
+	@RequestMapping("/admin/pview.do")
+	public String pview (String pcode,  Model model) throws Exception{
+		System.out.println("pview");
+		
+		Player player = adminService.pselect(pcode);
+		Player_detail playerd = adminService.pselectd(pcode);
+		List<Player_season> players = adminService.pselects(pcode);
+		model.addAttribute("player",player);
+		model.addAttribute("playerd",playerd);
+		model.addAttribute("players",players);
+		
+		
+		return "admin/player_info";
+	}
+	
+	//선수 입력 페이지 이동
+	@RequestMapping("/admin/pinsertForm1.do")
+	public String pinsertForm(Model model) {	
+		System.out.println("insertForm1");
+		return "admin/player_Form";
+	}
+	
+	//선수 입력
+	@RequestMapping("/admin/pinsert1.do")
+	public String pinsert1(Player player, 
+						Player_detail playerd, 
+						Player_season players, 
+						MultipartHttpServletRequest file,
+						@RequestParam("birthdate1") String birthdate1,
+						Model model) {
+		//date 를 timestamp로 형변환
+		System.out.println(birthdate1);
+		String birthdate2=birthdate1+" 00:00:00";
+		System.out.println(birthdate2);
+		playerd.setBirthdate(Timestamp.valueOf(birthdate2));	
+		System.out.println(player.toString());
+		
+		//file upload처리
+		
+		int result1 = adminService.pinsert(player);
+		System.out.println("insert1="+result1);
+		int result2 = adminService.pinsertd(playerd);
+		System.out.println("insert2="+result2);
+		int result3 = adminService.pinserts(players);
+		System.out.println("insert3="+result3);
+				 
+		model.addAttribute("result1",result1);
+		model.addAttribute("result2",result2);
+		model.addAttribute("result3",result3);
+			
+		return "admin/player_list";
+	}
+	
+	//선수 기본+상세정보 수정 페이지 이동
+	@RequestMapping("/admin/pupdateForm1.do")
+	public String pupdateForm1(String pcode,  Model model) throws Exception{
+		Player player = adminService.pselect(pcode);
+		Player_detail playerd = adminService.pselectd(pcode);
+		model.addAttribute("player",player);
+		model.addAttribute("playerd",playerd);
+		return "admin/player_detail_update";
+	}
+	
+	//선수 시즌 수정 페이지 이동
+	@RequestMapping("/admin/pupdateForm2.do")
+	public String pupdateForm2(String pcode,  Model model) throws Exception{
+		Player player = adminService.pselect(pcode);
+		Player_detail playerd = adminService.pselectd(pcode);
+		List<Player_season> players = adminService.pselects(pcode);
+		model.addAttribute("player",player);
+		model.addAttribute("playerd",playerd);
+		model.addAttribute("players",players);
+		model.addAttribute("pcode",pcode);
+		return "admin/player_season_update";
+	}
+	
+	//선수 시즌 추가 페이지 이동
+	@RequestMapping("/admin/pupdateForm3.do")
+	public String pupdate(String pcode,  Model model) throws Exception{
+		Player player = adminService.pselect(pcode);
+		Player_detail playerd = adminService.pselectd(pcode);
+		List<Player_season> players = adminService.pselects(pcode);
+		model.addAttribute("player",player);
+		model.addAttribute("playerd",playerd);
+		model.addAttribute("players",players);
+		model.addAttribute("pcode",pcode);
+		
+		return "admin/player_season_insert";
+	}
+	
+	//선수 기본+상세정보 수정
+	@RequestMapping("/admin/pupdate1.do")
+	public String pupdate1(String pcode, 
+									Player player, 
+									Player_detail playerd, 
+									MultipartHttpServletRequest file,
+									@RequestParam("birthdate1") String birthdate1,
+									Model model) throws IllegalStateException, IOException{
+		//date->timestamp변환
+		System.out.println("birthdate1="+birthdate1);
+		String birthdate2=birthdate1+" 00:00:00";
+		System.out.println("birthdate2="+birthdate2);
+		playerd.setBirthdate(Timestamp.valueOf(birthdate2));
+		
+		//file upload처리
+		MultipartFile mfile=file.getFile("file");
+		String path= file.getSession().getServletContext().getRealPath("resources/player");
+		System.out.println("path="+path);
+		
+		
+		//player,playerd에 값 있나 확인하고 인서트 처리
+		System.out.println("player pname="+player.getPname());
+		System.out.println("playerd nation="+playerd.getNation());
+		int result1 = adminService.pupdate(player);
+		int result2 = adminService.pupdated(playerd);
+		System.out.println("result1="+result1);
+		System.out.println("result2="+result2);
+		
+		//model에 주입
+		model.addAttribute("result1",result1);
+		model.addAttribute("result2",result2);
+		return "admin/player_list";
+	}
+	
+	//선수 시즌 정보 수정
+	@RequestMapping("/admin/pupdate2.do")
+	public String pupdate2(String pcode, 
+			Player_season players,
+			Model model) {
+		
+		  System.out.println("pupdate2");
+			int result=adminService.pupdates(players);
+			
+			model.addAttribute("ajax",result);
+			
+			System.out.println("pupdate2 result = "+result);
+			
+		return "ajax";
+	}
+	
+	//선수 시즌 정보 추가
+	@RequestMapping("/admin/pupdate3.do")
+	public String pupdate3(String pcode, 
+			Player_season players,
+			Model model) {
+			
+		System.out.println("players ="+players.getCcode()+players.getPcode());
+			
+			int result = adminService.puinsert(players);
+			model.addAttribute("result",result);
+			
+			System.out.println("pupdate3 result = "+result);
+		
+		
+		return "admin/player_list";
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	
 }

@@ -19,6 +19,8 @@ import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
+import com.project.kinone.model.Player_detail;
+import com.project.kinone.model.Player_season;
 import com.project.kinone.util.FileUpload;
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.StringToTimestamp;
@@ -28,14 +30,15 @@ public class AdminServiceImpl implements AdminServiceInter {
 
 	@Autowired
 	private AdminDAOImpl adminDao;
-	
+
 	@Autowired
 	private MatchDAOImpl matchDao;
-	
+
 	@Autowired
 	private PlayerDAOImpl playerDao;
 
-//////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
+	////////////////////////////////////////////// 한 동 준
+	////////////////////////////////////////////// /////////////////////////////////////////////////////////
 
 	// 등록된 모든 리그
 	public List<String> getAllLeague() {
@@ -130,11 +133,11 @@ public class AdminServiceImpl implements AdminServiceInter {
 		// 검색을 한 리스트인지 아닌 가에 따라 불러올 리스트 구분
 		List<String> keylist = new ArrayList<String>(params.keySet());
 
-		System.out.println("검색어 몇개야? "+ keylist.size());
-		for(String key : keylist) {
-			System.out.println(key+":"+params.get(key));
+		System.out.println("검색어 몇개야? " + keylist.size());
+		for (String key : keylist) {
+			System.out.println(key + ":" + params.get(key));
 		}
-		
+
 		List<Match> matchList = new ArrayList<Match>();
 		if (keylist.size() < 1) {
 			System.out.println("초기 리스트!");
@@ -185,25 +188,27 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		return result;
 	}
-	
+
 	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
 	public List<Player> getMatchDetail(String mcode) {
 		Match_detail md = matchDao.getMatchDetail(mcode);
 		String home = md.getHomelineup();
 		String homearr[] = home.split("/");
 		List<Player> homeStarting = playerDao.getPlayerList(homearr[0].split(","));
-		/*List<Player> homeSub = playerDao.getPlayerList(homearr[1].split(","));
-		String away = md.getAwaylineup();
-		String awayarr[] = away.split("/");
-		List<Player> awayStarting = playerDao.getPlayerList(homearr[0].split(","));
-		List<Player> awaySub = playerDao.getPlayerList(homearr[1].split(","));*/
-		
+		/*
+		 * List<Player> homeSub = playerDao.getPlayerList(homearr[1].split(",")); String
+		 * away = md.getAwaylineup(); String awayarr[] = away.split("/"); List<Player>
+		 * awayStarting = playerDao.getPlayerList(homearr[0].split(",")); List<Player>
+		 * awaySub = playerDao.getPlayerList(homearr[1].split(","));
+		 */
+
 		return homeStarting;
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////김 동 환 /////////////////////////////////////////////////////////
+	////////////////////////////////////////////// 김 동 환
+	////////////////////////////////////////////// /////////////////////////////////////////////////////////
 
 	public List<Club> getMngClubList() throws Exception {
 		// TODO Auto-generated method stub
@@ -218,22 +223,19 @@ public class AdminServiceImpl implements AdminServiceInter {
 
 		String filePath = FileUpload.fileUpload(efile, epath);
 
-		
-		mngClub.setEmblem("amdinservice filepath emblem"+filePath);
+		mngClub.setEmblem("amdinservice filepath emblem" + filePath);
 
 		adminDao.insertClub(mngClub);
 	}
 
 	public void insertStadium(Club mngClub, List<MultipartFile> fileList, String spath) throws Exception {
 		// TODO Auto-generated method stub
-		
-
 
 		// fileList의 1번 인덱스가 sphoto 이미지 파일
 		MultipartFile sfile = fileList.get(1);
 
 		String filePath = FileUpload.fileUpload(sfile, spath);
-		
+
 		mngClub.setSphoto(filePath);
 		adminDao.insertStadium(mngClub);
 	}
@@ -282,7 +284,64 @@ public class AdminServiceImpl implements AdminServiceInter {
 		adminDao.updateStadium(mngClub);
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////// 심 규 진
+	////////////////////////////////////////////// /////////////////////////////////////////////////////////
+	public List<Player> plist(Player player) throws Exception {
+		return adminDao.plist(player);
+	}
+
+	public int getPtotal(Player player) {
+		// TODO Auto-generated method stub
+		return adminDao.getPtotal(player);
+	}
+
+	public Player pselect(String pcode) {
+		// TODO Auto-generated method stub
+		return adminDao.pselect(pcode);
+	}
+
+	public Player_detail pselectd(String pcode) {
+		return adminDao.pselectd(pcode);
+	}
+
+	public List<Player_season> pselects(String pcode) {
+		return adminDao.pselects(pcode);
+	}
+
+	public int delete(String pcode) {
+		// TODO Auto-generated method stub
+		return adminDao.delete(pcode);
+	}
+
+	public int pupdate(Player player) {
+		return adminDao.pupdate(player);
+	}
+
+	public int pupdated(Player_detail playerd) {
+		return adminDao.pupdated(playerd);
+	}
+
+	public int pupdates(Player_season players) {
+		return adminDao.pupdates(players);
+	}
+
+	public int puinsert(Player_season players) {
+		return adminDao.puinsert(players);
+	}
+
+	public int pinsert(Player player) {
+		return adminDao.pinsert(player);
+	}
+
+	public int pinsertd(Player_detail playerd) {
+		return adminDao.pinsertd(playerd);
+	}
+
+	public int pinserts(Player_season players) {
+		return adminDao.pinserts(players);
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

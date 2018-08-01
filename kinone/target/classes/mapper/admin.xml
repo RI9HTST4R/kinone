@@ -131,21 +131,137 @@
 	</select>
 	
 	 <!-- 관리자 클럽 수정 -->	
-	 	<!-- 관리자 구단 수정 -->
-		<update id="mngUpdateClub" parameterType="club">
-			update club 
-			set cname=#{cname}, cname_short=#{cname_short}, emblem=#{emblem}, cmanager=#{cmanager}
-			where ccode = #{ccode}
-		</update>
-		
-		<!-- 관리자 경기장 수정 -->
-		<update id="mngUpdateStadium" parameterType="club">
-			update stadium 
-			set sname = #{sname}, sphoto = #{sphoto}, capacity = #{capacity}
-			where ccode = #{ccode}
-		</update>
+ 	<!-- 관리자 구단 수정 -->
+	<update id="mngUpdateClub" parameterType="club">
+		update club 
+		set cname=#{cname}, cname_short=#{cname_short}, emblem=#{emblem}, cmanager=#{cmanager}
+		where ccode = #{ccode}
+	</update>
+	
+	<!-- 관리자 경기장 수정 -->
+	<update id="mngUpdateStadium" parameterType="club">
+		update stadium 
+		set sname = #{sname}, sphoto = #{sphoto}, capacity = #{capacity}
+		where ccode = #{ccode}
+	</update>
 		
 <!-- ############################################################################################# -->    
+		
+<!-- #####################################심규진############################################### --> 
+   
+    <!-- 관리자 선수 리스트 -->
+	<select id="plist" parameterType="player"  resultType="player">
+	select * from (select a.*,rowNum rn from (select * from player order by pcode)a ) where rn between ${startRow} and ${endRow}
+		 <!-- <where>
+			<if test="teamcodes != null">
+				ccode =${teamcodes}
+			</if>
+			<if test="sposition != null">
+				position = ${spositon}
+			</if>
+			<if test="keyword != null">
+				pname like '%'||#{keyword}||'%'
+			</if>
+		</where>  -->
+		
+	</select>
+	
+	<!-- 관리자 선수 리스트 총인원수 -->
+	<select id="getPtotal" parameterType="player" resultType="int">
+		select count(*) from player
+		<!-- <where>
+		
+		</where> -->
+	</select>
+	
+	<!-- 관리자 선수 뷰 일반 -->
+	<select id="pselect" parameterType="String" resultType="player">
+		select * from player where pcode=#{pcode}
+	</select>
+	
+	<!-- 관리자 선수 뷰 디테일 -->
+	<select id="pselectd" parameterType="String" resultType="player_detail">
+		select * from player_detail where pcode=#{pcode}
+	</select>
+	
+	<!-- 관리자 선수 뷰 시즌 -->
+	<select id="pselects" parameterType="String" resultType="player_season">
+		select * from player_season where pcode=#{pcode} order by seasoncode desc
+	</select>
+	
+	<!-- 관리자 선수 업데이트 -->
+	<update id="pupdate" parameterType="player">
+		update player set ccode=#{ccode}, pno=#{pno},
+		pname=#{pname},position=#{position},photo=#{photo, jdbcType=VARCHAR} 
+		where pcode=#{pcode}
+	</update>
+	
+	<!-- 관리자 선수 업데이트 디테일-->
+	<update id="pupdated" parameterType="player_detail">
+		update player_detail set nation=#{nation}, birthdate=#{birthdate},
+		height=#{height},weight=#{weight} where pcode=#{pcode}
+	</update>
+	
+	<!-- 관리자 선수 업데이트 시즌-->
+	<update id="pupdates" parameterType="player_season">
+		update player_season set ccode=#{ccode}, gamecount=#{gamecount},
+		p_lgoal=#{p_lgoal},p_ggoal=#{p_ggoal},p_assist=#{p_assist}
+		where pcode=#{pcode} and seasoncode=#{seasoncode}
+	</update>
+	
+	<!-- 관리자 선수 업데이트시 삽입 시즌 -->
+	<insert  id="puinsert" parameterType="player_season">
+		insert into  player_season values ((select NVL(MAX(inputno)+1,1) from player_season), 
+		#{pcode}, #{seasoncode}, #{ccode}, #{gamecount}, #{p_lgoal}, #{p_ggoal}, #{p_assist})
+		
+	</insert>
+	
+	<!-- 관리자 선수 삽입 -->
+	<insert id="pinsert" parameterType="player">
+		<selectKey resultType="String" keyProperty="pcode" order="BEFORE">
+		<![CDATA[select  case when (max(to_number(substr(pcode,2)))+1 < 1000) then 'P0' || to_char(max(to_number(substr(pcode,2)))+1)
+	            when (max(to_number(substr(pcode,2)))+1 >= 1000) then 'P' || to_char(max(to_number(substr(pcode,2)))+1) end pcode from player]]>
+		</selectKey>
+		insert into player values(#{pcode},#{ccode},#{pno},#{pname},
+		#{position},#{photo, jdbcType=VARCHAR} )
+	</insert>
+	
+	<!-- 관리자 선수 삽입 디테일 -->
+	<insert id="pinsertd" parameterType="player_detail">
+		<selectKey resultType="String" keyProperty="pcode" order="BEFORE">
+			<![CDATA[select  case when (max(to_number(substr(pcode,2)))+1 < 1000) then 'P0' || to_char(max(to_number(substr(pcode,2)))+1)
+	            when (max(to_number(substr(pcode,2)))+1 >= 1000) then 'P' || to_char(max(to_number(substr(pcode,2)))+1) end pcode from player_detail]]>
+	</selectKey>
+		insert into player_detail values(#{pcode},#{nation},
+		#{birthdate, jdbcType=VARCHAR},#{height},#{weight})
+	</insert>
+	
+	<!-- 관리자 선수 삽입 시즌-->
+	<insert  id="pinserts" parameterType="player_season">
+		<selectKey resultType="String" keyProperty="pcode" order="BEFORE">
+			<![CDATA[select  case when (max(to_number(substr(pcode,2)))+1 < 1000) then 'P0' || to_char(max(to_number(substr(pcode,2)))+1)
+	            when (max(to_number(substr(pcode,2)))+1 >= 1000) then 'P' || to_char(max(to_number(substr(pcode,2)))+1) end pcode from PLAYER_SEASON]]>
+	</selectKey>
+		insert into  player_season values ((select NVL(MAX(inputno)+1,1) from player_season)  ,#{pcode},'2018',#{ccode},0,0,0,0 )
+	</insert>
+	
+	<!-- 관리자 선수 삭제 -->
+	<update id="pdelete" parameterType="String">
+		delete from player where pcode=#{pcode} 
+	</update>
+	
+	<!-- 관리자 선수 삭제 디테일 -->
+	<update id="pdeleted" parameterType="String">
+		delete from player_detail where pcode=#{pcode} 
+	</update>
+	
+	<!-- 관리자 선수 삭제 시즌 -->
+	<update id="pdeletes" parameterType="String">
+		delete from player_season where pcode=#{pcode} 
+	</update>
+    
+    <!-- #################################################################################### -->
+    
 		
 </mapper>
 
