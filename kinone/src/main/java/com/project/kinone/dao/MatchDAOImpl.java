@@ -9,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.kinone.model.Match;
+import com.project.kinone.model.Match_detail;
 
 @Repository
 public class MatchDAOImpl implements MatchDAOInter {
 
 	@Autowired
 	private SqlSessionTemplate session;
+	
+//////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
 	
 	@Override
 	public Date getMiddleDay(String lcode) {
@@ -37,4 +40,10 @@ public class MatchDAOImpl implements MatchDAOInter {
 		return session.selectList("matchmapper.matchInDay", map);
 	}
 
+	public Match_detail getMatchDetail(String mcode) {
+		return session.selectOne("matchmapper.matchDetail", mcode);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 }

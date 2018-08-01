@@ -12,8 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.kinone.dao.AdminDAOImpl;
+import com.project.kinone.dao.MatchDAOImpl;
+import com.project.kinone.dao.PlayerDAOImpl;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
+import com.project.kinone.model.Match_detail;
+import com.project.kinone.model.Player;
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.StringToTimestamp;
 
@@ -23,6 +27,12 @@ public class AdminServiceImpl implements AdminServiceInter{
 
 	@Autowired
 	private AdminDAOImpl adminDao;
+	
+	@Autowired
+	private MatchDAOImpl matchDao;
+	
+	@Autowired
+	private PlayerDAOImpl playerDao;
 
 //////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
 	
@@ -119,6 +129,9 @@ public class AdminServiceImpl implements AdminServiceInter{
 		// 검색을 한 리스트인지 아닌 가에 따라 불러올 리스트 구분
 		List<String> keylist = new ArrayList<String>(params.keySet());
 		System.out.println("검색어 몇개야? "+ keylist.size());
+		for(String key : keylist) {
+			System.out.println(key+":"+params.get(key));
+		}
 		
 		List<Match> matchList = new ArrayList<Match>();
 		if(keylist.size() < 1) {
@@ -169,6 +182,21 @@ public class AdminServiceImpl implements AdminServiceInter{
 			result += adminDao.deleteMatch(mcode);
 		}
 		return result;
+	}
+	
+	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
+	public List<Player> getMatchDetail(String mcode) {
+		Match_detail md = matchDao.getMatchDetail(mcode);
+		String home = md.getHomelineup();
+		String homearr[] = home.split("/");
+		List<Player> homeStarting = playerDao.getPlayerList(homearr[0].split(","));
+		/*List<Player> homeSub = playerDao.getPlayerList(homearr[1].split(","));
+		String away = md.getAwaylineup();
+		String awayarr[] = away.split("/");
+		List<Player> awayStarting = playerDao.getPlayerList(homearr[0].split(","));
+		List<Player> awaySub = playerDao.getPlayerList(homearr[1].split(","));*/
+		
+		return homeStarting;
 	}
 
 	
@@ -235,6 +263,8 @@ public class AdminServiceImpl implements AdminServiceInter{
 		System.out.println(mngClub.getCcode());
 		adminDao.updateStadium(mngClub);
 	}
+
+	
 	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

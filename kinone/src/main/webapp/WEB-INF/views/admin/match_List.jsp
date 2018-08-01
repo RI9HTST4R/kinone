@@ -35,7 +35,8 @@ input[type="text"] {
 	margin: 0 5px;
 }
 .table {
-	width: auto;
+	max-width: 980px;
+	border-bottom: 2px solid lightgray;
 }
 .table>tbody>tr>td, .table>tbody>tr>th, 
 .table>tfoot>tr>td, .table>tfoot>tr>th, 
@@ -120,7 +121,7 @@ span.example {
 		var bool = validcheck($cdate);
 		if(bool){
 			var lcode = $("#lcode option:selected").text();
-			alert(lcode);
+		//	alert(lcode);
 			var cdate = $.trim($cdate.val());
 			$.ajax({
 				url:"/kinone/admin/mcodeDuplCheck.do",
@@ -128,7 +129,7 @@ span.example {
 				dataType: "text",
 				type: "post",
 				success: function(data){
-					alert(data);
+				//	alert(data);
 					var $result = $("#duplresult");
 					$result.empty();
 					var result = parseInt($.trim(data));
@@ -217,6 +218,45 @@ span.example {
 		}
 	}
 	
+	function goSearch(){ // 검색 버튼 눌렀을 때
+		var seasoncode = $("#seasoncode").val();
+		var lcode = $("#lcode").val();
+		var category = $("#category").val();
+		var keyword = $.trim($("#keyword").val());
+	//	alert("seasoncode:"+seasoncode);
+	//	alert("lcode:"+lcode);
+	//	alert("category:"+category);
+	//	alert("keyword:"+keyword);
+		if(seasoncode == "" && lcode == "" && keyword == ""){
+			alert("조건을 선택하시거나 검색어를 입력하세요.");
+			return;
+		}else {
+			$("#searchForm").submit();
+		}
+	}
+	
+	function matchEdit(mcode){
+		alert(mcode);
+		
+		$.ajax({
+			url: "/kinone/admin/getMatchDetail.do",
+			data: {"mcode":mcode},
+			dataType: "json",
+			type: "post",
+			success: function(data){
+				alert(data);
+				
+			},
+			error: function(error){
+				alert("에러");
+			}
+		});
+		
+		
+		
+		
+	}
+	
 	$(function(){
 		// 종료된 경기의 상태에 툴팁 나타냄
 		$('[data-toggle="tooltip"]').tooltip();
@@ -239,9 +279,6 @@ span.example {
 				$(this).addClass("active");
 			});
 		});
-		
-		
-		
 	})
 </script>
 <div class="container">
@@ -253,18 +290,18 @@ span.example {
 		<h1 id="title">등록된 매치 목록</h1>
 		<hr>
 		<div class="search-wrapper">
-			<form name="searchForm" method="get" action="/kinone/admin/search">
+			<form id="searchForm" name="searchForm" method="post" action="${url}/admin/matchList.do">
 				<select id="seasoncode" name="seasoncode" class="form-control">
 					<option value="">전체시즌</option>
 				<c:forEach var="season" items="${seasonList}">
-					<option <c:if test="${seasoncode == season}">selected</c:if>>${season}</option>
+					<option <c:if test="${condition['seasoncode'] == season}">selected</c:if>>${season}</option>
 				</c:forEach>
 				</select>
 				
 				<select id="lcode" name="lcode" class="form-control">
 					<option value="">전체리그</option>
 				<c:forEach var="league" items="${leagueList}">
-					<option <c:if test="${lcode == league}">selected</c:if>>${league}</option>
+					<option <c:if test="${condition['lcode'] == league}">selected</c:if>>${league}</option>
 				</c:forEach>
 				</select>
 				
@@ -274,33 +311,40 @@ span.example {
 					<option value="day">일별</option>
 				</select>
 				<select id="category" name="category" class="form-control">
-					<option value="mcode">매치코드</option>
-					<option value="ccode">구단코드</option>
-					<option value="cname_short">구단명</option>
-					<option value="mround">라운드</option>
-					<option value="mstatus">상태</option>
+					<option value="mcode" <c:if test="${condition['category'] == 'mcode'}">selected</c:if>>매치코드</option>
+					<option value="ccode" <c:if test="${condition['category'] == 'ccode'}">selected</c:if>>구단코드</option>
+					<option value="cname_short" <c:if test="${condition['category'] == 'cname_short'}">selected</c:if>>구단명</option>
+					<option value="mround" <c:if test="${condition['category'] == 'mround'}">selected</c:if>>라운드</option>
+					<option value="mstatus" <c:if test="${condition['category'] == 'mstatus'}">selected</c:if>>상태</option>
 				</select>
 				<!-- <br/> -->
-				<input type="text" class="form-control" id="keyword" name="keyword"/>
-				<a class="tbl-btn">검색</a>
+				<input type="text" class="form-control" id="keyword" name="keyword" value="${condition['keyword']}"/>
+				<a class="tbl-btn" onClick="goSearch()">검색</a>
 			</form>
 		</div>
-		
+		<a class="tbl-btn" onClick="javascript:location.href='${url}/admin/matchList.do'">전체 목록</a>
+		<a class="tbl-btn" id="multiDel" onClick="matchDel()">선택 삭제</a><br/><br/>
 		<div class="table-wrapper">
 			<table class="table table-sm">
 				<thead>
 					<tr>
-						<th><input type="checkbox" id="allcheck"  onChange="allcheckbox(this.checked)"/></th>
+						<th style="width: 45px;"><input type="checkbox" id="allcheck"  onChange="allcheckbox(this.checked)"/></th>
 						<th style="width: 190px;">매치 코드</th>
 						<th style="width: 180px;">매치 일시</th>
-						<th style="width: 83px;">홈</th>
-						<th style="width: 83px;">어웨이</th>
-						<th>라운드</th>
-						<th>상태</th>
-						<th style="text-align: right"><a class="tbl-btn" id="multiDel" onClick="matchDel()">선택 삭제</a></th>
+						<th style="width: 110px;">홈</th>
+						<th style="width: 110px;">어웨이</th>
+						<th style="width: 64px;">라운드</th>
+						<th style="width: 80px;">상태</th>
+						<th style="max-width: 201px;"></th>
 					</tr>
 				</thead>
 				<tbody>
+			<c:if test="${empty matchList}">
+					<tr class="match-info">
+						<td colspan="7"><span style="font-weight: bold; color: red; font-size: 10pt;">조건에 맞는 매치가 없습니다.</span></td>
+					</tr>
+			</c:if>
+			<c:if test="${not empty matchList}">
 				<c:forEach var="match" items="${matchList}">
 					<tr class="match-info">
 						<td><c:if test="${match.mstatus == 0}"><input type="checkbox" name="match_checkbox" value="${match.mcode}"/></c:if></td>
@@ -311,15 +355,21 @@ span.example {
 						<td>${match.mround}</td>
 					<c:if test="${match.mstatus == 0}">
 						<td><span class="before-m">경기전</span></td>
-						<td class="last-td" colspan="2"><a class="tbl-btn editLineup">라인업 편집</a> <a class="tbl-btn editLineup">스코어 편집</a> <a class="tbl-btn editDate">날짜 변경</a> <a class="tbl-btn cancelMatch" onClick="matchDel('${match.mcode}')">삭제</a></td>
+						<td class="last-td"><a class="tbl-btn" onClick="matchEdit('${match.mcode}')">편집</a> <a class="tbl-btn editDate">날짜 변경</a> <a class="tbl-btn cancelMatch" onClick="matchDel('${match.mcode}')">삭제</a></td>
 					</c:if>
 					<c:if test="${match.mstatus == 1}">
 						<td><a class="after-m" data-toggle="tooltip" data-placement="bottom" title="${match.homescore}:${match.awayscore}">경기종료</a></td>
-						<td class="last-td" colspan="2"><a class="tbl-btn editLineup">라인업 편집</a> <a class="tbl-btn editLineup">스코어 편집</a></td>
+						<td class="last-td"><a class="tbl-btn" onClick="matchEdit('${match.mcode}')">편집</a></td>
 					</c:if>
 					</tr>
 				</c:forEach>
-				
+					<tr>
+						<td></td>
+						<td colspan="7" style="align: center;">
+							<div style="height: 500px; width: 800px; border: 1px solid red; padding-left: 10px;"></div>
+						</td>
+					</tr>
+			</c:if>
 				</tbody>
 			</table>
 		</div>

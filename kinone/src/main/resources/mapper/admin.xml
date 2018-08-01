@@ -58,16 +58,30 @@
     </select>
     
     <select id="searchMatchList" parameterType="java.util.HashMap" resultType="match">
-    	select * from
-		(select rownum rnum, V.* from
-		(select M.*, Ch.cname_short cname_short_h, Ca.cname_short cname_short_a
+    	select * from (
+		select rownum rnum, V.* from (
+		select M.*, 
+		<if test='seasoncode != null and seasoncode !=""'>to_char(M.mdate,'yyyy') seasoncode,</if>
+		Ch.cname_short cname_short_h, Ca.cname_short cname_short_a
 		from match M, club Ch, club Ca
-		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode 
-		<if test="mcode != null">
-			and M.mcode = #{mcode}
-		</if>
-		order by M.mdate desc, mround desc) V)
-		where rnum <![CDATA[<]]>= 200
+		<where>
+			M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode
+			<if test='lcode != null and lcode !=""'>and lcode = #{lcode}</if>
+			<if test='keyword != null and keyword != ""'>
+				<if test='category == "mcode"'>and M.mcode like '%'||upper(#{keyword})||'%'</if>
+				<if test='category == "ccode"'>and (M.ccode_home like '%'||upper(#{keyword})||'%' or M.ccode_away like '%'||upper(#{keyword})||'%')</if>
+				<if test='category == "cname_short"'>and (Ch.cname_short like '%'||upper(#{keyword})||'%' or Ca.cname_short like '%'||upper(#{keyword})||'%')</if>
+				<if test='category == "mround"'>and M.mround = #{keyword}</if>
+				<if test='category == "mstatus"'>and M.mstatus = #{keyword}</if>
+			</if>
+		</where>
+		order by M.mdate asc, mround asc) V
+		<where>
+			<if test='seasoncode != null and seasoncode !=""'>seasoncode = #{seasoncode}</if>
+		</where>
+		)
+		where rnum <![CDATA[>]]>= 1 and rnum <![CDATA[<]]>= 100 
+		
     </select>
 <!-- ############################################################################################# -->    
 
