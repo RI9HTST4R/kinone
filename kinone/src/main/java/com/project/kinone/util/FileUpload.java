@@ -16,7 +16,7 @@ public class FileUpload {
 		// 오리지널 이름에서 확장자 추출
 		String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
 		System.out.println("ext :" + ext);
-
+		System.out.println("file 이름 : " + file.getOriginalFilename());
 		// 파일저장 경로
 		String filePath = path + "/" + saveFName + "." + ext;
 

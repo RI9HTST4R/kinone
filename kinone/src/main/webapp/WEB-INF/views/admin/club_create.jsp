@@ -10,7 +10,7 @@
 </head>
 
 <body>
-	<form action="${url}/admin/create_club_ok.do">
+	<form action="${url}/admin/create_club_ok.do" enctype="multipart/form-data" method="post">
 		<table>
 			<tr>
 				<td>클럽명(풀네임)</td>
@@ -24,8 +24,8 @@
 			</tr>
 			<tr>
 				<td>엠블럼</td>
-				<td colspan="2"><input type="file" id="emblem" name="emblem"
-					enctype="multipart/form-data" method="post"></td>
+				<td colspan="2"><input type="file" id="emblem" name="file"
+					></td>
 			</tr>
 			<tr>
 				<td>감독명</td>
@@ -41,7 +41,7 @@
 			</tr>
 			<tr>
 				<td>경기장 사진</td>
-				<td colspan="2"><input type="file" id="sphoto" name="sphoto">
+				<td colspan="2"><input type="file" id="sphoto" name="file">
 				</td>
 			</tr>
 			<tr>
