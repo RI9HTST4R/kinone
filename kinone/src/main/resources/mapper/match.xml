@@ -7,7 +7,7 @@
     	select mdate
 	  	from (select trunc(mdate) mdate 
 			  from match 
-			  where lcode = #{lcode} and trunc(sysdate)-trunc(mdate) <![CDATA[<]]> 0
+			  where lcode = #{lcode} and trunc(sysdate)-trunc(mdate) <![CDATA[<]]>= 0
 			  group by trunc(mdate) 
 			  order by abs(trunc(sysdate)-trunc(mdate)) asc, trunc(mdate) desc) 
 		where rownum = 1
@@ -52,6 +52,10 @@
 		from match M, club Ch, club Ca
 		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode and M.lcode = #{lcode} and to_char(mdate,'yyyy') = #{seasoncode}
 		order by M.mdate desc, mround desc
+    </select>
+    
+    <select id="matchDetail" parameterType="java.lang.String" resultType="match_detail">
+    	select * from match_detail where mcode = #{mcode}
     </select>
     
 </mapper>

@@ -3,6 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<c:set var="url" value="<%=request.getContextPath()%>"/>
 <!DOCTYPE>
 <html>
 <head>
@@ -78,7 +79,7 @@ h1#title {
 			<div class="col-sm-3 sidenav">
 				<ul class="nav nav-pills nav-stacked">
 					<li class="active"><a href="/kinone/admin/main.do">시즌</a></li>
-					<li><a href="#">구단</a></li>
+					<li><a href="/kinone/admin/club_view.do">구단</a></li>
 					<li><a href="#">클럽</a></li>
 					<li><a href="#">선수</a></li>
 					<li><a href="/kinone/admin/matchList.do">매치 리스트</a></li>

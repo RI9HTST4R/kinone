@@ -56,7 +56,7 @@ public class AdminDAOImpl implements AdminDAOInter {
 	}
 
 	// 매치 검색(키워드는 HashMap에 저장)
-	public List<Match> searchMatchList(HashMap keyword) {
+	public List<Match> searchMatchList(HashMap<String, String> keyword) {
 		return session.selectList("adminmapper.searchMatchList", keyword);
 
 	}

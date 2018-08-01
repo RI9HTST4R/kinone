@@ -19,4 +19,8 @@ public class PlayerDAOImpl implements PlayerDAOInter {
 	public List<Player> getPlayerSeasonRankList(HashMap map) {
 		return session.selectList("playermapper.playerSeasonRankList", map);
 	}
+
+	public List<Player> getPlayerList(String[] pcode) {
+		return session.selectList("playermapper.playerList", pcode);
+	}
 }

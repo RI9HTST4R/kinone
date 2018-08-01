@@ -11,12 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
+import com.project.kinone.model.Player;
 import com.project.kinone.service.AdminServiceImpl;
 
 @Controller
@@ -38,7 +40,7 @@ public class AdminController {
 	// 어드민 매치 등록 폼 페이지
 	@RequestMapping(value="/admin/matchForm.do", method=RequestMethod.GET)
 	public String matchForm() {
-		return "admin/matchForm";
+		return "admin/match_Form";
 	}
 	
 	// 매치 등록 폼 페이지에서 입력한 구단을 체크하는 메소드
@@ -67,7 +69,7 @@ public class AdminController {
 	}
 	
 	// 등록된 매치 리스트 페이지
-	@RequestMapping(value="/admin/matchList.do", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/matchList.do", method= {RequestMethod.GET,RequestMethod.POST})
 	public String matchList(@RequestParam HashMap<String, String> params, Model model) {
 		List<String> seasonList = adminService.getAllSeason();
 		List<String> leagueList = adminService.getAllLeague();
@@ -77,7 +79,8 @@ public class AdminController {
 		model.addAttribute("leagueList", leagueList);
 		model.addAttribute("seasonList", seasonList);
 		model.addAttribute("matchList", matchList);
-		return "admin/matchList";
+		model.addAttribute("condition", params);
+		return "admin/match_List";
 	}
 	
 	// 매치 리스트 페이지에서 매치 날짜 변경 시 변경될 날짜로 인해 변경되는 mcode를 가진 데이터가 있는지 확인
@@ -111,6 +114,18 @@ public class AdminController {
 		model.addAttribute("ajax", succrate);
 		return "ajax";
 	}
+	
+	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
+	@RequestMapping(value="/admin/getMatchDetail.do", method=RequestMethod.POST)
+	@ResponseBody
+	public List<Player> getMatchDetail(@RequestParam String mcode){
+		System.out.println("gg");
+		List<Player> list = adminService.getMatchDetail(mcode);
+		for(Player player : list) {
+			System.out.println(player.toString());
+		}
+		return list;
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -127,7 +142,7 @@ public class AdminController {
 		System.out.println(mngClubList.toString());
 		model.addAttribute("mngClubList", mngClubList);
 		
-		return "admin/club_view_manager";
+		return "admin/club_view";
 	}
 	
 	// 클럽 생성 페이지
@@ -135,8 +150,8 @@ public class AdminController {
 	public String createClubView() {
 		
 		System.out.println("클럽 생성 페이지");
-		
-		return "admin/create_club_manager";
+
+		return "admin/club_create";
 	}
  
 	// 클럽 생성 페이지에서 클럽 생성
@@ -161,8 +176,9 @@ public class AdminController {
 	public String deleteClubView() {
 		
 		System.out.println("클럽 삭제 페이지");
-		
-		return "admin/delete_club_manager";
+
+		return "admin/club_delete";
+
 	}
 	
 	// 클럽 삭제 페이지에서 클럽 삭제
@@ -187,7 +203,7 @@ public class AdminController {
 		Club mngC = adminService.getClubDetail(ccode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mngC", mngC);
-		mv.setViewName("admin/detail_club_manager");
+		mv.setViewName("admin/club_detail");
 		
 		return mv;
 	}
@@ -201,7 +217,7 @@ public class AdminController {
 		Club mngC = adminService.getClubDetail(ccode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mngC", mngC);
-		mv.setViewName("admin/update_club_manager");
+		mv.setViewName("admin/club_update");
 		
 		return mv;
 	}
