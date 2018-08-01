@@ -245,15 +245,11 @@ span.example {
 			type: "post",
 			success: function(data){
 				alert(data);
-				
 			},
-			error: function(error){
-				alert("에러");
+			error: function(request,status,error){
+			    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		});
-		
-		
-		
 		
 	}
 	

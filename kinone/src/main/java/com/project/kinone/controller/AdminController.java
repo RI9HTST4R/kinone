@@ -125,6 +125,7 @@ public class AdminController {
 		for(Player player : list) {
 			System.out.println(player.toString());
 		}
+		
 		return list;
 	}
 
