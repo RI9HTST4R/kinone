@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="header.jsp"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -48,8 +47,21 @@ footer {
 
 	<div class="container-fluid">
 		<div class="row content">
+			<div class="col-sm-3 sidenav">
+				<h4>관리자 페이지</h4>
+				<ul class="nav nav-pills nav-stacked">
+					<li class="active"><a href="#section1">Menu</a></li>
+					<li><a href="#section2">클럽</a></li>
+					<li><a href="#section3">선수</a></li>
+					<li><a href="#section3">일정</a></li>
+				</ul>
+			</div>
 			<div class="col-sm-9">
 				<form>
+				
+				파일 업로드 확인
+								
+				
 					<table>
 						<thead>
 							<td>목록</td>

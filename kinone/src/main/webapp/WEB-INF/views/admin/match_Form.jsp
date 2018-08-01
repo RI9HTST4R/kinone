@@ -159,7 +159,7 @@ h1#title {
 </script>
 
 <div class="container">
-	<form id="addForm" action="/kinone/admin/insertMatch.do" method="post">
+	<form id="addForm" action="${url}/admin/insertMatch.do" method="post">
 		<div class="wrapper">
 			<h1 id="title">매치 일정 등록</h1>
 			<hr>
