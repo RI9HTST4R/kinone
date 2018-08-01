@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<td>엠블럼</td>
-				<td colspan="2"><img src="../stadium/${ mngC.emblem }"></td>
+				<td colspan="2"><img src=${ mngC.emblem }></td>
 			</tr>
 			<tr>
 				<td>감독명</td>

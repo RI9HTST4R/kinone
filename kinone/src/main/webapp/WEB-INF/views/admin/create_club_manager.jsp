@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="fileupload.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -9,7 +10,7 @@
 </head>
 
 <body>
-<form action ="create_club_ok.do">
+<form action ="create_club_ok.do" enctype="multipart/form-data" method="post">
     <table>
         <tr>
             <td>클럽명(풀네임)</td>
@@ -26,7 +27,7 @@
         <tr>
             <td>엠블럼</td>
             <td colspan="2">
-                <input type="file" id="emblem" name="emblem" enctype="multipart/form-data" method="post">
+                <input type="file" id="emblem" name="file">
             </td>
         </tr>
         <tr>
@@ -46,7 +47,7 @@
         <tr>
             <td>경기장 사진</td>
             <td colspan="2">
-                <input type="file" id="sphoto" name="sphoto">
+                <input type="file" id="sphoto" name="file">
             </td>
         </tr>
         <tr>

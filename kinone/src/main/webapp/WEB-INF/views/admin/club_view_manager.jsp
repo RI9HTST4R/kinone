@@ -58,6 +58,10 @@ footer {
 			</div>
 			<div class="col-sm-9">
 				<form>
+				
+				파일 업로드 확인
+								
+				
 					<table>
 						<thead>
 							<td>목록</td>

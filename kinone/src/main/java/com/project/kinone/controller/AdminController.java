@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -121,6 +121,7 @@ public class AdminController {
 	// 리그 클럽 목록
 	@RequestMapping("/admin/club_view.do")
 	public String clubView(Model model) throws Exception {
+		
 		System.out.println("리그 클럽 목록");
 		List<Club> mngClubList = adminService.getMngClubList();
 		System.out.println(mngClubList.toString());
@@ -132,21 +133,25 @@ public class AdminController {
 	// 클럽 생성 페이지
 	@RequestMapping("/admin/create_club.do")
 	public String createClubView() {
+		
 		System.out.println("클럽 생성 페이지");
+		
 		return "admin/create_club_manager";
 	}
  
 	// 클럽 생성 페이지에서 클럽 생성
-	@RequestMapping("/admin/create_club_ok.do")
-	public String createClub(Club mngclub, MultipartHttpServletRequest mRequest, ModelMap model) throws Exception {
+	@RequestMapping(value="/admin/create_club_ok.do", method=RequestMethod.POST)
+	public String createClub(Club mngclub,MultipartHttpServletRequest mtfRequest) throws Exception {
 		
 		System.out.println("클럽 생성 서비스");
 		
-		model.addAttribute("emblem", mngclub.getEmblem());
-		model.addAttribute("sphoto", mngclub.getSphoto());
+		List<MultipartFile> fileList = mtfRequest.getFiles("file");
 		
-		adminService.insertClub(mngclub);
-		adminService.insertStadium(mngclub);
+		String epath = mtfRequest.getSession().getServletContext().getRealPath("resources/emblem");
+		String spath = mtfRequest.getSession().getServletContext().getRealPath("resources/sphoto");
+
+		adminService.insertClub(mngclub, fileList, epath);
+		adminService.insertStadium(mngclub, fileList, spath);
 		
 		return "redirect:/admin/club_view.do";
 	}
@@ -154,23 +159,30 @@ public class AdminController {
 	// 클럽 삭제 페이지
 	@RequestMapping("/admin/delete_club.do")
 	public String deleteClubView() {
+		
 		System.out.println("클럽 삭제 페이지");
+		
 		return "admin/delete_club_manager";
 	}
 	
 	// 클럽 삭제 페이지에서 클럽 삭제
 	@RequestMapping("/admin/delete_club_ok.do")
 	public String deleteClub(String cname, String cmanager, HttpServletResponse response) throws Exception{
+		
 		System.out.println("클럽 삭제");
+		
 		adminService.deleteClub(response, cname, cmanager);
 //		mngServ.deleteStadium(ccode,);	//경기장 삭제
+		
 		return "redirect:/admin/club_view.do";
 	}
 	
 	// 클럽정보 상세보기 페이지
 	@RequestMapping("/admin/detail_club.do")
 	public ModelAndView detailView(String ccode,HttpServletResponse response ) throws Exception {
+		
 		System.out.println("클럽 상세 정보 페이지");
+		
 		// 상세정보 가져오기
 		Club mngC = adminService.getClubDetail(ccode);
 		ModelAndView mv = new ModelAndView();
@@ -185,6 +197,7 @@ public class AdminController {
 	public ModelAndView updateclubView(String ccode, HttpServletResponse response ) throws Exception {
 		
 		System.out.println("클럽 수정 페이지");
+		
 		Club mngC = adminService.getClubDetail(ccode);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mngC", mngC);
