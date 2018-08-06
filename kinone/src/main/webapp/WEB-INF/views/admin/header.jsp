@@ -84,7 +84,6 @@ h1#title {
 					<li><a href="#">선수</a></li>
 					<li><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
 					<li><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
-					
 				</ul>
 			</div>
 			<div class="col-sm-9">
