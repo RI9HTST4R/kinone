@@ -1,10 +1,16 @@
 package com.project.kinone.controller;
 
+import java.awt.Image;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -338,9 +344,11 @@ public class AdminController {
 	public String pinsert1(Player player, 
 						Player_detail playerd, 
 						Player_season players, 
-						MultipartHttpServletRequest file,
+						MultipartHttpServletRequest mhsr,
+						HttpServletResponse response,
 						@RequestParam("birthdate1") String birthdate1,
-						Model model) {
+						Model model) throws IOException{
+		System.out.println("pinsert");
 		//date 를 timestamp로 형변환
 		System.out.println(birthdate1);
 		String birthdate2=birthdate1+" 00:00:00";
@@ -349,19 +357,38 @@ public class AdminController {
 		System.out.println(player.toString());
 		
 		//file upload처리
+		MultipartFile file = mhsr.getFile("file");
 		
-		int result1 = adminService.pinsert(player);
+		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player");
+		
+		
+		//service호출해서 sql처리
+		int result1 = adminService.pinsert(player, file, path);
 		System.out.println("insert1="+result1);
 		int result2 = adminService.pinsertd(playerd);
 		System.out.println("insert2="+result2);
 		int result3 = adminService.pinserts(players);
 		System.out.println("insert3="+result3);
+		
+		//리다이렉트를 위한 pcode호출
+		String pc = player.getPcode();
 				 
-		model.addAttribute("result1",result1);
-		model.addAttribute("result2",result2);
-		model.addAttribute("result3",result3);
+		
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		if(result1==1 && result2==1) {
+			model.addAttribute("pcode",pc);
 			
+			return "redirect:/admin/pview.do";
+		}
+		else {
+			out.println("<script>");
+			out.println("alert('입력에 실패했습니다')");
+			out.println("</script>");
+			out.close();
 		return "admin/player_list";
+		}
+		
 	}
 	
 	//선수 기본+상세정보 수정 페이지 이동
@@ -406,67 +433,155 @@ public class AdminController {
 	public String pupdate1(String pcode, 
 									Player player, 
 									Player_detail playerd, 
-									MultipartHttpServletRequest file,
+									MultipartHttpServletRequest mhsr,
+									HttpServletResponse response,
 									@RequestParam("birthdate1") String birthdate1,
 									Model model) throws IllegalStateException, IOException{
+		System.out.println("pupdate1");
+		
 		//date->timestamp변환
-		System.out.println("birthdate1="+birthdate1);
+		System.out.println("birthdate1=" +birthdate1);
 		String birthdate2=birthdate1+" 00:00:00";
 		System.out.println("birthdate2="+birthdate2);
 		playerd.setBirthdate(Timestamp.valueOf(birthdate2));
 		
 		//file upload처리
-		MultipartFile mfile=file.getFile("file");
-		String path= file.getSession().getServletContext().getRealPath("resources/player");
+		MultipartFile file=mhsr.getFile("file");
+		String path= mhsr.getSession().getServletContext().getRealPath("resources/player");
 		System.out.println("path="+path);
 		
 		
 		//player,playerd에 값 있나 확인하고 인서트 처리
 		System.out.println("player pname="+player.getPname());
 		System.out.println("playerd nation="+playerd.getNation());
-		int result1 = adminService.pupdate(player);
+		int result1 = adminService.pupdate(player,file,path);
 		int result2 = adminService.pupdated(playerd);
 		System.out.println("result1="+result1);
 		System.out.println("result2="+result2);
 		
-		//model에 주입
-		model.addAttribute("result1",result1);
-		model.addAttribute("result2",result2);
-		return "admin/player_list";
+		model.addAttribute("pcode",player.getPcode());
+		
+		//alert띄우려고 getwriter 호출
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		
+		//결과에 따라 리다이렉트
+		if(result1==1 && result2==1) {
+			return "redirect:/admin/pview.do";
+		}
+		else {
+			out.println("<script>");
+			out.println("alert('수정에 실패했습니다')");
+			out.println("</script>");
+			out.close();
+		return "redirect:/admin/pview.do";
+		}
 	}
 	
 	//선수 시즌 정보 수정
 	@RequestMapping("/admin/pupdate2.do")
 	public String pupdate2(String pcode, 
 			Player_season players,
-			Model model) {
-		
-		  System.out.println("pupdate2");
+			HttpServletResponse response,
+			Model model) throws IOException {
+			
+			//받은 시즌 정보 수정
+			System.out.println("pupdate2");
 			int result=adminService.pupdates(players);
-			
-			model.addAttribute("ajax",result);
-			
 			System.out.println("pupdate2 result = "+result);
 			
-		return "ajax";
+			//alert띄우려고 getwriter 호출
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			//리다이렉트용 pcode
+			model.addAttribute("pcode",players.getPcode());
+			
+			//결과에 따라 alert호출
+			if(result==1) {
+				return "redirect:/admin/pupdateForm2.do";
+			}
+			else {
+				out.println("<script>");
+				out.println("alert('수정에 실패했습니다')");
+				out.println("</script>");
+				out.close();
+			return "redirect:/admin/pupdateForm2.do";
+			}
+			
 	}
 	
 	//선수 시즌 정보 추가
 	@RequestMapping("/admin/pupdate3.do")
 	public String pupdate3(String pcode, 
 			Player_season players,
-			Model model) {
+			HttpServletResponse response,
+			Model model) throws IOException{
 			
-		System.out.println("players ="+players.getCcode()+players.getPcode());
-			
+			//players 정보 확인하고 정보추가
+			System.out.println("pupdate3");
+			System.out.println("players ="+players.getCcode()+players.getPcode());
 			int result = adminService.puinsert(players);
-			model.addAttribute("result",result);
-			
 			System.out.println("pupdate3 result = "+result);
+			
+			
+			//alert띄우려고 getwriter 호출
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			
+			model.addAttribute("pcode",players.getPcode());
+			if(result==1) {
+				
+				return "redirect:/admin/pupdateForm2.do";
+			}
+			else {
+				out.println("<script>");
+				out.println("alert('수정에 실패했습니다')");
+				out.println("</script>");
+				out.close();
+
+			return "redirect:/admin/pupdateForm2.do";
+			}
+			
+
+	
 		
-		
-		return "admin/player_list";
 	}
+	//선수 삭제
+	@RequestMapping("/admin/pdelete.do")
+	public String pdelete(String pcode, 
+			HttpServletResponse response,
+			Model model) throws IOException{
+		System.out.println("pdelete");
+		int result3 = adminService.pdeleted(pcode);
+		int result2 = adminService.pdeletes(pcode);
+		int result1 = adminService.pdelete(pcode);
+		
+		
+		
+	
+		
+		//alert띄우려고 getwriter 호출
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		if(result1==1&&result2==1&&result3==1) {
+			
+			return "redirect:/admin/plist.do";
+		}
+		else {
+			model.addAttribute("pcode",pcode);
+			out.println("<script>");
+			out.println("alert('삭제에 실패했습니다')");
+			out.println("</script>");
+			out.close();
+
+		return "redirect:/admin/pview.do";
+		}
+		
+	}
+	
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	
 }

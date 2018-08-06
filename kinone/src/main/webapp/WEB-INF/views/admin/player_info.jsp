@@ -1,16 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<div align="center">
+<%@ include file="header.jsp"%>
+<div class="container">
+	<div class="wrapper" align="center">
+		<h1 id="title">시즌 정보</h1>
+		<hr> 
 <h2>${player.pname}선수 정보</h2>
-<table border=1px>
+<table class="table table-sm">
 <tr>
 	<td colspan=5>선수 기본정보</td>
 </tr>
@@ -28,12 +24,13 @@
 	<td>${player.ccode}</td>
 	<td>${player.pno }</td>
 	<td>${player.position}</td>
-	<td><img src="${player.photo }"/></td>
+	<td><img src="/kinone/resources/player/${player.photo }" width=60height=100/></td>
 	
 </tr>
 <tr>
 	<td colspan=5>선수 상세정보</td>
 </tr>
+
 <tr>
 	<td>출생국</td>
 	<td>생일</td>
@@ -77,8 +74,25 @@
 <input type="button" value="기본정보수정" onclick="location.href='/kinone/admin/pupdateForm1.do?pcode=${player.pcode}'">
 <input type="button" value="시즌정보수정" onclick="location.href='/kinone/admin/pupdateForm2.do?pcode=${player.pcode }'">
 <input type="button" value="시즌정보업데이트" onclick="location.href='/kinone/admin/pupdateForm3.do?pcode=${player.pcode }'">
-<input type="button" value="삭제" onclick="location.href='/kinone/admin/pdeleteForm.do?pcode=${player.pcode }'">
+<input type="button" value="삭제" id="pdelete" onclick="pdelete('${player.pcode}')" >
 <input type="button" value="목록" onclick="location.href='/kinone/admin/plist.do?pageNum=1'">
 </div>
-</body>
-</html>
+	</div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+	
+	function pdelete(pcode){
+		
+		var result = confirm('정말로 삭제하시겠습니까?');
+		if(result) { //yes 
+			location.replace('/kinone/admin/pdelete.do?pcode='+pcode); 
+		} else { //no
+			return;
+				}
+			}
+	
+	
+
+</script>	
+	
+<%@ include file="footer.jsp"%>
