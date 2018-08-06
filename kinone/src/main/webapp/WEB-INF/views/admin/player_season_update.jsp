@@ -1,36 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script>
-	function edit(num){
-		var formdata = $("#editForm"+num).serialize();
-		
-		$.post("/kinone/admin/pupdate2.do", formdata, function(data){
-			if(data == 1){
-				location.reload();
-			}
-		});
-		
-	}
-</script>
-
-</head>
-<body>
-
-<div align="center">
+<%@ include file="header.jsp"%>
+<div class="container">
+	<div class="wrapper">
+		<h1 id="title">시즌 정보</h1>
+		<hr> 
+		<div align="center">
 <h2>선수 수정</h2>
 
 
-<table border=1px>
+<table class="table table-sm">
 <tr>
 	<td colspan=5>선수 기본정보</td>
 </tr>
@@ -111,5 +90,20 @@
 
 
 </div>
-</body>
-</html>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+	function edit(num){
+		var formdata = $("#editForm"+num).serialize();
+		
+		$.post("/kinone/admin/pupdate2.do", formdata, function(data){
+			if(data == 1){
+				location.reload();
+			}
+		});
+		
+	}
+</script>
+
+	</div>
+</div>
+<%@ include file="footer.jsp"%>

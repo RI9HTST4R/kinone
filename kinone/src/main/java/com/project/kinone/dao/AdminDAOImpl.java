@@ -133,19 +133,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 
 	// 선수 리스트
 	public List<Player> plist(Player player) throws Exception {
-		// TODO Auto-generated method stub
 		return session.selectList("adminmapper.plist", player);
 	}
 
 	// 선수 총 인원
 	public int getPtotal(Player player) {
-		// TODO Auto-generated method stub
 		return session.selectOne("adminmapper.getPtotal", player);
 	}
 
 	// 선수 기본 정보 선택
 	public Player pselect(String pcode) {
-		// TODO Auto-generated method stub
 		return session.selectOne("adminmapper.pselect", pcode);
 	}
 
@@ -195,9 +192,14 @@ public class AdminDAOImpl implements AdminDAOInter {
 	}
 
 	// 선수 정보 삭제
-	public int delete(String pcode) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int pdelete(String pcode) {
+		return session.delete("adminmapper.pdelete",pcode);
+	}
+	public int pdeleted(String pcode) {
+		return session.delete("adminmapper.pdeleted",pcode);
+	}
+	public int pdeletes(String pcode) {
+		return session.delete("adminmapper.pdeletes",pcode);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
