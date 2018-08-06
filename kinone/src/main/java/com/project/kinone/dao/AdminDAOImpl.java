@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
+import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
@@ -78,6 +79,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 	// 매치 정보를 삭제
 	public int deleteMatch(String mcode) {
 		return session.delete("adminmapper.deleteMatch", mcode);
+	}
+	
+	// 하나의 매치 정보를 가져온다
+	public Match getMatchInfo(String mcode) {
+		return session.selectOne("matchmapper.matchInfo", mcode);
+	}
+	
+	// 라인업 수정
+	public int updateMatchDetail(Match_detail md) {
+		return session.update("adminmapper.updateMatchDetail", md);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +210,10 @@ public class AdminDAOImpl implements AdminDAOInter {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	
+
+	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

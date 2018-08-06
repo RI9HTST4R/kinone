@@ -22,6 +22,7 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.util.FileUpload;
+import com.project.kinone.util.Lineup;
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.StringToTimestamp;
 
@@ -188,21 +189,22 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		return result;
 	}
+	
+	// mcode를 통해 하나의 매치 정보를 가져오는 메소드
+	public Match getMatchInfo(String mcode) {
+		return adminDao.getMatchInfo(mcode);
+	}
 
 	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
-	public List<Player> getMatchDetail(String mcode) {
+	public Lineup getMatchDetail(String mcode) {
 		Match_detail md = matchDao.getMatchDetail(mcode);
-		String home = md.getHomelineup();
-		String homearr[] = home.split("/");
-		List<Player> homeStarting = playerDao.getPlayerList(homearr[0].split(","));
-		/*
-		 * List<Player> homeSub = playerDao.getPlayerList(homearr[1].split(",")); String
-		 * away = md.getAwaylineup(); String awayarr[] = away.split("/"); List<Player>
-		 * awayStarting = playerDao.getPlayerList(homearr[0].split(",")); List<Player>
-		 * awaySub = playerDao.getPlayerList(homearr[1].split(","));
-		 */
 
-		return homeStarting;
+		return new Lineup(playerDao, md);
+	}
+	
+	// 라인업 수정
+	public int updateMatchDetail(Match_detail md) {
+		return adminDao.updateMatchDetail(md);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -343,5 +345,9 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pinserts(players);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+
+	
 
 }

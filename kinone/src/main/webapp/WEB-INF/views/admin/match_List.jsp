@@ -235,22 +235,10 @@ span.example {
 		}
 	}
 	
-	function matchEdit(mcode){
-		alert(mcode);
-		
-		$.ajax({
-			url: "/kinone/admin/getMatchDetail.do",
-			data: {"mcode":mcode},
-			dataType: "json",
-			type: "post",
-			success: function(data){
-				alert(data);
-			},
-			error: function(request,status,error){
-			    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
-		});
-		
+	function matchEdit(mcode){ // 편집 버튼 눌렀을때 페이지 이동
+	//	alert(mcode);
+		$("#hideInput").val(mcode);
+		$("#goEdit").submit();		
 	}
 	
 	$(function(){
@@ -370,7 +358,9 @@ span.example {
 			</table>
 		</div>
 	</div>
-
+	<form id="goEdit" method="post" action="${url}/admin/matchDetailForm.do" >
+		<input type="hidden" id="hideInput" name="mcode"/>
+	</form>
 </div>
 
 

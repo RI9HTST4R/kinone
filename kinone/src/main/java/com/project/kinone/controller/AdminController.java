@@ -20,17 +20,23 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
+import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.service.AdminServiceImpl;
+import com.project.kinone.service.PlayerServiceImpl;
+import com.project.kinone.util.Lineup;
 import com.project.kinone.util.PagingPgm;
 
 @Controller
 public class AdminController {
 	
 	@Autowired
-	private AdminServiceImpl adminService;	
+	private AdminServiceImpl adminService;
+	
+	@Autowired
+	private PlayerServiceImpl playerService;
 	
 ////////////////////////////////////////////// 한 동 준 /////////////////////////////////////////////////////////
 	
@@ -120,19 +126,43 @@ public class AdminController {
 		return "ajax";
 	}
 	
-	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
-	@RequestMapping(value="/admin/getMatchDetail.do", method=RequestMethod.POST)
-	@ResponseBody
-	public List<Player> getMatchDetail(@RequestParam String mcode){
-		System.out.println("gg");
-		List<Player> list = adminService.getMatchDetail(mcode);
-		for(Player player : list) {
-			System.out.println(player.toString());
-		}
+	// 매치의 라인업과 상태, 스코어를 편집할 수 있는 페이지로 이동
+	@RequestMapping(value="/admin/matchDetailForm.do", method=RequestMethod.POST)
+	public String matchDetailForm(@RequestParam String mcode, Model model) {
+		System.out.println("mcode:"+mcode);
 		
-		return list;
+		// 해당 매치의 정보
+		Match match = adminService.getMatchInfo(mcode);
+		System.out.println(match.toString());
+		// 해당 매치의 클럽 소속 선수들
+		String ccode_home = match.getCcode_home();
+		String ccode_away = match.getCcode_away();
+		System.out.println("ccode_home:"+ccode_home+" ccode_away:"+ccode_away);
+		List<Player> pList_home = playerService.getPlayerListInClub(ccode_home);
+		List<Player> pList_away = playerService.getPlayerListInClub(ccode_away);
+		
+		// 라인업이 등록되었다면 그 등록된 라인업 선수 정보
+		Lineup lu = adminService.getMatchDetail(mcode);
+		
+		model.addAttribute("match", match);
+		model.addAttribute("pList_home", pList_home);
+		model.addAttribute("pList_away", pList_away);
+		model.addAttribute("lu", lu);
+		return "admin/match_detail";
 	}
-
+	
+	// 라인업 수정
+	@RequestMapping(value="/admin/updateMatchDetail.do", method=RequestMethod.POST)
+	public String updateMatchDetail(Match_detail md, Model model) {
+		System.out.println("mcode : "+md.getMcode());
+		System.out.println("hLineup : "+md.getHomelineup());
+		System.out.println("aLineup : "+md.getAwaylineup());
+		
+		int result = adminService.updateMatchDetail(md);
+		model.addAttribute("ajax", result);
+		return "ajax";
+	}
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	

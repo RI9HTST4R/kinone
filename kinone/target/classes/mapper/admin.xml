@@ -80,9 +80,13 @@
 			<if test='seasoncode != null and seasoncode !=""'>seasoncode = #{seasoncode}</if>
 		</where>
 		)
-		where rnum <![CDATA[>]]>= 1 and rnum <![CDATA[<]]>= 100 
-		
+		where rnum <![CDATA[>]]>= 1 and rnum <![CDATA[<]]>= 100
     </select>
+    
+    <update id="updateMatchDetail" parameterType="match_detail">
+    	update match_detail set homelineup = #{homelineup, jdbcType=VARCHAR}, awaylineup = #{awaylineup, jdbcType=VARCHAR}
+    	where mcode = #{mcode}
+    </update>
 <!-- ############################################################################################# -->    
 
 
