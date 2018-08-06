@@ -23,7 +23,7 @@ import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.util.FileUpload;
 import com.project.kinone.util.Lineup;
-import com.project.kinone.util.FileUpload2;
+
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.StringToTimestamp;
 
@@ -351,7 +351,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int pinsert(Player player, MultipartFile file, String path) {
-		String photo = FileUpload2.fileUpload(file,path);
+		String photo = FileUpload.fileUpload(file,path);
 		if (photo.split("\\.").length==2) {
 			System.out.println("split="+photo.split("\\.").length);
 			System.out.println("photosplit="+photo.split("\\."));
@@ -377,7 +377,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int pupdate(Player player,MultipartFile file, String path ) {
-		String photo = FileUpload2.fileUpload(file,path);
+		String photo = FileUpload.fileUpload(file,path);
 		if (photo.split("\\.").length==2) {
 			System.out.println("split="+photo.split("\\.").length);
 			System.out.println("photosplit="+photo.split("\\."));

@@ -72,6 +72,7 @@ h1#title {
 	margin-top: 0px;
 }
 </style>
+
 </head>
 <body>
 	<div class="container-fluid">
