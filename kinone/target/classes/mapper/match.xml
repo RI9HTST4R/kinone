@@ -58,6 +58,12 @@
     	select * from match_detail where mcode = #{mcode}
     </select>
     
+    <select id="matchInfo" parameterType="java.lang.String" resultType="match">
+    	select M.*, Ch.cname_short cname_short_h, Ca.cname_short cname_short_a
+		from match M, club Ch, club Ca
+		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode and mcode = #{mcode}
+    </select>
+    
 </mapper>
 
 

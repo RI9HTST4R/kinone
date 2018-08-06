@@ -26,6 +26,11 @@ public class PlayerDAOImpl implements PlayerDAOInter {
 	public List<Player> getPlayerList(String[] pcode) {
 		return session.selectList("playermapper.playerList", pcode);
 	}
+
+	// 특정 구단에 속해있는 선수 목록을 가져온다
+	public List<Player> getPlayerListInClub(String ccode) {
+		return session.selectList("playermapper.playerListInClub", ccode);
+	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

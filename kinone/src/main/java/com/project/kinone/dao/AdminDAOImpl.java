@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
+import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
@@ -79,6 +80,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int deleteMatch(String mcode) {
 		return session.delete("adminmapper.deleteMatch", mcode);
 	}
+	
+	// 하나의 매치 정보를 가져온다
+	public Match getMatchInfo(String mcode) {
+		return session.selectOne("matchmapper.matchInfo", mcode);
+	}
+	
+	// 라인업 수정
+	public int updateMatchDetail(Match_detail md) {
+		return session.update("adminmapper.updateMatchDetail", md);
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -133,19 +144,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 
 	// 선수 리스트
 	public List<Player> plist(Player player) throws Exception {
-		// TODO Auto-generated method stub
 		return session.selectList("adminmapper.plist", player);
 	}
 
 	// 선수 총 인원
 	public int getPtotal(Player player) {
-		// TODO Auto-generated method stub
 		return session.selectOne("adminmapper.getPtotal", player);
 	}
 
 	// 선수 기본 정보 선택
 	public Player pselect(String pcode) {
-		// TODO Auto-generated method stub
 		return session.selectOne("adminmapper.pselect", pcode);
 	}
 
@@ -195,10 +203,19 @@ public class AdminDAOImpl implements AdminDAOInter {
 	}
 
 	// 선수 정보 삭제
-	public int delete(String pcode) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int pdelete(String pcode) {
+		return session.delete("adminmapper.pdelete",pcode);
 	}
+	public int pdeleted(String pcode) {
+		return session.delete("adminmapper.pdeleted",pcode);
+	}
+	public int pdeletes(String pcode) {
+		return session.delete("adminmapper.pdeletes",pcode);
+	}
+
+	
+
+	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

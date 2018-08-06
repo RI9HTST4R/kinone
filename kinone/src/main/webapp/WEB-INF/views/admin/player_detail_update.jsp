@@ -1,48 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<!DOCTYPE>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-
-<div align="center">
-<h2>선수 수정</h2>
+<%@ include file="header.jsp"%>
+<div class="container">
+	<div class="wrapper" align="center">
+		<h1 id="title">선수 정보 수정</h1>
+		<hr> 
 <form action="/kinone/admin/pupdate1.do" method="POST" enctype="multipart/form-data">
 <input type=hidden name="pcode" value="${player.pcode}">
-<table border=1px>
+<table class="table table-sm">
 <tr>
 	<td colspan=5>선수 기본정보</td>
 </tr>
 <tr>
-	<td>선수 이름</td>
-	<td>소속 구단</td>
-	<td>백넘버</td>
-	<td>포지션</td>
-	<td>사진</td>
+	<th>선수 이름</th>
+	<th>소속 구단</th>
+	<th>백넘버</th>
+	<th>포지션</th>
+	<th>사진</th>
 </tr>
 <tr>
 	<td><input type="text" name="pname" value="${player.pname }"></td>
 	<td><input type="text" name="ccode" value="${player.ccode }"></td>
 	<td><input type="text" name="pno" value="${player.pno }"></td>
 	<td><input type="text" name="position" value="${player.position }"></td>
-	<td><input type="file" name="photo"></td>
+	<td><input type="file" name="file"></td>
 	
 </tr>
 <tr>
 	<td colspan=4>선수 상세정보</td>
 </tr>
 <tr>
-	<td>출생국</td>
-	<td>생일</td>
-	<td>키</td>
-	<td>몸무게</td>
+	<th>출생국</th>
+	<th>생일</th>
+	<th>키</th>
+	<th>몸무게</th>
 </tr>
 <tr>
 	<td><input type="text" name="nation" value="${playerd.nation}"></td>
@@ -58,9 +49,11 @@
 <input type=submit value="수정" >
 <input type="button" value="취소" onclick="location.href='/kinone/admin/pview.do?pcode=${player.pcode}'">
 <input type="button" value="목록으로" onclick="location.href='/kinone/admin/plist.do'">
+
 </form>
 
 
+
 </div>
-</body>
-</html>
+	</div>
+<%@ include file="footer.jsp"%>

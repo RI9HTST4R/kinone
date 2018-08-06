@@ -22,6 +22,8 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.util.FileUpload;
+import com.project.kinone.util.Lineup;
+import com.project.kinone.util.FileUpload2;
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.StringToTimestamp;
 
@@ -188,21 +190,22 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		return result;
 	}
+	
+	// mcode를 통해 하나의 매치 정보를 가져오는 메소드
+	public Match getMatchInfo(String mcode) {
+		return adminDao.getMatchInfo(mcode);
+	}
 
 	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
-	public List<Player> getMatchDetail(String mcode) {
+	public Lineup getMatchDetail(String mcode) {
 		Match_detail md = matchDao.getMatchDetail(mcode);
-		String home = md.getHomelineup();
-		String homearr[] = home.split("/");
-		List<Player> homeStarting = playerDao.getPlayerList(homearr[0].split(","));
-		/*
-		 * List<Player> homeSub = playerDao.getPlayerList(homearr[1].split(",")); String
-		 * away = md.getAwaylineup(); String awayarr[] = away.split("/"); List<Player>
-		 * awayStarting = playerDao.getPlayerList(homearr[0].split(",")); List<Player>
-		 * awaySub = playerDao.getPlayerList(homearr[1].split(","));
-		 */
 
-		return homeStarting;
+		return new Lineup(playerDao, md);
+	}
+	
+	// 라인업 수정
+	public int updateMatchDetail(Match_detail md) {
+		return adminDao.updateMatchDetail(md);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,12 +331,10 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int getPtotal(Player player) {
-		// TODO Auto-generated method stub
 		return adminDao.getPtotal(player);
 	}
 
 	public Player pselect(String pcode) {
-		// TODO Auto-generated method stub
 		return adminDao.pselect(pcode);
 	}
 
@@ -345,12 +346,53 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pselects(pcode);
 	}
 
-	public int delete(String pcode) {
-		// TODO Auto-generated method stub
-		return adminDao.delete(pcode);
+	public int puinsert(Player_season players) {
+		return adminDao.puinsert(players);
 	}
 
-	public int pupdate(Player player) {
+	public int pinsert(Player player, MultipartFile file, String path) {
+		String photo = FileUpload2.fileUpload(file,path);
+		if (photo.split("\\.").length==2) {
+			System.out.println("split="+photo.split("\\.").length);
+			System.out.println("photosplit="+photo.split("\\."));
+			player.setPhoto(photo);
+			System.out.println(photo);
+		}else{
+			System.out.println("split="+photo.split("\\.").length);
+			System.out.println("photosplit="+photo.split("\\."));
+			photo=null;
+		}
+		
+		player.setPhoto(photo);
+		
+		return adminDao.pinsert(player);
+	}
+
+	public int pinsertd(Player_detail playerd) {
+		return adminDao.pinsertd(playerd);
+	}
+
+	public int pinserts(Player_season players) {
+		return adminDao.pinserts(players);
+	}
+
+	public int pupdate(Player player,MultipartFile file, String path ) {
+		String photo = FileUpload2.fileUpload(file,path);
+		if (photo.split("\\.").length==2) {
+			System.out.println("split="+photo.split("\\.").length);
+			System.out.println("photosplit="+photo.split("\\."));
+			player.setPhoto(photo);
+			System.out.println(photo);
+		}else{
+			System.out.println("photo="+photo);
+			System.out.println("split length="+photo.split("\\.").length);
+			System.out.println("photosplit="+photo.split("\\."));
+			
+			Player p = pselect(player.getPcode());
+			String prophoto = p.getPhoto();
+			player.setPhoto(prophoto);
+		}
+		
 		return adminDao.pupdate(player);
 	}
 
@@ -362,21 +404,19 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pupdates(players);
 	}
 
-	public int puinsert(Player_season players) {
-		return adminDao.puinsert(players);
+	public int pdelete(String pcode) {
+		return adminDao.pdelete(pcode);
 	}
-
-	public int pinsert(Player player) {
-		return adminDao.pinsert(player);
+	public int pdeleted(String pcode) {
+		return adminDao.pdeleted(pcode);
 	}
-
-	public int pinsertd(Player_detail playerd) {
-		return adminDao.pinsertd(playerd);
-	}
-
-	public int pinserts(Player_season players) {
-		return adminDao.pinserts(players);
+	public int pdeletes(String pcode) {
+		return adminDao.pdeletes(pcode);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+
+	
 
 }
