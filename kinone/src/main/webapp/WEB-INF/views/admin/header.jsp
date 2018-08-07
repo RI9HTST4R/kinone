@@ -4,6 +4,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="url" value="<%=request.getContextPath()%>"/>
+<c:set var="cpage" value="<%= request.getServletPath().substring(request.getServletPath().lastIndexOf('/')+1, request.getServletPath().indexOf('.'))  %>" />
 <!DOCTYPE>
 <html>
 <head>
@@ -81,11 +82,11 @@ h1#title {
 			</div>
 			<div class="col-sm-3 sidenav">
 				<ul class="nav nav-pills nav-stacked">
-					<li class="active"><a href="/kinone/admin/main.do">시즌</a></li>
-					<li><a href="/kinone/admin/club_view.do">클럽</a></li>
-					<li><a href="/kinone/admin/plist.do">선수</a></li>
-					<li><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
-					<li><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
+					<li <c:if test='${fn:contains(cpage, "main")}'>class="active"</c:if>><a href="/kinone/admin/main.do">시즌</a></li>
+					<li <c:if test='${fn:contains(cpage, "club")}'>class="active"</c:if>><a href="/kinone/admin/club_view.do">클럽</a></li>
+					<li <c:if test='${fn:contains(cpage, "player")}'>class="active"</c:if>><a href="/kinone/admin/plist.do">선수</a></li>
+					<li <c:if test='${fn:contains(cpage, "match")}'>class="active"</c:if>><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
+					<li <c:if test='${fn:contains(cpage, "match")}'>class="active"</c:if>><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
 					
 				</ul>
 			</div>
