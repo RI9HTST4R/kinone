@@ -10,9 +10,9 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 	$(window).load(function() {
-	//	location.href = "main.do";
+		location.href = "main.do";
 	//	location.href = "admin/main.do";
-		location.href = "admin/club_view.do";
+	//	location.href = "admin/club_view.do";
 	//	location.href = "admin/plist.do";
 
 	});	

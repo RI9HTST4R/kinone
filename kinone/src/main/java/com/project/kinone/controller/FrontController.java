@@ -41,10 +41,10 @@ public class FrontController {
 		System.out.println(clubList.toString());
 		String seasoncode = adminService.getTopSeason();
 		
+		// 매치 슬라이드 부분 데이터
 		List<Date> k1MatchDays = matchService.get7MatchDays("K1");
 		System.out.println("K1 리그 매치 날짜 : " + k1MatchDays);
 		HashMap<String, HashMap> k1MatchMapList = matchService.getAllMatchInDay(k1MatchDays, "K1");
-	//	System.out.println(matchListMap.toString());
 		List<Date> k2MatchDays = matchService.get7MatchDays("K2");
 		System.out.println("K2 리그 매치 날짜 : " + k2MatchDays);
 		HashMap<String, HashMap> k2MatchMapList = matchService.getAllMatchInDay(k2MatchDays, "K2");
@@ -79,19 +79,6 @@ public class FrontController {
 	// 로그인 페이지로 이동
 	@RequestMapping(value="/login.do", method=RequestMethod.GET)
 	public String login(Model model) {
-		
-		// 이부분은 일단 고정해놓으세요 -------------------------------------------
-		List<Date> k1MatchDays = matchService.get7MatchDays("K1");
-		System.out.println("K1 리그 매치 날짜 : " + k1MatchDays);
-		HashMap<String, HashMap> k1MatchMapList = matchService.getAllMatchInDay(k1MatchDays, "K1");
-		List<Date> k2MatchDays = matchService.get7MatchDays("K2");
-		System.out.println("K2 리그 매치 날짜 : " + k2MatchDays);
-		HashMap<String, HashMap> k2MatchMapList = matchService.getAllMatchInDay(k2MatchDays, "K2");
-		model.addAttribute("k1MatchDays", k1MatchDays);
-		model.addAttribute("k1MatchMapList", k1MatchMapList);
-		model.addAttribute("k2MatchDays", k2MatchDays);
-		model.addAttribute("k2MatchMapList", k2MatchMapList);
-		// 이부분은 일단 고정해놓으세요 -------------------------------------------
 		
 		return "login";
 	}
