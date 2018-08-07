@@ -95,8 +95,6 @@ public class AdminController {
 	@RequestMapping(value="/admin/matchList.do", method= {RequestMethod.GET,RequestMethod.POST})
 	public String matchList(@RequestParam HashMap<String, String> params, Model model) throws Exception {
 		
-		model.addAttribute("active4", "class='active'");
-		
 		List<String> seasonList = adminService.getAllSeason();
 		List<String> leagueList = adminService.getAllLeague();
 
@@ -217,8 +215,6 @@ public class AdminController {
 	// 리그 클럽 목록
 	@RequestMapping("/admin/club_view.do")
 	public String clubView(Model model) throws Exception {
-
-		model.addAttribute("active2", "class='active'");
 		
 		System.out.println("리그 클럽 목록");
 		List<Club> mngClubList = adminService.getMngClubList();
