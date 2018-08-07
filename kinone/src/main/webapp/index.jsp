@@ -14,8 +14,7 @@
 	//	location.href = "admin/main.do";
 	//	location.href = "admin/club_view.do";
 	//	location.href = "admin/plist.do";
-
-	});	
+	});
 </script>
 <style>
 #loading {

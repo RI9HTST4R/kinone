@@ -82,7 +82,10 @@ span.example {
       color: white; 
       padding: 5px;
       font-size: 15px;
-  }
+}
+.pagingwrapper {
+	padding-left: 255px;
+}
 
 </style>
 <script>
@@ -231,6 +234,13 @@ span.example {
 			alert("조건을 선택하시거나 검색어를 입력하세요.");
 			return;
 		}else {
+			if(category == "mstatus" && keyword.length > 0){
+				if(keyword == "경기전"){
+					$("#keyword").val("0");
+				}else {
+					$("#keyword").val("1");
+				}
+			}
 			$("#searchForm").submit();
 		}
 	}
@@ -266,43 +276,37 @@ span.example {
 	})
 </script>
 <div class="container">
-	<%-- 검색 시 키워드 별 변수 세팅 --%>
-	<c:set var="seasoncode" value="${keyword['seasoncode']}"/>
-	<c:set var="lcode" value="${keyword['lcode']}"/>
-	<%-- 검색 시 키워드 별 변수 세팅 끝 --%>
+	<c:set var="seasoncode" value="${condition['seasoncode']}"/>
+	<c:set var="lcode" value="${condition['lcode']}"/>
+	<c:set var="category" value="${condition['category']}"/>
+	<c:set var="keyword" value="${condition['keyword']}"/>
 	<div class="wrapper">
 		<h1 id="title">등록된 매치 목록</h1>
 		<hr>
 		<div class="search-wrapper">
-			<form id="searchForm" name="searchForm" method="post" action="${url}/admin/matchList.do">
+			<form id="searchForm" name="searchForm" method="get" action="${url}/admin/matchList.do">
 				<select id="seasoncode" name="seasoncode" class="form-control">
 					<option value="">전체시즌</option>
 				<c:forEach var="season" items="${seasonList}">
-					<option <c:if test="${condition['seasoncode'] == season}">selected</c:if>>${season}</option>
+					<option <c:if test="${seasoncode == season}">selected</c:if>>${season}</option>
 				</c:forEach>
 				</select>
 				
 				<select id="lcode" name="lcode" class="form-control">
 					<option value="">전체리그</option>
 				<c:forEach var="league" items="${leagueList}">
-					<option <c:if test="${condition['lcode'] == league}">selected</c:if>>${league}</option>
+					<option <c:if test="${lcode == league}">selected</c:if>>${league}</option>
 				</c:forEach>
 				</select>
-				
-				<select id="interval" name="interval" class="form-control">
-					<option value="whole">전체기간</option>
-					<option value="month">월별</option>
-					<option value="day">일별</option>
-				</select>
 				<select id="category" name="category" class="form-control">
-					<option value="mcode" <c:if test="${condition['category'] == 'mcode'}">selected</c:if>>매치코드</option>
-					<option value="ccode" <c:if test="${condition['category'] == 'ccode'}">selected</c:if>>구단코드</option>
-					<option value="cname_short" <c:if test="${condition['category'] == 'cname_short'}">selected</c:if>>구단명</option>
-					<option value="mround" <c:if test="${condition['category'] == 'mround'}">selected</c:if>>라운드</option>
-					<option value="mstatus" <c:if test="${condition['category'] == 'mstatus'}">selected</c:if>>상태</option>
+					<option value="mcode" <c:if test="${category == 'mcode'}">selected</c:if>>매치코드</option>
+					<option value="ccode" <c:if test="${category == 'ccode'}">selected</c:if>>구단코드</option>
+					<option value="cname_short" <c:if test="${category == 'cname_short'}">selected</c:if>>구단명</option>
+					<option value="mround" <c:if test="${category == 'mround'}">selected</c:if>>라운드</option>
+					<option value="mstatus" <c:if test="${category == 'mstatus'}">selected</c:if>>상태</option>
 				</select>
 				<!-- <br/> -->
-				<input type="text" class="form-control" id="keyword" name="keyword" value="${condition['keyword']}"/>
+				<input type="text" class="form-control" id="keyword" name="keyword" value="${keyword}"/>
 				<a class="tbl-btn" onClick="goSearch()">검색</a>
 			</form>
 		</div>
@@ -325,7 +329,7 @@ span.example {
 				<tbody>
 			<c:if test="${empty matchList}">
 					<tr class="match-info">
-						<td colspan="7"><span style="font-weight: bold; color: red; font-size: 10pt;">조건에 맞는 매치가 없습니다.</span></td>
+						<td colspan="7"><span style="font-weight: bold; color: red; font-size: 10pt;">매치가 없습니다.</span></td>
 					</tr>
 			</c:if>
 			<c:if test="${not empty matchList}">
@@ -347,16 +351,46 @@ span.example {
 					</c:if>
 					</tr>
 				</c:forEach>
-					<tr>
-						<td></td>
-						<td colspan="7" style="align: center;">
-							<div style="height: 500px; width: 800px; border: 1px solid red; padding-left: 10px;"></div>
-						</td>
-					</tr>
 			</c:if>
 				</tbody>
 			</table>
+			<div class="pagingwrapper">
+				<ul class="pagination">
+				<c:choose>
+					<%-- 전체 목록의 페이징 처리 --%>
+					<c:when test="${empty keyword and empty seasoncode and empty lcode}">
+						<c:if test="${pp.startPage > pp.pagePerBlk}">
+							<li><a href="${url}/admin/matchList.do?pageNum=${pp.startPage - 1}">&lt;</a></li>
+						</c:if>
+						<c:forEach var="i" begin="${pp.startPage}" end="${pp.endPage}">
+							<li <c:if test="${pp.currentPage==i}">class="active"</c:if>>
+								<a href="${url}/admin/matchList.do?pageNum=${i}">${i}</a></li>
+						</c:forEach>
+						<c:if test="${pp.endPage < pp.totalPage}">
+							<li><a href="${url}/admin/matchList.do?pageNum=${pp.endPage + 1}">&gt;</a></li>
+						</c:if>
+					</c:when>
+					
+					<%-- 검색 했을 경우의 페이징 처리 --%>
+					<c:otherwise>
+						<c:if test="${pp.startPage > pp.pagePerBlk }">
+							<li><a href="${url}/admin/matchList.do?pageNum=${pp.startPage - 1}&seasoncode=${seasoncode}&lcode=${lcode}&category=${category}&keyword=${keyword}">&lt;</a></li>
+						</c:if>
+						<c:forEach var="i" begin="${pp.startPage}" end="${pp.endPage}">
+							<li <c:if test="${pp.currentPage==i}">class="active"</c:if>><a
+								href="${url}/admin/matchList.do?pageNum=${i}&seasoncode=${seasoncode}&lcode=${lcode}&category=${category}&keyword=${keyword}">${i}</a></li>
+						</c:forEach>
+						<c:if test="${pp.endPage < pp.totalPage}">
+							<li><a href="${url}/admin/matchList.do?pageNum=${pp.endPage + 1}&seasoncode=${seasoncode}&lcode=${lcode}&category=${category}&keyword=${keyword}">&gt;</a></li>
+						</c:if>
+					</c:otherwise>
+				</c:choose>
+				</ul>
+			</div>
 		</div>
+		
+			<c:choose><c:when test=""></c:when><c:otherwise></c:otherwise></c:choose>
+		
 	</div>
 	<form id="goEdit" method="post" action="${url}/admin/matchDetailForm.do" >
 		<input type="hidden" id="hideInput" name="mcode"/>

@@ -142,33 +142,42 @@ function save(mcode){
 	var aLineup = "";
 	
 	if(hStartArr.length == 11){
-		hLineup += hStartArr.join(",");
-		hLineup += "/";
-	}else if(hStartArr.length != 0){
-		alert("선발 라인업 선수 숫자가 맞지 않습니다.");
+		if(hSubArr.length > 7){
+			alert("홈팀의 후보 라인업 선수 숫자가 맞지 않습니다.");
+			return;
+		}else {
+			hLineup += hStartArr.join(",");
+			hLineup += "/";
+			hLineup += hSubArr.join(",");
+		}
+	}else if(hStartArr.length > 0 && hStartArr.length < 11){
+		alert("홈팀의 선발 라인업 선수 숫자가 맞지 않습니다.");
 		return;
+	}else if(hStartArr.length == 0){
+		if(hSubArr.length > 0){
+			alert("선발/후보 라인업을 모두 입력하세요.");
+			return;
+		}
 	}
 	
-	if(hSubArr.length <= 7){
-		hLineup += hSubArr.join(",");
-	}else {
-		alert("후보 라인업 선수 숫자가 맞지 않습니다.");
-		return;
-	}
 	
 	if(aStartArr.length == 11){
-		aLineup += aStartArr.join(",");
-		aLineup += "/";
-	}else if(aStartArr.length != 0){
-		alert("선발 라인업 선수 숫자가 맞지 않습니다.");
+		if(aSubArr.length > 7){
+			alert("홈팀의 후보 라인업 선수 숫자가 맞지 않습니다.");
+			return;
+		}else {
+			aLineup += aStartArr.join(",");
+			aLineup += "/";
+			aLineup += aSubArr.join(",");
+		}
+	}else if(aStartArr.length > 0 && aStartArr.length < 11){
+		alert("홈팀의 선발 라인업 선수 숫자가 맞지 않습니다.");
 		return;
-	}
-	
-	if(aSubArr.length <= 7){
-		aLineup += aSubArr.join(",");
-	}else {
-		alert("후보 라인업 선수 숫자가 맞지 않습니다.");
-		return;
+	}else if(aStartArr.length == 0){
+		if(aSubArr.length > 0){
+			alert("선발/후보 라인업을 모두 입력하세요.");
+			return;
+		}
 	}
 	
 	$.ajax({
@@ -178,9 +187,9 @@ function save(mcode){
 		type: "post",
 		success: function(data){
 		//	alert(data);
-			if(data == 1){
+			var result = parseInt($.trim(data));
+			if(result === 1){
 				alert("수정되었습니다.");
-				
 			}else {
 				alert("실패..");
 			}
@@ -191,8 +200,26 @@ function save(mcode){
 
 // 스코어 등록
 function saveScore(mcode){
-	if(confirm("경기 종료 및 스코어 등록을 하시겠습니까?")){
-		return;
+	if(confirm("경기 종료 처리 및 스코어 등록을 하시겠습니까?")){
+		var homescore = $("#hscore").val();
+		var awayscore = $("#ascore").val();
+		
+		$.ajax({
+			url: "/kinone/admin/matchEnd.do",
+			data: {"mcode":mcode, "homescore":homescore, "awayscore":awayscore},
+			dataType: "text",
+			type: "post",
+			success: function(data){
+				alert(data);
+				var result = parseInt($.trim(data));
+				if(result === 1){
+					alert("수정되었습니다.");
+				}else {
+					alert("실패..");
+				}
+				location.reload();
+			}
+		});
 	}else {
 		return;
 	}
@@ -231,8 +258,8 @@ $(function(){
 		<div id="lineedit">
 			<div class="lineup-container" align="left">
 				<h3>홈 라인업 설정</h3>
-				<br />
-				<br />
+				<br/>
+				<br/>
 				<h4 class="clubname">${match.cname_short_h}</h4>
 				<div class="lineup-content" align="left">
 					<div class="playerlist">
