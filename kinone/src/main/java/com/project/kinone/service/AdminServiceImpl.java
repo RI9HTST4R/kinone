@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.kinone.dao.AdminDAOImpl;
@@ -25,6 +26,7 @@ import com.project.kinone.util.FileUpload;
 import com.project.kinone.util.Lineup;
 
 import com.project.kinone.util.McodeMaker;
+import com.project.kinone.util.PagingPgm;
 import com.project.kinone.util.StringToTimestamp;
 
 @Service
@@ -88,7 +90,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	// 어드민 페이지에서 매치 정보를 입력
-	public int insertMatch(HashMap<String, String> params) {
+	public int insertMatch(HashMap<String, String> params) throws Exception{
 
 		// 폼에서 넘긴 값을 받아 배열로 나눔
 		String lcode = params.get("lcode");
@@ -129,25 +131,16 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		return adminDao.insertMatch(matchList);
 	}
+	
+	// 등록된 매치 리스트의 총 갯수를 가져오는 메소드
+	public int getMatchListCount(HashMap<String, String> keyword) {
+		return adminDao.getMatchListCount(keyword);
+	}
 
 	// 등록된 매치 리스트 가져오는 메소드
-	public List<Match> getMatchList(HashMap<String, String> params) {
-		// 검색을 한 리스트인지 아닌 가에 따라 불러올 리스트 구분
-		List<String> keylist = new ArrayList<String>(params.keySet());
-
-		System.out.println("검색어 몇개야? " + keylist.size());
-		for (String key : keylist) {
-			System.out.println(key + ":" + params.get(key));
-		}
-
-		List<Match> matchList = new ArrayList<Match>();
-		if (keylist.size() < 1) {
-			System.out.println("초기 리스트!");
-			matchList = adminDao.allMatchList();
-		} else {
-			System.out.println("검색 리스트!");
-			matchList = adminDao.searchMatchList(params);
-		}
+	public List<Match> getMatchList(HashMap<String, String> params) throws Exception{
+		List<Match> matchList = adminDao.searchMatchList(params);
+		
 		return matchList;
 	}
 
@@ -206,6 +199,15 @@ public class AdminServiceImpl implements AdminServiceInter {
 	// 라인업 수정
 	public int updateMatchDetail(Match_detail md) {
 		return adminDao.updateMatchDetail(md);
+	}
+	
+	// 매치 상태 수정 및 스코어 수정
+	public int matchEnd(Match match) {
+		
+		// 매치 상태 변경 0 -> 1, 스코어 입력
+		int result = adminDao.updateMatchStatScore(match);
+		
+		return result;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -414,6 +416,10 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pdeletes(pcode);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+
+	
 
 	
 

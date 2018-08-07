@@ -55,9 +55,9 @@ public class AdminDAOImpl implements AdminDAOInter {
 		return result;
 	}
 
-	// 모든 매치 리스트
-	public List<Match> allMatchList() {
-		return session.selectList("adminmapper.allMatchList");
+	// 처음 혹은 검색된 매치 리스트의 총 갯수
+	public int getMatchListCount(HashMap<String, String> keyword) {
+		return session.selectOne("adminmapper.matchListCount", keyword);
 	}
 
 	// 매치 검색(키워드는 HashMap에 저장)
@@ -89,6 +89,11 @@ public class AdminDAOImpl implements AdminDAOInter {
 	// 라인업 수정
 	public int updateMatchDetail(Match_detail md) {
 		return session.update("adminmapper.updateMatchDetail", md);
+	}
+	
+	// 매치 상태 변경(0 -> 1)
+	public int updateMatchStatScore(Match match) {
+		return session.update("adminmapper.updateMatchStatScore", match);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,6 +217,10 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int pdeletes(String pcode) {
 		return session.delete("adminmapper.pdeletes",pcode);
 	}
+
+	
+
+	
 
 	
 

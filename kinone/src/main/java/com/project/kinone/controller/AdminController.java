@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,11 +76,12 @@ public class AdminController {
 	}
 
 	// 매치 등록 폼 페이지에서 데이터 db에 입력하는 메소드
-	@RequestMapping(value = "/admin/insertMatch.do", method = RequestMethod.POST)
-	public String insertMatch(@RequestParam HashMap<String, String> params, Model model) {
 
-		int result = adminService.insertMatch(params);
-
+	@RequestMapping(value="/admin/insertMatch.do", method=RequestMethod.POST)
+	public String insertMatch(@RequestParam HashMap<String, String> params, Model model) throws Exception {
+		
+		int result = adminService.insertMatch(params); 
+		
 		String msg = result + "건의 데이터가 입력되었습니다.";
 		String loc = "/kinone/admin/matchList.do";
 
@@ -89,17 +91,34 @@ public class AdminController {
 	}
 
 	// 등록된 매치 리스트 페이지
-	@RequestMapping(value = "/admin/matchList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String matchList(@RequestParam HashMap<String, String> params, Model model) {
+
+	@RequestMapping(value="/admin/matchList.do", method= {RequestMethod.GET,RequestMethod.POST})
+	public String matchList(@RequestParam HashMap<String, String> params, Model model) throws Exception {
 		List<String> seasonList = adminService.getAllSeason();
 		List<String> leagueList = adminService.getAllLeague();
 
+		// 처음 혹은 검색된 매치 리스트의 총 갯수
+		int total = adminService.getMatchListCount(params);
+	//	System.out.println("total : "+total);
+		
+		int rowPerPage = 30;
+		String pageNum = params.get("pageNum");
+		if(pageNum == null || pageNum.equals("")) {
+			pageNum = "1";
+		}
+		int currentPage = Integer.parseInt(pageNum);
+		PagingPgm pp = new PagingPgm(total, rowPerPage, currentPage);
+	//	System.out.println(pp.toString());
+		params.put("startRow", ""+pp.getStartRow());
+		params.put("endRow", ""+pp.getEndRow());
+		
 		List<Match> matchList = adminService.getMatchList(params);
 
 		model.addAttribute("leagueList", leagueList);
 		model.addAttribute("seasonList", seasonList);
 		model.addAttribute("matchList", matchList);
 		model.addAttribute("condition", params);
+		model.addAttribute("pp", pp);
 		return "admin/match_List";
 	}
 
@@ -166,9 +185,27 @@ public class AdminController {
 		System.out.println("aLineup : "+md.getAwaylineup());
 		
 		int result = adminService.updateMatchDetail(md);
+		System.out.println("result:"+result);
 		model.addAttribute("ajax", result);
 		return "ajax";
 	}
+	
+	// 매치 종료 상태로 업데이트 및 스코어 입력
+	@RequestMapping(value="/admin/matchEnd.do", method=RequestMethod.POST)
+	public String matchEnd(Match match, Model model) {
+		System.out.println("mcode : "+match.getMcode());
+		System.out.println("homescore : "+match.getHomescore());
+		System.out.println("awayscore : "+match.getAwayscore());
+		
+		int result = adminService.matchEnd(match);
+		model.addAttribute("ajax", result);
+		
+		return "ajax";
+	}
+
+	
+	
+	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -303,23 +340,22 @@ public class AdminController {
 
 		int currentPage = Integer.parseInt(pageNum);
 
-		int total = adminService.getPtotal(player);
-		int startRow = (currentPage - 1) * rowPerPage + 1;
-		int endRow = startRow + rowPerPage - 1;
+		
+		int total= adminService.getPtotal(player);
+		
 		PagingPgm pp = new PagingPgm(total, rowPerPage, currentPage);
-		player.setStartRow(startRow);
-		player.setEndRow(endRow);
-
-		int no = total - startRow + 1;
-		List<Player> list = adminService.plist(player);
-		model.addAttribute("list", list);
-		model.addAttribute("no", no);
-		model.addAttribute("pp", pp);
-		// 검색
-		model.addAttribute("teamcode", player.getTeamcode());
-		model.addAttribute("sposition", player.getSposition());
-		model.addAttribute("keyword", player.getKeyword());
-
+		player.setStartRow(pp.getStartPage());
+		player.setEndRow(pp.getEndPage());
+		
+		List<Player> list=adminService.plist(player);
+		model.addAttribute("list",list);
+		model.addAttribute("no",pp.getNo());
+		model.addAttribute("pp",pp);
+		//검색
+		model.addAttribute("teamcode",player.getTeamcode());
+		model.addAttribute("sposition",player.getSposition());
+		model.addAttribute("keyword",player.getKeyword());
+		
 		return "admin/player_list";
 	}
 

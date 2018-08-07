@@ -16,6 +16,7 @@
 	//	location.href = "admin/plist.do";
 
 	});	
+
 </script>
 <style>
 #loading {
