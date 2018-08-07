@@ -44,6 +44,11 @@ public class AdminServiceImpl implements AdminServiceInter {
 	////////////////////////////////////////////// 한 동 준
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////
 
+	// 시즌 추가
+	public int addSeason(String seasoncode) {
+		return adminDao.addSeason(seasoncode);
+	}
+	
 	// 등록된 모든 리그
 	public List<String> getAllLeague() {
 		return adminDao.getAllLeague();
@@ -416,13 +421,5 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pdeletes(pcode);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	
-
-	
-
-	
-
-	
 
 }

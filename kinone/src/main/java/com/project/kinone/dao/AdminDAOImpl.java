@@ -22,7 +22,12 @@ public class AdminDAOImpl implements AdminDAOInter {
 
 	////////////////////////////////////////////// 한 동 준
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////
-
+	
+	// 시즌 추가
+	public int addSeason(String seasoncode) {
+		return session.insert("adminmapper.addSeason", seasoncode);
+	}
+	
 	// 등록된 모든 리그 리스트 가져옴
 	public List<String> getAllLeague() {
 		return session.selectList("adminmapper.allLeague");
@@ -217,14 +222,6 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int pdeletes(String pcode) {
 		return session.delete("adminmapper.pdeletes",pcode);
 	}
-
-	
-
-	
-
-	
-
-	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

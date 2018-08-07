@@ -73,7 +73,15 @@
 											</tr>
 											<!-- ㅡㅡㅡㅡㅡㅡ경기 상태 끝ㅡㅡㅡㅡㅡㅡ -->
 											<tr class="match-bottom">
-												<td colspan="3"><a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> <a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a></td>
+												<td colspan="3">
+												<c:if test="${amatch.mstatus == 0}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> 
+													<a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
+												</c:if>
+												<c:if test="${amatch.mstatus == 1}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">경기결과</a> 
+												</c:if>
+												</td>
 											</tr>
 										</table>
 									</div>
@@ -188,7 +196,15 @@
 											</tr>
 											<!-- ㅡㅡㅡㅡㅡㅡ경기 상태 끝ㅡㅡㅡㅡㅡㅡ -->
 											<tr class="match-bottom">
-												<td colspan="3"><a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> <a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a></td>
+												<td colspan="3">
+												<c:if test="${amatch.mstatus == 0}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> 
+													<a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
+												</c:if>
+												<c:if test="${amatch.mstatus == 1}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">경기결과</a> 
+												</c:if>
+												</td>
 											</tr>
 										</table>
 									</div>
@@ -330,7 +346,7 @@
 						<div class="right-menu recent-news">
 							<div class="top news-top" align="left">
 								<span class="subject" id="news-subject">K리그 소식</span><a
-									class="more" href="">더보기 &gt;</a>
+									class="more" href="${url}/kleagueNews.do">더보기 &gt;</a>
 							</div>
 							<div class="news-content" align="center">
 								<div class="news">
@@ -376,7 +392,7 @@
 							<div class="rank_wrap">
 								<div class="top rank-top" align="left">
 									<span class="subject">2018 K리그 1 선수 기록</span><a class="more"
-										href="">더보기 &gt;</a>
+										href="${url}/playerRank.do?seasoncode='2018'&lcode='K1'">더보기 &gt;</a>
 								</div>
 								<hr>
 								<div class="rank-content" align="center">
@@ -445,7 +461,7 @@
 							<div class="rank_wrap">
 								<div class="top rank-top" align="left">
 									<span class="subject">2018 K리그 2 선수 기록</span><a class="more"
-										href="">더보기 &gt;</a>
+										href="${url}/playerRank.do?seasoncode='2018'&lcode='K2'">더보기 &gt;</a>
 								</div>
 								<hr>
 								<div class="rank-content" align="center">
@@ -522,7 +538,7 @@
 							<div class="emblem" align="left">
 								<hr>
 								<c:forEach var="club" items="${clubList}">
-									<a href="#"><img
+									<a href="${url}/clubMain.do?ccode=${club.ccode}"><img
 										src="${url}/resources/emblem/${club.ccode}.png"
 										title="${club.cname_short}"></a>
 								</c:forEach>
