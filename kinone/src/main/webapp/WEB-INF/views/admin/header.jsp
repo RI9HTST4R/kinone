@@ -82,14 +82,6 @@ h1#title {
 }
 </style>
 
-<script>
-$(function(){
-	$('li').click(function() {
-		$(this).index();	// 0~4까지
-	});
-});
-</script>
-
 </head>
 <body>
 	<div class="container-fluid">
@@ -99,11 +91,11 @@ $(function(){
 			</div>
 			<div class="col-sm-3 sidenav">
 				<ul class="nav nav-pills nav-stacked">
-					<li class="active"><a href="/kinone/admin/main.do">시즌</a></li>
-					<li><a href="/kinone/admin/club_view.do">클럽</a></li>
-					<li><a href="/kinone/admin/plist.do">선수</a></li>
-					<li><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
-					<li><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
+					<li ${active1}><a href="/kinone/admin/main.do">시즌</a></li>
+					<li ${active2}><a href="/kinone/admin/club_view.do">클럽</a></li>
+					<li ${active3}><a href="/kinone/admin/plist.do">선수</a></li>
+					<li ${active4}><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
+					<li ${active5}><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-9">
