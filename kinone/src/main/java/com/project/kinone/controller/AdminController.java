@@ -256,7 +256,7 @@ public class AdminController {
 	
 	//선수 리스트 출력 페이지 이동
 	@RequestMapping("/admin/plist.do")
-	public String plist(String pageNum, Player player, Model model) throws Exception {
+	public String plist(String pageNum, Player player,Club club, Model model) throws Exception {
 		
 		System.out.println("plist");
 		if (pageNum==null||pageNum.equals("")) {
@@ -275,9 +275,11 @@ public class AdminController {
 		
 		int no = total-startRow + 1;
 		List<Player> list=adminService.plist(player);
+		List<Club> clist=adminService.getMngClubList();
 		model.addAttribute("list",list);
 		model.addAttribute("no",no);
 		model.addAttribute("pp",pp);
+		model.addAttribute("clist",clist);
 		//검색
 		model.addAttribute("teamcode",player.getTeamcode());
 		model.addAttribute("sposition",player.getSposition());

@@ -20,15 +20,9 @@ public class FileUpload2 {
 		System.out.println("file 이름 : " + file.getOriginalFilename());
 		// 파일저장 경로
 		String filePath = path + "/" + saveFName + "." + ext;
-
 		// 파일 저장
 		File saveFile = new File(filePath);
-		
-		
-		
 		String rfname=saveFName + "." + ext;
-		
-
 		try {
 			file.transferTo(saveFile);
 			System.out.println("파일 업로드 성공");
