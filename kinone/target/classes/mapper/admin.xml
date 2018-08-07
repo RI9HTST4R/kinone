@@ -116,7 +116,7 @@
 			select 'K' || to_char(max(to_number(substr(ccode,2)))+1) from club
 		</selectKey>
 		insert into club(ccode, cname, cname_short, emblem, cmanager, isbeing)
-		values (#{ccode}, #{cname}, #{cname_short}, #{emblem}, #{cmanager}, 1)
+		values (#{ccode}, #{cname}, #{cname_short}, #{emblem, jdbcType=VARCHAR}, #{cmanager}, 1)
 	</insert>
 
 	<!-- 관리자 구단 경기장 생성 -->
@@ -126,7 +126,7 @@
 			select 'K' || to_char(max(to_number(substr(ccode,2)))) from club
 		</selectKey>
 		insert into stadium (ccode, sname, sphoto, capacity)
-		values (#{ccode}, #{sname}, #{sphoto}, #{capacity})
+		values (#{ccode}, #{sname}, #{sphoto, jdbcType=VARCHAR}, #{capacity})
 	</insert>
 
 	<select id="mngClubCont" parameterType="String"
@@ -155,14 +155,14 @@
  	<!-- 관리자 구단 수정 -->
 	<update id="mngUpdateClub" parameterType="club">
 		update club 
-		set cname=#{cname}, cname_short=#{cname_short}, emblem=#{emblem}, cmanager=#{cmanager}
+		set cname=#{cname}, cname_short=#{cname_short}, emblem=#{emblem, jdbcType=VARCHAR}, cmanager=#{cmanager}
 		where ccode = #{ccode}
 	</update>
 	
 	<!-- 관리자 경기장 수정 -->
 	<update id="mngUpdateStadium" parameterType="club">
 		update stadium 
-		set sname = #{sname}, sphoto = #{sphoto}, capacity = #{capacity}
+		set sname = #{sname}, sphoto = #{sphoto, jdbcType=VARCHAR}, capacity = #{capacity}
 		where ccode = #{ccode}
 	</update>
 		

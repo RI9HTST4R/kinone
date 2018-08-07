@@ -24,7 +24,7 @@ import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.util.FileUpload;
 import com.project.kinone.util.Lineup;
-import com.project.kinone.util.FileUpload2;
+
 import com.project.kinone.util.McodeMaker;
 import com.project.kinone.util.PagingPgm;
 import com.project.kinone.util.StringToTimestamp;
@@ -228,7 +228,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 
 		String filePath = FileUpload.fileUpload(efile, epath);
 
-		mngClub.setEmblem("amdinservice filepath emblem" + filePath);
+		mngClub.setEmblem(filePath);
 
 		adminDao.insertClub(mngClub);
 	}
@@ -277,15 +277,50 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return mngClub;
 	}
 
-	public void updateClub(Club mngClub) throws Exception {
+	public void updateClub(Club mngClub, List<MultipartFile> fileList, String epath) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("service입니다." + mngClub.getCcode());
+		System.out.println("update service club" + mngClub.getCcode() + ", epath : " + epath);
+
+		MultipartFile efile = fileList.get(0);
+		
+		System.out.println("updateclub service efile : " + efile);
+		String emblem = FileUpload.fileUpload(efile, epath);
+		
+		// 파일 수정
+		if(emblem.split("\\.").length==2) {
+			mngClub.setEmblem(emblem);
+		
+			// 파일 수정 안했을 경우
+		}else {
+			Club before = getClubDetail(mngClub.getCcode());
+			mngClub.setEmblem(before.getEmblem());
+		}
+		
+		System.out.println("emblem : " + emblem);
+		System.out.println("mngClub.emeblem : " + mngClub.getEmblem());
+		
 		adminDao.updateClub(mngClub);
 	}
 
-	public void updateStadium(Club mngClub) throws Exception {
+	public void updateStadium(Club mngClub, List<MultipartFile> fileList, String spath) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(mngClub.getCcode());
+		System.out.println("update service stadium : " + mngClub.getCcode() + ", spath : " + spath);
+
+		MultipartFile sfile = fileList.get(1);
+
+		System.out.println("updateclub service sfile : " + sfile);
+		String sphoto = FileUpload.fileUpload(sfile, spath);
+
+		if(sphoto.split("\\.").length==2) {
+			mngClub.setSphoto(sphoto);			
+		}else {
+			Club before = getClubDetail(mngClub.getCcode());
+			mngClub.setSphoto(before.getSphoto());
+		}
+		
+		System.out.println("sphoto : " + sphoto);
+		System.out.println("mngClub.sphoto : " + mngClub.getSphoto());
+
 		adminDao.updateStadium(mngClub);
 	}
 
@@ -318,7 +353,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int pinsert(Player player, MultipartFile file, String path) {
-		String photo = FileUpload2.fileUpload(file,path);
+		String photo = FileUpload.fileUpload(file,path);
 		if (photo.split("\\.").length==2) {
 			System.out.println("split="+photo.split("\\.").length);
 			System.out.println("photosplit="+photo.split("\\."));
@@ -344,7 +379,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int pupdate(Player player,MultipartFile file, String path ) {
-		String photo = FileUpload2.fileUpload(file,path);
+		String photo = FileUpload.fileUpload(file,path);
 		if (photo.split("\\.").length==2) {
 			System.out.println("split="+photo.split("\\.").length);
 			System.out.println("photosplit="+photo.split("\\."));

@@ -3,33 +3,43 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<<<<<<< HEAD
 <c:set var="url" value="<%=request.getContextPath()%>"/>
 <c:set var="cpage" value="<%= request.getServletPath().substring(request.getServletPath().lastIndexOf('/')+1, request.getServletPath().indexOf('.'))  %>" />
+=======
+<c:set var="url" value="<%=request.getContextPath()%>" />
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 <!DOCTYPE>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
-	integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+	integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+	crossorigin="anonymous">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/latest-jquery.js"></script>
 <style>
 /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
 body {
 	line-height: normal;
 }
+
 .row.content {
 	height: 100%;
 }
+
 .top {
 	height: 120px;
 	background: #d8d8d8;
 }
+
 #pagetitle {
 	line-height: 120px;
 	margin: 0px;
@@ -41,7 +51,7 @@ body {
 	background-color: #f1f1f1;
 	height: 100%;
 	padding-top: 30px;
-	width: 250px; 
+	width: 250px;
 }
 
 /* Set black background color, white text and some padding */
@@ -61,18 +71,22 @@ footer {
 		height: auto;
 	}
 }
+
 .col-sm-9 {
 	padding: 25px 0px 0px 25px;
 }
+
 .container {
 	display: block;
 	padding: 0;
 	margin: 0;
 }
+
 h1#title {
 	margin-top: 0px;
 }
 </style>
+
 </head>
 <body>
 	<div class="container-fluid">
@@ -87,8 +101,6 @@ h1#title {
 					<li <c:if test='${fn:contains(cpage, "player")}'>class="active"</c:if>><a href="/kinone/admin/plist.do">선수</a></li>
 					<li <c:if test='${fn:contains(cpage, "match")}'>class="active"</c:if>><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
 					<li <c:if test='${fn:contains(cpage, "match")}'>class="active"</c:if>><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
-					
 				</ul>
 			</div>
 			<div class="col-sm-9">
-			
