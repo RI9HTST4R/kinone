@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="url" value="<%=request.getContextPath()%>" />
+
 
 <div class="container">
 	<div class="wrapper">

@@ -3,6 +3,11 @@
 
 <mapper namespace="membermapper">
     
+    <insert id="insertJoin" parameterType="member">
+		insert into member (mno, email, passwd, mname, mbirthdate, mstatus)  
+		values (member_seq.nextval, #{email}, #{passwd}, to_timestamp(#{mbirthdate}, 'yyyy/mm/dd'), 1)    
+    </insert>
+    
 </mapper>
 
 

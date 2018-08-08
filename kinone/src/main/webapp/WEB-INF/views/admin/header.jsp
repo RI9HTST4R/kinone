@@ -3,7 +3,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<c:set var="url" value="<%=request.getContextPath()%>" />
+<c:set var="url" value="<%=request.getContextPath()%>"/>
+<c:set var="cpage" value="<%= request.getServletPath().substring(request.getServletPath().lastIndexOf('/')+1, request.getServletPath().indexOf('.'))  %>" />
 <!DOCTYPE>
 <html>
 <head>
@@ -91,11 +92,17 @@ h1#title {
 			</div>
 			<div class="col-sm-3 sidenav">
 				<ul class="nav nav-pills nav-stacked">
-					<li ${active1}><a href="/kinone/admin/main.do">시즌</a></li>
-					<li ${active2}><a href="/kinone/admin/club_view.do">클럽</a></li>
-					<li ${active3}><a href="/kinone/admin/plist.do">선수</a></li>
-					<li ${active4}><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
-					<li ${active5}><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
+					<li><h4>메인</h4></li>
+					<li <c:if test='${fn:contains(cpage, "main")}'>class="active"</c:if>><a href="/kinone/admin/main.do">시즌</a></li>
+					<li><h4>클럽</h4></li>
+					<li <c:if test='${fn:contains(cpage, "club_view")}'>class="active"</c:if>><a href="/kinone/admin/club_view.do">클럽 리스트</a></li>
+					<li <c:if test='${fn:contains(cpage, "club_create")}'>class="active"</c:if>><a href="/kinone/admin/create_club.do">클럽 등록</a></li>
+					<li><h4>선수</h4></li>
+					<li <c:if test='${fn:contains(cpage, "player_list")}'>class="active"</c:if>><a href="/kinone/admin/plist.do">선수 리스트</a></li>
+					<li <c:if test='${fn:contains(cpage, "player_Form")}'>class="active"</c:if>><a href="/kinone/admin/pinsertForm1.do">선수 등록</a></li>
+					<li><h4>매치</h4></li>
+					<li <c:if test='${fn:contains(cpage, "match_List")}'>class="active"</c:if>><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
+					<li <c:if test='${fn:contains(cpage, "match_Form")}'>class="active"</c:if>><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-9">

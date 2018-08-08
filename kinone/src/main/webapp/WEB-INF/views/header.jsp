@@ -644,21 +644,21 @@ a#totalmatch {
 				id="navbar">
 				<div class="nav-wrapper" align="center">
 					<div class="nav-container">
-						<a class="navbar-brand nav-logo" href="#">K In One</a>
+						<a class="navbar-brand nav-logo" href="main.do">K In One</a>
 						<ul class="navbar-nav nav-menu">
-							<li class="nav-item"><a class="nav-link" href="#">경기일정/결과</a>
+							<li class="nav-item"><a class="nav-link" href="matchList.do">경기일정/결과</a>
 							</li>
 							
-							<li class="nav-item"><a class="nav-link" href="#">클럽정보</a></li>
-							<li class="nav-item"><a class="nav-link" href="#">경기예매</a></li>
-							<li class="nav-item"><a class="nav-link" href="#">리그순위</a></li>
+							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
+							<li class="nav-item"><a class="nav-link" href="matchReserv.do">경기예매</a></li>
+							<li class="nav-item"><a class="nav-link" href="leagueRank.do">리그순위</a></li>
 						</ul>
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
 								<li class="nav-item"><a class="nav-link member-text"
 									href="login.do"><i class="fa fa-lock"></i> 로그인</a></li>
 								<li class="nav-item"><a class="nav-link member-text"
-									href="#">회원가입</a></li>
+									href="join_form.do">회원가입</a></li>
 							</ul>
 						</div>
 					</div>
@@ -669,7 +669,7 @@ a#totalmatch {
 		<!-- 매치 일정 슬라이드 -->
 		<div class="match-slide">
 			<div class="container">
-				<a id="totalmatch" href="#">전체 일정 보기 ></a>
+				<a id="totalmatch" href="matchList.do">전체 일정 보기 ></a>
 				<ul class="nav nav-tabs match-slide-tabs">
 					<li class="nav-item"><a
 						class="nav-link active font-weight-bold" data-toggle="tab"
@@ -737,7 +737,7 @@ a#totalmatch {
 											</tr>
 											<!-- ㅡㅡㅡㅡㅡㅡ경기 상태 끝ㅡㅡㅡㅡㅡㅡ -->
 											<tr class="match-bottom">
-												<td colspan="3"><a href="#" class="lineup">전력비교</a> <a href="#" class="resmatch">경기예매</a></td>
+												<td colspan="3"><a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> <a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a></td>
 											</tr>
 										</table>
 									</div>
@@ -852,7 +852,7 @@ a#totalmatch {
 											</tr>
 											<!-- ㅡㅡㅡㅡㅡㅡ경기 상태 끝ㅡㅡㅡㅡㅡㅡ -->
 											<tr class="match-bottom">
-												<td colspan="3"><a href="#" class="lineup">전력비교</a> <a href="#" class="resmatch">경기예매</a></td>
+												<td colspan="3"><a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> <a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a></td>
 											</tr>
 										</table>
 									</div>
