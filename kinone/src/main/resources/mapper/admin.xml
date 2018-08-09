@@ -4,7 +4,11 @@
 <mapper namespace="adminmapper">
     
 <!-- #####################################한동준############################################### -->    
-
+	
+	<insert id="addSeason" parameterType="java.lang.String">
+		insert into season values(#{seasoncode})
+	</insert>
+	
     <select id="allLeague" resultType="java.lang.String">
     	select * from league order by lcode
     </select>

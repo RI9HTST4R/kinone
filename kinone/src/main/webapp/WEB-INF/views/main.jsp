@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
 		
-		
 		<!-- 페이지 내용 들어가는 부분 -->
 		<div class="wrap_page">
 			<div class="wrap_content" align="center">
@@ -82,7 +81,7 @@
 						<div class="right-menu recent-news">
 							<div class="top news-top" align="left">
 								<span class="subject" id="news-subject">K리그 소식</span><a
-									class="more" href="">더보기 &gt;</a>
+									class="more" href="${url}/kleagueNews.do">더보기 &gt;</a>
 							</div>
 							<div class="news-content" align="center">
 								<div class="news">
@@ -128,7 +127,7 @@
 							<div class="rank_wrap">
 								<div class="top rank-top" align="left">
 									<span class="subject">2018 K리그 1 선수 기록</span><a class="more"
-										href="">더보기 &gt;</a>
+										href="${url}/playerRank.do?seasoncode='2018'&lcode='K1'">더보기 &gt;</a>
 								</div>
 								<hr>
 								<div class="rank-content" align="center">
@@ -197,7 +196,7 @@
 							<div class="rank_wrap">
 								<div class="top rank-top" align="left">
 									<span class="subject">2018 K리그 2 선수 기록</span><a class="more"
-										href="">더보기 &gt;</a>
+										href="${url}/playerRank.do?seasoncode='2018'&lcode='K2'">더보기 &gt;</a>
 								</div>
 								<hr>
 								<div class="rank-content" align="center">
@@ -274,7 +273,7 @@
 							<div class="emblem" align="left">
 								<hr>
 								<c:forEach var="club" items="${clubList}">
-									<a href="#"><img
+									<a href="${url}/clubMain.do?ccode=${club.ccode}"><img
 										src="${url}/resources/emblem/${club.ccode}.png"
 										title="${club.cname_short}"></a>
 								</c:forEach>

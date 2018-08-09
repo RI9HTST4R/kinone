@@ -6,15 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import com.project.kinone.model.Member;
 
-
 @Repository
 public class MemberDAOImpl implements MemberDAOInter{
-	
+
 	@Autowired
 	private SqlSessionTemplate session;
-	
-	
-	
 	
 	
 	
@@ -28,4 +24,7 @@ public class MemberDAOImpl implements MemberDAOInter{
 		return session.selectOne("membermapper.logincheck", member);
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public int join(Member member) {
+		return session.insert("membermapper.insertJoin", member);
+	}
 }

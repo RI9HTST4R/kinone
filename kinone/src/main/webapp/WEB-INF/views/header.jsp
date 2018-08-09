@@ -4,12 +4,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="url" value="<%=request.getContextPath()%>" />
-<!DOCTYPE html>
+<!DOCTYPE>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${url}/resources/images/favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
 <title>K in One</title>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -138,6 +139,7 @@ a#totalmatch {
 .wrap_content>.wrap_remain {
 	width: 100%;
 	margin-top: 10px;
+	margin-bottom: 40px;
 	/* border: 1px solid yellow; */
 	box-sizing: border-box;
 	float: left;
@@ -211,6 +213,7 @@ a#totalmatch {
 
 .right-menu {
 	padding: 10px;
+	
 }
 
 .wrap_content>.wrap_remain>.remain_right {
@@ -442,6 +445,7 @@ a#totalmatch {
 
 .nav-menu, .nav-logo {
 	float: left;
+	font-family: Righteous;
 }
 
 .nav-menu>li {
@@ -658,7 +662,7 @@ a#totalmatch {
 								<li class="nav-item"><a class="nav-link member-text"
 									href="login.do"><i class="fa fa-lock"></i> 로그인</a></li>
 								<li class="nav-item"><a class="nav-link member-text"
-									href="join.do">회원가입</a></li>
+									href="join_form.do">회원가입</a></li>
 							</ul>
 						</div>
 					</div>
@@ -666,6 +670,14 @@ a#totalmatch {
 			</nav>
 		</div>
 		<!-- 네비게이션바 메뉴 끝 -->
+		
+		<%-- 세션에 저장된 데이터 설정 --%>
+		<c:set var="k1MatchDays" value="${sessionScope.k1MatchDays}"/>
+		<c:set var="k1MatchMapList" value="${sessionScope.k1MatchMapList}"/>
+		<c:set var="k2MatchDays" value="${sessionScope.k2MatchDays}"/>
+		<c:set var="k2MatchMapList" value="${sessionScope.k2MatchMapList}"/>
+		<%-- 세션에 저장된 데이터 설정 끝--%>
+		
 		<!-- 매치 일정 슬라이드 -->
 		<div class="match-slide">
 			<div class="container">
@@ -737,7 +749,15 @@ a#totalmatch {
 											</tr>
 											<!-- ㅡㅡㅡㅡㅡㅡ경기 상태 끝ㅡㅡㅡㅡㅡㅡ -->
 											<tr class="match-bottom">
-												<td colspan="3"><a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> <a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a></td>
+												<td colspan="3">
+												<c:if test="${amatch.mstatus == 0}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> 
+													<a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
+												</c:if>
+												<c:if test="${amatch.mstatus == 1}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">경기결과</a> 
+												</c:if>
+												</td>
 											</tr>
 										</table>
 									</div>
@@ -852,7 +872,15 @@ a#totalmatch {
 											</tr>
 											<!-- ㅡㅡㅡㅡㅡㅡ경기 상태 끝ㅡㅡㅡㅡㅡㅡ -->
 											<tr class="match-bottom">
-												<td colspan="3"><a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> <a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a></td>
+												<td colspan="3">
+												<c:if test="${amatch.mstatus == 0}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> 
+													<a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
+												</c:if>
+												<c:if test="${amatch.mstatus == 1}">
+													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">경기결과</a> 
+												</c:if>
+												</td>
 											</tr>
 										</table>
 									</div>
@@ -915,3 +943,4 @@ a#totalmatch {
 			</div>
 		</div>
 		<!-- 매치 일정 슬라이드 끝 -->
+		

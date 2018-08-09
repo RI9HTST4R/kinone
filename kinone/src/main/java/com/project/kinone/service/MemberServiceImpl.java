@@ -1,6 +1,12 @@
 package com.project.kinone.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.project.kinone.dao.MemberDAOImpl;
+import com.project.kinone.model.Member;
+
 
 import com.project.kinone.dao.MemberDAOImpl;
 import com.project.kinone.model.Member;
@@ -9,7 +15,8 @@ import com.project.kinone.model.Member;
 public class MemberServiceImpl implements MemberServiceInter{
 	MemberDAOImpl MemberDAO;
 	
-	
+	@Autowired
+	private MemberDAOImpl memberDAO;
 	
 	
 
@@ -19,5 +26,12 @@ public class MemberServiceImpl implements MemberServiceInter{
 		return MemberDAO.logincheck(member);
 	}
 	
+	////////////////////////////////////////////// /////////////////////////////////////////////////////////
+	//////////////////////////////////////////////김 동 환
+	////////////////////////////////////////////// /////////////////////////////////////////////////////////
+	
+	public int insertJoin(Member member) {
+		return memberDAO.join(member);
+	}
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////
 }

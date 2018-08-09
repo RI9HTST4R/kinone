@@ -21,6 +21,11 @@
     
     
     
+    <insert id="insertJoin" parameterType="member">
+		insert into member (mno, email, passwd, mname, mbirthdate, mstatus)  
+		values (member_seq.nextval, #{email}, #{passwd}, #{mname}, #{mbirthdate}, 1)    
+    </insert>
+    
 </mapper>
 
 
