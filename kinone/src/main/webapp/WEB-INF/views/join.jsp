@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="header.jsp"%>
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css?family=Raleway"
-	rel="stylesheet">
+<c:set var="url" value="<%=request.getContextPath()%>" />
+<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
+<script type="text/javascript" src="http://code.jquery.com/latest-jquery.com"></script>
 <style>
 * {
 	box-sizing: border-box;
@@ -18,7 +20,7 @@ body {
 #regForm {
 	background-color: #ffffff;
 	margin: 100px auto;
-	font-family: Raleway;
+	font-family: Righteous;
 	padding: 40px;
 	width: 70%;
 	min-width: 300px;
@@ -85,6 +87,16 @@ button:hover {
 	background-color: #4CAF50;
 }
 </style>
+
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+		type: "POST",
+		url: ""
+	});
+});
+</script>
+
 <body>
 	<div class="container">
 		<div class="wrapper">
@@ -94,10 +106,10 @@ button:hover {
 				<h1>Register</h1>
 				<!-- One "tab" for each step in the form: -->
 				<div class="tab">
-					Login Info:
+					<font face="bing" >로그인 정보</font>
 					<p>
 						<input placeholder="로그인에 사용하실 이메일을 입력하세요"
-							oninput="this.className = ''" name="email">
+							oninput="this.className = ''" name="email">	
 					</p>
 					<p>
 						<input placeholder="로그인에 사용하실 비밀번호를 입력하세요"
@@ -105,14 +117,14 @@ button:hover {
 					</p>
 				</div>
 				<div class="tab">
-					Name:
+					<font face="bing" >기본정보</font>
 					<p>
 						<input placeholder="이름을 입력하세요." oninput="this.className = ''"
 							name="mname">
 					</p>
 					<p>
-						<input placeholder="생년월일을 입력하세요. [ex)yyyy/mm/dd]"
-							oninput="this.className = ''" name="mbirthdate">
+						<input type="date" placeholder="생년월일을 입력하세요."
+							oninput="this.className = ''" name="mbirthdate1">
 					</p>
 				</div>
 				<div style="overflow: auto;">

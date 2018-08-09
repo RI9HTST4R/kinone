@@ -1,6 +1,7 @@
 package com.project.kinone.controller;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
@@ -19,6 +21,7 @@ import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
+import com.project.kinone.util.EmailCheck;
 
 @Controller
 public class FrontController {
@@ -112,13 +115,28 @@ public class FrontController {
 
 	// 회원 가입 처리
 	@RequestMapping(value = "/join_ok.do", method = RequestMethod.POST)
-	public String join(Member member) {
+	public String join(Member member, @RequestParam("mbirthdate1")String mbirthdate) {
 
 		System.out.println("회원 가입 DB에 등록");
-
+		
+		// Timestamp 자료형을 위해 변환
+		System.out.println(mbirthdate);
+		String birthdate = mbirthdate + " 00:00:00";
+		System.out.println(birthdate);
+		member.setMbirthdate(Timestamp.valueOf(birthdate));
+		System.out.println(member.toString());
+		
+		String emailcheck = member.getEmail();
+		if(EmailCheck.isValidEmail(emailcheck)) {
+			
+		}else {
+			
+		}
+		
 		int result = memberService.insertJoin(member);
 		if(result == 1 )
-			System.out.println("DB에 등록 성공");
+		System.out.println("DB에 등록 성공");
+		
 		return "redirect:/admin/club_view.do";
 
 	}

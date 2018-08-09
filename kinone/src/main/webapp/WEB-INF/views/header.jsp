@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${url}/resources/images/favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
 <title>K in One</title>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -442,6 +443,7 @@ a#totalmatch {
 
 .nav-menu, .nav-logo {
 	float: left;
+	font-family: Righteous;
 }
 
 .nav-menu>li {
