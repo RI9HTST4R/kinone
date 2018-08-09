@@ -3,15 +3,13 @@
 <%@ include file="header.jsp"%>
 <div class="container">
 	<div class="wrapper">
-		<h1 id="title">시즌 정보</h1>
+		<h1 id="title">시즌 정보 수정</h1>
 		<hr> 
 		<div align="center">
-<h2>선수 수정</h2>
-
 
 <table class="table table-sm">
 <tr>
-	<td colspan=5>선수 기본정보</td>
+	<td colspan=5><h4>선수 기본정보</h4></td>
 </tr>
 <tr>
 	<td>선수 이름</td>
@@ -22,14 +20,15 @@
 </tr>
 <tr>
 	<td>${player.pname }</td>
-	<td>${player.ccode }</td>
+	<td><c:set var="key" value="${player.ccode}"/>
+					<c:out value="${cn[key]}"/></td>
 	<td>${player.pno }</td>
 	<td>${player.position }</td>
 	<td></td>
 	
 </tr>
 <tr>
-	<td colspan=4>선수 상세정보</td>
+	<td colspan=4><h4>선수 상세정보</h4></td>
 </tr>
 <tr>
 	<td>출생국</td>
@@ -51,7 +50,7 @@
 
 <table border=1px>
 	<tr>
-		<td colspan=7>선수 시즌정보</td>
+		<td colspan=7><h4>선수 시즌정보</h4></td>
 	</tr>
 	<tr>
 		<td>시즌</td>
@@ -64,12 +63,22 @@
 	</tr>
 	
 	<c:if test="${not empty players}">
+	<c:set var="key" value="${0 }"/>
 	<c:forEach var="players" items="${players }" varStatus="i">
 		<form id="editForm${i.count}">
 		<input type=hidden name="pcode" value="${player.pcode }">
 			<tr>
 				<td><input type="text" name="seasoncode" value="${players.seasoncode }"></td>
-				<td><input type="text" name="ccode" value="${players.ccode }"></td>
+				<td>
+					<select name="ccode" >
+						<option value="">팀</option>
+						<c:set var="key" value="${players.ccode }"/>
+						<c:forEach var="p" items="${cn}">
+						<option value="${p.key}" <c:if test="${p.key==key}">selected</c:if>>
+						${p.value}</option>
+						</c:forEach>
+					</select>
+				</td>
 				<td><input type="text" name="gamecount"  value="${players.gamecount }"></td>
 				<td><input type="text" name="p_lgoal"  value="${players.p_lgoal }"></td>
 				<td><input type="text" name="p_ggoal"  value="${players.p_ggoal }"></td>

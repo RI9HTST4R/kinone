@@ -8,6 +8,9 @@ public class PagingPgm {
 	private int startPage;
 	private int endPage;
 	private int totalPage;
+	private int startRow;
+	private int endRow;
+	private int no;
 	
 	public PagingPgm(int total, int rowPerPage, int currentPage) {
 		this.total = total;
@@ -21,6 +24,9 @@ public class PagingPgm {
 		if(endPage>totalPage)
 			endPage=totalPage;
 		
+		this.startRow =(currentPage -1)*rowPerPage+1;
+		this.endRow = startRow + rowPerPage-1;
+		this.no = total-startRow + 1;
 	}
 
 	public int getTotal() {
@@ -77,5 +83,36 @@ public class PagingPgm {
 
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
+	}
+
+	public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	public int getEndRow() {
+		return endRow;
+	}
+
+	public void setEndRow(int endRow) {
+		this.endRow = endRow;
+	}
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+
+	@Override
+	public String toString() {
+		return "PagingPgm [total=" + total + ", rowPerPage=" + rowPerPage + ", pagePerBlk=" + pagePerBlk
+				+ ", currentPage=" + currentPage + ", startPage=" + startPage + ", endPage=" + endPage + ", totalPage="
+				+ totalPage + ", startRow=" + startRow + ", endRow=" + endRow + ", no=" + no + "]";
 	}
 }

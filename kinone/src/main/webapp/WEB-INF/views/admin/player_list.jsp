@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
-<div class="container" align="center">
+<div class="container">
 	<div class="wrapper">
 		<h1 id="title">시즌 정보</h1>
 		<hr> 
+
 <h2>선수 목록</h2>
 			포지션 검색
 			<select name="sposition" id="sposition" >
@@ -17,8 +18,8 @@
 			팀 검색
 			<select name="teamcode" id="teamcode">
 				<option value="">팀</option>
-				<c:forEach var="clist" items="${clist}">
-				<option value="${clist.ccode }">${clist.ccode }</option>
+				<c:forEach var="i" items="${cn}">
+				<option value="${i.key }">${i.value }</option>
 				</c:forEach>
 				
 			</select>
@@ -27,6 +28,8 @@
 			<input type="text" name="keyword" > 
 			<input type="submit" value="확인">
 			</form>
+
+
 <table class="table table-sm">
 	<tr>
 	<td>선수 이름</td>
@@ -40,11 +43,13 @@
 			<td colspan="5">데이터가 없습니다</td>
 		</tr>
 	</c:if>
+	<c:set var="key" value="${0 }"/>
 	<c:if test="${not empty list }">
 	<c:forEach var="player" items="${list }" >
 		<tr>
 			<td><a href ="/kinone/admin/pview.do?pcode=${player.pcode }">${player.pname }</a> </td>
-			<td>${player.ccode }</td>
+			<td><c:set var="key" value="${player.ccode}"/>
+					<c:out value="${cn[key]}"/></td>
 			<td>${player.position }</td>
 			<td>${player.pno }</td>
 			<td><img src="/kinone/resources/player/${player.photo }" width=60height=100/></td>

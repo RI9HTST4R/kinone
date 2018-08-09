@@ -2,10 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 <div class="container">
-	<div class="wrapper" align="center">
+	<div class="wrapper">
 		<h1 id="title">시즌 정보</h1>
 		<hr> 
-<h2>선수 입력1</h2>
+<h3>선수 입력</h3>
 <form action="/kinone/admin/pinsert1.do" method="POST" enctype="multipart/form-data">
 
 <table class="table table-sm">
@@ -21,7 +21,14 @@
 </tr>
 <tr>
 	<td><input type="text" name="pname"></td>
-	<td><input type="text" name="ccode"></td>
+	<td>
+			<select name="ccode" >
+				<option value="">팀</option>
+				<c:forEach var="i" items="${cn}">
+				<option value="${i.key }">${i.value }</option>
+				</c:forEach>
+			</select>
+	</td>
 	<td><input type="text" name="pno"></td>
 	<td><input type="text" name="position"></td>
 	<td><input type="file" name="file"></td>

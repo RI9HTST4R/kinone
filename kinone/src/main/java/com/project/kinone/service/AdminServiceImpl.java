@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.kinone.dao.AdminDAOImpl;
@@ -22,8 +23,10 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.util.FileUpload;
-import com.project.kinone.util.FileUpload2;
+import com.project.kinone.util.Lineup;
+
 import com.project.kinone.util.McodeMaker;
+import com.project.kinone.util.PagingPgm;
 import com.project.kinone.util.StringToTimestamp;
 
 @Service
@@ -87,7 +90,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	// 어드민 페이지에서 매치 정보를 입력
-	public int insertMatch(HashMap<String, String> params) {
+	public int insertMatch(HashMap<String, String> params) throws Exception{
 
 		// 폼에서 넘긴 값을 받아 배열로 나눔
 		String lcode = params.get("lcode");
@@ -128,25 +131,16 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		return adminDao.insertMatch(matchList);
 	}
+	
+	// 등록된 매치 리스트의 총 갯수를 가져오는 메소드
+	public int getMatchListCount(HashMap<String, String> keyword) {
+		return adminDao.getMatchListCount(keyword);
+	}
 
 	// 등록된 매치 리스트 가져오는 메소드
-	public List<Match> getMatchList(HashMap<String, String> params) {
-		// 검색을 한 리스트인지 아닌 가에 따라 불러올 리스트 구분
-		List<String> keylist = new ArrayList<String>(params.keySet());
-
-		System.out.println("검색어 몇개야? " + keylist.size());
-		for (String key : keylist) {
-			System.out.println(key + ":" + params.get(key));
-		}
-
-		List<Match> matchList = new ArrayList<Match>();
-		if (keylist.size() < 1) {
-			System.out.println("초기 리스트!");
-			matchList = adminDao.allMatchList();
-		} else {
-			System.out.println("검색 리스트!");
-			matchList = adminDao.searchMatchList(params);
-		}
+	public List<Match> getMatchList(HashMap<String, String> params) throws Exception{
+		List<Match> matchList = adminDao.searchMatchList(params);
+		
 		return matchList;
 	}
 
@@ -189,21 +183,31 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		return result;
 	}
+	
+	// mcode를 통해 하나의 매치 정보를 가져오는 메소드
+	public Match getMatchInfo(String mcode) {
+		return adminDao.getMatchInfo(mcode);
+	}
 
 	// 등록된 매치 리스트 페이지에서 편집 버튼을 통해 라인업 불러오기
-	public List<Player> getMatchDetail(String mcode) {
+	public Lineup getMatchDetail(String mcode) {
 		Match_detail md = matchDao.getMatchDetail(mcode);
-		String home = md.getHomelineup();
-		String homearr[] = home.split("/");
-		List<Player> homeStarting = playerDao.getPlayerList(homearr[0].split(","));
-		/*
-		 * List<Player> homeSub = playerDao.getPlayerList(homearr[1].split(",")); String
-		 * away = md.getAwaylineup(); String awayarr[] = away.split("/"); List<Player>
-		 * awayStarting = playerDao.getPlayerList(homearr[0].split(",")); List<Player>
-		 * awaySub = playerDao.getPlayerList(homearr[1].split(","));
-		 */
 
-		return homeStarting;
+		return new Lineup(playerDao, md);
+	}
+	
+	// 라인업 수정
+	public int updateMatchDetail(Match_detail md) {
+		return adminDao.updateMatchDetail(md);
+	}
+	
+	// 매치 상태 수정 및 스코어 수정
+	public int matchEnd(Match match) {
+		
+		// 매치 상태 변경 0 -> 1, 스코어 입력
+		int result = adminDao.updateMatchStatScore(match);
+		
+		return result;
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +228,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 
 		String filePath = FileUpload.fileUpload(efile, epath);
 
-		mngClub.setEmblem("amdinservice filepath emblem" + filePath);
+		mngClub.setEmblem(filePath);
 
 		adminDao.insertClub(mngClub);
 	}
@@ -273,15 +277,50 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return mngClub;
 	}
 
-	public void updateClub(Club mngClub) throws Exception {
+	public void updateClub(Club mngClub, List<MultipartFile> fileList, String epath) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("service입니다." + mngClub.getCcode());
+		System.out.println("update service club" + mngClub.getCcode() + ", epath : " + epath);
+
+		MultipartFile efile = fileList.get(0);
+		
+		System.out.println("updateclub service efile : " + efile);
+		String emblem = FileUpload.fileUpload(efile, epath);
+		
+		// 파일 수정
+		if(emblem.split("\\.").length==2) {
+			mngClub.setEmblem(emblem);
+		
+			// 파일 수정 안했을 경우
+		}else {
+			Club before = getClubDetail(mngClub.getCcode());
+			mngClub.setEmblem(before.getEmblem());
+		}
+		
+		System.out.println("emblem : " + emblem);
+		System.out.println("mngClub.emeblem : " + mngClub.getEmblem());
+		
 		adminDao.updateClub(mngClub);
 	}
 
-	public void updateStadium(Club mngClub) throws Exception {
+	public void updateStadium(Club mngClub, List<MultipartFile> fileList, String spath) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(mngClub.getCcode());
+		System.out.println("update service stadium : " + mngClub.getCcode() + ", spath : " + spath);
+
+		MultipartFile sfile = fileList.get(1);
+
+		System.out.println("updateclub service sfile : " + sfile);
+		String sphoto = FileUpload.fileUpload(sfile, spath);
+
+		if(sphoto.split("\\.").length==2) {
+			mngClub.setSphoto(sphoto);			
+		}else {
+			Club before = getClubDetail(mngClub.getCcode());
+			mngClub.setSphoto(before.getSphoto());
+		}
+		
+		System.out.println("sphoto : " + sphoto);
+		System.out.println("mngClub.sphoto : " + mngClub.getSphoto());
+
 		adminDao.updateStadium(mngClub);
 	}
 
@@ -314,7 +353,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int pinsert(Player player, MultipartFile file, String path) {
-		String photo = FileUpload2.fileUpload(file,path);
+		String photo = FileUpload.fileUpload(file,path);
 		if (photo.split("\\.").length==2) {
 			System.out.println("split="+photo.split("\\.").length);
 			System.out.println("photosplit="+photo.split("\\."));
@@ -340,7 +379,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 
 	public int pupdate(Player player,MultipartFile file, String path ) {
-		String photo = FileUpload2.fileUpload(file,path);
+		String photo = FileUpload.fileUpload(file,path);
 		if (photo.split("\\.").length==2) {
 			System.out.println("split="+photo.split("\\.").length);
 			System.out.println("photosplit="+photo.split("\\."));
@@ -377,5 +416,13 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pdeletes(pcode);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+
+	
+
+	
+
+	
 
 }

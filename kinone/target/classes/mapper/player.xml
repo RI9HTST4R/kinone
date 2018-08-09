@@ -27,12 +27,16 @@
 		<foreach collection="array" item="pcode" separator="," open="(" close=")">
 			#{pcode}
 		</foreach>
+		order by decode(position, 'GK', 0, 'DF', 1, 'MF', 2, 'FW', 3)
+	</select>
+	
+	<select id="playerListInClub" parameterType="java.lang.String" resultType="player">
+		select * from player where ccode = #{ccode} order by to_number(pno)
 	</select>
     <!-- #################################################################################### -->
-   
-   
-   
-    
+   	
+		
+	        
 </mapper>
 
 

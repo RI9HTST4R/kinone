@@ -1,48 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-		<input type=hidden id="ccode" value=${ mngC.ccode }>
-		<table>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
+<div class="container">
+	<div class="wrapper">
+		<h1 id="title">클럽 상세 정보</h1>
+		<hr> 
+		<table border=1px class="table table-sm">
 			<tr>
-				<td>클럽명(풀네임)</td>
+				<th>클럽명(풀네임)</th>
 				<td colspan="2">${ mngC.cname }</td>
 			</tr>
 			
 			<tr>
-				<td>클럽명(줄임)</td>
+				<th>클럽명(줄임)</th>
 				<td colspan="2">${ mngC.cname_short }</td>
 			</tr>
 			<tr>
-				<td>엠블럼</td>
-				<td colspan="2"><img src="../stadium/${ mngC.emblem }"></td>
+				<th>엠블럼</th>
+				<td colspan="2"><img src="${url}/resources/emblem/${ mngC.emblem }" width=200 height=200></td>
 			</tr>
 			<tr>
-				<td>감독명</td>
+				<th>감독명</th>
 				<td colspan="2">${ mngC.cmanager }</td>
 			</tr>
 		</table>
-		<table>
+		<table border=1px class="table table-sm">
 			<tr>
-				<td>경기장</td>
+				<th>경기장</th>
 				<td colspan="2">${ mngC.sname }</td>
 			</tr>
 			<tr>
-				<td>경기장 사진</td>
-				<td colspan="2"><img src=${ mngC.sphoto }></td>
+				<th>경기장 사진</th>
+				<td colspan="2"><img src="${url}/resources/sphoto/${ mngC.sphoto }" width=200 height=200></td>
 			</tr>
 			<tr>
-				<td>수용 가능 인원</td>
+				<th>수용 가능 인원</th>
 				<td colspan="2">${ mngC.capacity }</td>
-				<td>${mngC.ccode}</td>
 			</tr>			
 		</table>
 			<input type="button" name="update" value="수정하기" onclick="location='update_club.do?ccode=${mngC.ccode}'">
-	</body>
-</html>
+	</div>
+</div>
+<%@ include file="footer.jsp"%>
+
