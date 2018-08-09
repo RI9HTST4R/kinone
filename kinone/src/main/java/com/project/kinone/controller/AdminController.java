@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Match_detail;
-import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
@@ -48,8 +49,26 @@ public class AdminController {
 	@RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
 	public String main(Model model) {
 		String seasoncode = adminService.getTopSeason();
+		Date sysdate = new Date();
+		
 		model.addAttribute("seasoncode", seasoncode);
+		model.addAttribute("sysdate", sysdate);
 		return "admin/main";
+	}
+	
+	// 시즌 추가 메소드
+	@RequestMapping(value="/admin/addSeason.do", method=RequestMethod.POST)
+	public String addSeason(@RequestParam String seasoncode, Model model) {
+	//	System.out.println("season : "+ seasoncode);
+		int result = adminService.addSeason(seasoncode);
+		
+		if(result == 1) {
+			model.addAttribute("msg", "등록되었습니다.");
+		}else {
+			model.addAttribute("msg", "등록 실패");
+		}
+		model.addAttribute("loc", "/kinone/admin/main.do");
+		return "msg";
 	}
 
 	// 어드민 매치 등록 폼 페이지
