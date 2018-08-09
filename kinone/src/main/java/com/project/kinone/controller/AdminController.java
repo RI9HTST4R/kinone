@@ -2,15 +2,10 @@ package com.project.kinone.controller;
 
 
 import java.io.File;
-
-import java.awt.Image;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -113,6 +107,7 @@ public class AdminController {
 
 	@RequestMapping(value="/admin/matchList.do", method= {RequestMethod.GET,RequestMethod.POST})
 	public String matchList(@RequestParam HashMap<String, String> params, Model model) throws Exception {
+
 		List<String> seasonList = adminService.getAllSeason();
 		List<String> leagueList = adminService.getAllLeague();
 
@@ -233,6 +228,7 @@ public class AdminController {
 	// 리그 클럽 목록
 	@RequestMapping("/admin/club_view.do")
 	public String clubView(Model model) throws Exception {
+
 		System.out.println("리그 클럽 목록");
 		List<Club> mngClubList = adminService.getMngClubList();
 		System.out.println(mngClubList.toString());
@@ -341,6 +337,7 @@ public class AdminController {
 		return "redirect:/admin/club_view.do";
 
 	}
+	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 

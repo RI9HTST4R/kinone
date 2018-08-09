@@ -1,5 +1,18 @@
 package com.project.kinone.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.project.kinone.dao.MemberDAOImpl;
+import com.project.kinone.model.Member;
+
+@Service
 public class MemberServiceImpl implements MemberServiceInter{
 
+	@Autowired
+	private MemberDAOImpl memberDAO;
+	
+	public int insertJoin(Member member) {
+		return memberDAO.join(member);
+	}
 }
