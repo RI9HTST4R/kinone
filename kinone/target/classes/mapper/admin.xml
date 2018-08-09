@@ -176,27 +176,32 @@
    
     <!-- 관리자 선수 리스트 -->
 	<select id="plist" parameterType="player"  resultType="player">
-	select * from (select a.*,rowNum rn from (select * from player order by pcode)a ) where rn between ${startRow} and ${endRow}
-		 <!-- <where>
-			<if test="teamcodes != null">
-				ccode =${teamcodes}
+	select * from (select a.*,rowNum rn from (select * from player 
+			<if test="teamcode != null">
+				where ccode =#{teamcode}
 			</if>
 			<if test="sposition != null">
-				position = ${spositon}
+				where position = #{sposition}
 			</if>
 			<if test="keyword != null">
-				pname like '%'||#{keyword}||'%'
-			</if>
-		</where>  -->
+				where pname like '%'||#{keyword}||'%'
+			</if>order by pcode)a ) where (rn between #{startRow} and #{endRow})
+			
 		
 	</select>
 	
 	<!-- 관리자 선수 리스트 총인원수 -->
 	<select id="getPtotal" parameterType="player" resultType="int">
 		select count(*) from player
-		<!-- <where>
-		
-		</where> -->
+			<if test="teamcode != null">
+				where ccode =#{teamcode}
+			</if>
+			<if test="sposition != null">
+				where position = #{sposition}
+			</if>
+			<if test="keyword != null">
+				where pname like '%'||#{keyword}||'%'
+			</if>
 	</select>
 	
 	<!-- 관리자 선수 뷰 일반 -->

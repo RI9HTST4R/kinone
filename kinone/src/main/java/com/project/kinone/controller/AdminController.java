@@ -2,15 +2,10 @@ package com.project.kinone.controller;
 
 
 import java.io.File;
-
-import java.awt.Image;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,6 +32,7 @@ import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.PagingPgm;
+import com.project.kinone.util.clubname;
 
 @Controller
 public class AdminController {
@@ -113,6 +108,7 @@ public class AdminController {
 
 	@RequestMapping(value="/admin/matchList.do", method= {RequestMethod.GET,RequestMethod.POST})
 	public String matchList(@RequestParam HashMap<String, String> params, Model model) throws Exception {
+
 		List<String> seasonList = adminService.getAllSeason();
 		List<String> leagueList = adminService.getAllLeague();
 
@@ -233,6 +229,7 @@ public class AdminController {
 	// 리그 클럽 목록
 	@RequestMapping("/admin/club_view.do")
 	public String clubView(Model model) throws Exception {
+
 		System.out.println("리그 클럽 목록");
 		List<Club> mngClubList = adminService.getMngClubList();
 		System.out.println(mngClubList.toString());
@@ -341,6 +338,7 @@ public class AdminController {
 		return "redirect:/admin/club_view.do";
 
 	}
+	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -360,15 +358,23 @@ public class AdminController {
 
 		
 		int total= adminService.getPtotal(player);
-		
+		int startRow = (currentPage - 1) * rowPerPage + 1;
+		int endRow = startRow + rowPerPage - 1;
 		PagingPgm pp = new PagingPgm(total, rowPerPage, currentPage);
-		player.setStartRow(pp.getStartPage());
-		player.setEndRow(pp.getEndPage());
+		player.setStartRow(startRow);
+		player.setEndRow(endRow);
 		
 		List<Player> list=adminService.plist(player);
+		List<Club> clist=adminService.getMngClubList();
+		
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		
 		model.addAttribute("list",list);
 		model.addAttribute("no",pp.getNo());
 		model.addAttribute("pp",pp);
+		model.addAttribute("cn",cn);
+		
+		
 		//검색
 		model.addAttribute("teamcode",player.getTeamcode());
 		model.addAttribute("sposition",player.getSposition());
@@ -385,6 +391,10 @@ public class AdminController {
 		Player player = adminService.pselect(pcode);
 		Player_detail playerd = adminService.pselectd(pcode);
 		List<Player_season> players = adminService.pselects(pcode);
+		List<Club> clist=adminService.getMngClubList();
+		
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		model.addAttribute("cn", cn);
 		model.addAttribute("player", player);
 		model.addAttribute("playerd", playerd);
 		model.addAttribute("players", players);
@@ -394,8 +404,12 @@ public class AdminController {
 
 	// 선수 입력 페이지 이동
 	@RequestMapping("/admin/pinsertForm1.do")
-	public String pinsertForm(Model model) {
+	public String pinsertForm(Model model) throws Exception {
 		System.out.println("insertForm1");
+		List<Club> clist=adminService.getMngClubList();
+		
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		model.addAttribute("cn", cn);
 		return "admin/player_Form";
 	}
 
@@ -462,6 +476,10 @@ public class AdminController {
 	public String pupdateForm1(String pcode, Model model) throws Exception {
 		Player player = adminService.pselect(pcode);
 		Player_detail playerd = adminService.pselectd(pcode);
+		List<Club> clist=adminService.getMngClubList();
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		
+		model.addAttribute("cn", cn);
 		model.addAttribute("player", player);
 		model.addAttribute("playerd", playerd);
 		return "admin/player_detail_update";
@@ -473,6 +491,10 @@ public class AdminController {
 		Player player = adminService.pselect(pcode);
 		Player_detail playerd = adminService.pselectd(pcode);
 		List<Player_season> players = adminService.pselects(pcode);
+		List<Club> clist=adminService.getMngClubList();
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		
+		model.addAttribute("cn", cn);
 		model.addAttribute("player", player);
 		model.addAttribute("playerd", playerd);
 		model.addAttribute("players", players);
@@ -486,6 +508,10 @@ public class AdminController {
 		Player player = adminService.pselect(pcode);
 		Player_detail playerd = adminService.pselectd(pcode);
 		List<Player_season> players = adminService.pselects(pcode);
+		List<Club> clist=adminService.getMngClubList();
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		
+		model.addAttribute("cn", cn);
 		model.addAttribute("player", player);
 		model.addAttribute("playerd", playerd);
 		model.addAttribute("players", players);
@@ -556,6 +582,8 @@ public class AdminController {
 			
 			//받은 시즌 정보 수정
 			System.out.println("pupdate2");
+			System.out.println(players.toString());
+		
 			int result=adminService.pupdates(players);
 			System.out.println("pupdate2 result = "+result);
 			
@@ -612,6 +640,7 @@ public class AdminController {
 			return "redirect:/admin/pupdateForm2.do";
 			}
 	}
+	
 	//선수 삭제
 	@RequestMapping("/admin/pdelete.do")
 	public String pdelete(String pcode, 

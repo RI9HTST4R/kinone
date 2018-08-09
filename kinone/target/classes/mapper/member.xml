@@ -2,6 +2,32 @@
  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="membermapper">
+
+<!-- #####################################심규진############################################### --> 
+   
+   
+   
+    
+	
+
+
+
+
+    <select id="getPtotal" parameterType="member" resultType="int">
+		select count(*) from member	where email =#{email} and passwd=#{passwd}
+	</select>
+    <!-- ############################################################################################# -->
+    
+    
+    
+    
+    <insert id="insertJoin" parameterType="member">
+    	<selectKey keyProperty="mno" resultType="java.lang.Integer" order="BEFORE">
+    		select nvl(max(mno),0)+1 from member
+    	</selectKey>
+		insert into member (mno, email, passwd, mname, mbirthdate, mstatus)  
+		values (member_seq.nextval, #{email}, #{passwd}, #{mname}, #{mbirthdate}, 1)    
+    </insert>
     
 </mapper>
 

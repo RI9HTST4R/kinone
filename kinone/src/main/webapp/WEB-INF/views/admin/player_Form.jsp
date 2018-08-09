@@ -21,7 +21,14 @@
 </tr>
 <tr>
 	<td><input type="text" name="pname"></td>
-	<td><input type="text" name="ccode"></td>
+	<td>
+			<select name="ccode" >
+				<option value="">팀</option>
+				<c:forEach var="i" items="${cn}">
+				<option value="${i.key }">${i.value }</option>
+				</c:forEach>
+			</select>
+	</td>
 	<td><input type="text" name="pno"></td>
 	<td><input type="text" name="position"></td>
 	<td><input type="file" name="file"></td>

@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${url}/resources/images/favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
 <title>K in One</title>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -444,6 +445,7 @@ a#totalmatch {
 
 .nav-menu, .nav-logo {
 	float: left;
+	font-family: Righteous;
 }
 
 .nav-menu>li {
@@ -629,6 +631,19 @@ a#totalmatch {
 	background-color: white;
 	color: black;
 }
+
+/* 페이지 별로 타이틀과 하위 메뉴들 들어가는 박스 */
+.pagetitle {
+	width: 100%;
+	height: 150px;
+	/* border: 1px solid red; */
+	margin-top: 20px;
+	color: white;
+	font-size: 25pt;
+	text-align: left;
+	line-height: 120px;
+	padding: 0 20px;
+}
 </style>
 
 </head>
@@ -658,9 +673,9 @@ a#totalmatch {
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
 								<li class="nav-item"><a class="nav-link member-text"
-									href="login.do"><i class="fa fa-lock"></i> 로그인</a></li>
+									href="login.do"><i class="fa fa-lock"></i> 로그인</a>
 								<li class="nav-item"><a class="nav-link member-text"
-									href="join.do">회원가입</a></li>
+									href="join_form.do">회원가입</a></li>
 							</ul>
 						</div>
 					</div>
