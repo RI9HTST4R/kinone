@@ -652,8 +652,8 @@ a#totalmatch {
 							</li>
 							
 							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
-							<li class="nav-item"><a class="nav-link" href="matchReserv.do">경기예매</a></li>
-							<li class="nav-item"><a class="nav-link" href="leagueRank.do">리그순위</a></li>
+							<li class="nav-item"><a class="nav-link" href="reservation.do">경기예매</a></li>
+							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
 						</ul>
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
@@ -671,9 +671,13 @@ a#totalmatch {
 		
 		<%-- 세션에 저장된 데이터 설정 --%>
 		<c:set var="k1MatchDays" value="${sessionScope.k1MatchDays}"/>
+		<%-- ${k1MatchDays} --%>
 		<c:set var="k1MatchMapList" value="${sessionScope.k1MatchMapList}"/>
+		<%-- ${k1MatchMapList} --%>
 		<c:set var="k2MatchDays" value="${sessionScope.k2MatchDays}"/>
+		<%-- ${k2MatchDays} --%>
 		<c:set var="k2MatchMapList" value="${sessionScope.k2MatchMapList}"/>
+		<%-- ${k2MatchMapList} --%>
 		<%-- 세션에 저장된 데이터 설정 끝--%>
 		
 		<!-- 매치 일정 슬라이드 -->
@@ -942,3 +946,5 @@ a#totalmatch {
 		</div>
 		<!-- 매치 일정 슬라이드 끝 -->
 		
+		<!-- 페이지 내용 들어가는 부분 -->
+		<div class="wrap_page">

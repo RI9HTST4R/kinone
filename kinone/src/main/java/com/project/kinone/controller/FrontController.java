@@ -51,7 +51,7 @@ public class FrontController {
 		String d = sdf.format(new Date(System.currentTimeMillis()));
 		System.out.println(d);
 		if(whendata == null || !sdf.format(new Date(System.currentTimeMillis())).equals(d)) {
-		
+			System.out.println("세션 새로 설정");
 			// 매치 슬라이드 부분 데이터
 			List<Date> k1MatchDays = matchService.get7MatchDays("K1");
 			System.out.println("K1 리그 매치 날짜 : " + k1MatchDays);
@@ -69,7 +69,15 @@ public class FrontController {
 		
 		// 리그 별 클럽 순위 리스트
 		List<Club_season> k1ClubSeasonRankList = clubService.getClubSeasonRankList(seasoncode,"K1");
+		System.out.println("k1 size : "+ k1ClubSeasonRankList.size());
+	//	for(Club_season cs : k1ClubSeasonRankList) {
+	//		System.out.println("k1:"+cs.toString());
+	//	}
 		List<Club_season> k2ClubSeasonRankList = clubService.getClubSeasonRankList(seasoncode,"K2");
+		System.out.println("k2 size : "+ k2ClubSeasonRankList.size());
+	//	for(Club_season cs : k2ClubSeasonRankList) {
+	//		System.out.println("k2:"+cs.toString());
+	//	}
 		
 		// 리그 별 선수 순위 리스트
 		// 득점랭크
@@ -86,7 +94,6 @@ public class FrontController {
 		model.addAttribute("k2PlayerSeasonGRankList", k2PlayerSeasonGRankList);
 		model.addAttribute("k1PlayerSeasonARankList", k1PlayerSeasonARankList);
 		model.addAttribute("k2PlayerSeasonARankList", k2PlayerSeasonARankList);
-		
 		return "main";
 	}
 	
@@ -95,5 +102,11 @@ public class FrontController {
 	public String login(Model model) {
 		
 		return "login";
+	}
+	
+	// 매치 일정 페이지로 이동
+	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
+	public String matchList(Model model) {
+		return "match_List";
 	}
 }
