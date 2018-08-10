@@ -20,7 +20,14 @@
 </tr>
 <tr>
 	<td><input type="text" name="pname" value="${player.pname }"></td>
-	<td><input type="text" name="ccode" value="${player.ccode }"></td>
+	<td><select name="ccode" >
+				<option value="">팀</option>
+				<c:set var="key" value="${player.ccode }"/>
+				<c:forEach var="i" items="${cn}">
+				
+				<option value="${i.key }"<c:if test="${i.key==key}">selected="selected"</c:if> >${i.value }</option>
+				</c:forEach>
+			</select></td>
 	<td><input type="text" name="pno" value="${player.pno }"></td>
 	<td><input type="text" name="position" value="${player.position }"></td>
 	<td><input type="file" name="file"></td>
@@ -43,7 +50,7 @@
 	<td><input type="text" name="height" value="${playerd.height }"></td>
 	<td><input type="text" name="weight" value="${playerd.weight }"></td>
 </tr>
-</table>bd2=${bd2}<br>${playerd.birthdate}
+</table><br>
 
 
 <input type=submit value="수정" >

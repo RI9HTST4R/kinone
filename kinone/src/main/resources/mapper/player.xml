@@ -34,10 +34,9 @@
 		select * from player where ccode = #{ccode} order by to_number(pno)
 	</select>
     <!-- #################################################################################### -->
-   
-   
-   
-    
+   	
+		
+	        
 </mapper>
 
 

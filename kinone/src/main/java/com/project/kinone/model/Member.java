@@ -9,6 +9,8 @@ public class Member {
 	private String passwd;
 	private Timestamp mbirthdate;
 	private int mstatus;
+	
+	
 
 	public int getMno() {
 		return mno;

@@ -21,7 +21,8 @@
 
 <tr>
 	<td>${player.pname}</td>
-	<td>${player.ccode}</td>
+	<td><c:set var="key" value="${player.ccode}"/>
+					<c:out value="${cn[key]}"/></td>
 	<td>${player.pno }</td>
 	<td>${player.position}</td>
 	<td><img src="/kinone/resources/player/${player.photo }" width=60height=100/></td>
@@ -40,7 +41,9 @@
 </tr>
 <tr>
 	<td>${playerd.nation}</td>
-	<td>${playerd.birthdate}</td>
+	<fmt:parseDate value="${playerd.birthdate}" var="bd1" pattern="yyyy-MM-dd HH:mm:ss"/>
+	<fmt:formatDate value="${bd1}" var="bd2" pattern="yyyy-MM-dd" />
+	<td>${bd2}</td>
 	<td>${playerd.height}</td>
 	<td>${playerd.weight}</td>
 	<td></td>
@@ -50,17 +53,21 @@
 </tr>
 <tr>
 	<td>시즌</td>
+	<td>소속 구단</td>
 	<td>출장수</td>
 	<td>득점</td>	
 	<td>실점</td>
 	<td>도움</td>
 </tr>
+<c:set var="key" value="${0 }"/>
 <c:forEach var="players" items="${players}" >
 	<c:if test="${empty players.seasoncode}">
 	</c:if>
 	<c:if test="${not empty players.seasoncode}">
 	<tr>
 		<td>${players.seasoncode}</td>
+		<td><c:set var="key" value="${player.ccode}"/>
+					<c:out value="${cn[key]}"/></td>
 		<td>${players.gamecount}</td>
 		<td>${players.p_ggoal}</td>
 		<td>${players.p_lgoal}</td>

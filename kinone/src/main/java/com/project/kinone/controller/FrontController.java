@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Service;
 
+import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
+import com.project.kinone.model.Match;
 import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
 import com.project.kinone.service.AdminServiceImpl;
@@ -28,6 +33,7 @@ import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.util.EmailCheck;
+import com.project.kinone.util.Sha256;
 
 @Controller
 public class FrontController {
@@ -46,7 +52,7 @@ public class FrontController {
 	
 	@Autowired
 	private MemberServiceImpl memberService;
-
+	
 	@RequestMapping(value="/main.do", method=RequestMethod.GET)
 	public String main(Model model, HttpSession ses) {
 		List<Club> clubList = clubService.getClubList();
@@ -102,6 +108,39 @@ public class FrontController {
 	public String login(Model model) {
 		return "login";
 	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+//////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////		
+	//로그인 요청
+	@RequestMapping(value="/logincall.do")
+	public String logincall(HttpServletRequest request, HttpSession session, Member member) {
+		//id, passwd 확인
+		//id, pass 같이
+		int result1 = memberService.logincheck(member);
+		
+		//따로?
+//		int result1 = memberService.emailcheck(member.getEmail());
+//		if(result1==1) {
+//		int result2 = memberService.passwdcheck(member.getEmail(),member.getPasswd())
+//			if(result2==1){
+//				result1=3
+//				}else{result1=2}
+//		}
+		if (result1==1) {
+			session.setAttribute("username", member.getMname());
+			
+			return "main.do";
+		}else {
+			
+			return "login";
+		}
+		
+	}
+	
+	
+	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 	/////////////////// 김동환////////////////////
 
@@ -113,13 +152,28 @@ public class FrontController {
 
 		return "join";
 	}
-
+	// 회원가입 폼 이메일 중복체크 확인 아작스 요청 
+	@RequestMapping(value = "/register_email_check.do")
+	public String register_email_check(@RequestParam("register_email")String register_email ,Model model) {
+		
+		System.out.println("입력아이디 잘 나오낭?"+register_email);
+		String email = memberService.find_email(register_email);
+		System.out.println("확인된 email"+email);
+		System.out.println("회원 가입");
+		model.addAttribute("email", email);
+		return "register_email_check_result";
+	}
+	
+	
 	// 회원 가입 처리
 	@RequestMapping(value = "/join_ok.do", method = RequestMethod.POST)
-	public String join(Member member, @RequestParam("mbirthdate1")String mbirthdate) {
+	public String join(Model model, @RequestParam("email") String email,@RequestParam("mname")String mname,@RequestParam("passwd")String passwd, @RequestParam("mbirthdate1")String mbirthdate) {
 
-		System.out.println("회원 가입 DB에 등록");
-		
+		System.out.println("회원 가입 DB에 등록"+email+mname+passwd+mbirthdate);
+		Member member = new Member();
+		member.setEmail(email);
+		member.setMname(mname);
+		member.setPasswd(passwd);
 		// Timestamp 자료형을 위해 변환
 		System.out.println(mbirthdate);
 		String birthdate = mbirthdate + " 00:00:00";
@@ -127,19 +181,70 @@ public class FrontController {
 		member.setMbirthdate(Timestamp.valueOf(birthdate));
 		System.out.println(member.toString());
 		
-		String emailcheck = member.getEmail();
+		/*String emailcheck = member.getEmail();
 		if(EmailCheck.isValidEmail(emailcheck)) {
 			
 		}else {
 			
-		}
-		
+		}*/
+		System.out.println(member.getEmail());
 		int result = memberService.insertJoin(member);
 		if(result == 1 )
 		System.out.println("DB에 등록 성공");
-		
-		return "redirect:/admin/club_view.do";
+		model.addAttribute("result", result);
+		return "join_result";
 
+	}
+	@RequestMapping(value = "/register_encrypt.do")
+	public String register_encrypt(@RequestParam("register_passwd")String register_passwd ,Model model) {
+		
+		System.out.println("입력비밀번호 잘 나오낭?"+register_passwd);
+		String passwd = Sha256.encrypt(register_passwd);
+		System.out.println("암호화된 email"+passwd);
+		model.addAttribute("passwd", passwd);
+		return "register_encrypt_result";
+	}
+	@RequestMapping(value ="/email_send.do")
+	public String email_send(@RequestParam("email_number")String email_number,@RequestParam("email")String email1,@RequestParam("name")String name, Model model) {
+		
+		System.out.println(name+email1+email_number);
+		// Mail Server 설정
+		String charSet = "utf-8";
+		String hostSMTP = "smtp.naver.com";
+		String hostSMTPid = "zun1091@naver.com";
+		String hostSMTPpwd = "000000"; // 비밀번호 입력해야함
+
+		// 보내는 사람 EMail, 제목, 내용
+		String fromEmail = "zun1091@naver.com";
+		String fromName = name+"씨에게";
+		String subject = "K In One 인증메일입니다.";
+
+		// 받는 사람 E-Mail 주소
+		String mail = email1;
+
+		try {
+			HtmlEmail email = new HtmlEmail();
+			email.setDebug(true);
+			email.setCharset(charSet);
+			email.setSSL(true);
+			email.setHostName(hostSMTP);
+			email.setSmtpPort(587);
+
+			email.setAuthentication(hostSMTPid, hostSMTPpwd);
+			email.setTLS(true);
+			email.addTo(mail, charSet);
+			email.setFrom(fromEmail, fromName, charSet);
+			email.setSubject(subject);
+			email.setHtmlMsg("<p align = 'center'>K in One의 회원가입을 환영합니다.</p><br>" 
+							 + "<div align='center'> 인증번호 : " + email_number + "</div>");
+			email.send();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		model.addAttribute("result", "good~!!\n 등록된 E-Mail 확인");
+
+		return "email_send_result";
 	}
 
 	////////////////////////////////////////////

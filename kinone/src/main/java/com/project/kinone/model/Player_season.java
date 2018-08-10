@@ -58,5 +58,10 @@ public class Player_season {
 	public void setP_assist(int p_assist) {
 		this.p_assist = p_assist;
 	}
-	
+	@Override
+	public String toString() {
+		return "Player_season [inputno=" + inputno + ", pcode=" + pcode + ", seasoncode=" + seasoncode + ", ccode="
+				+ ccode + ", gamecount=" + gamecount + ", p_lgoal=" + p_lgoal + ", p_ggoal=" + p_ggoal + ", p_assist="
+				+ p_assist + "]";
+	}
 }
