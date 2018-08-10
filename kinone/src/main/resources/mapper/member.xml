@@ -24,8 +24,11 @@
     
     
     <insert id="insertJoin" parameterType="member">
+    	<selectKey keyProperty="mno" resultType="java.lang.Integer" order="BEFORE">
+    		select nvl(max(mno),0)+1 from member
+    	</selectKey>
 		insert into member (mno, email, passwd, mname, mbirthdate, mstatus)  
-		values (member_seq.nextval, #{email}, #{passwd}, #{mname}, #{mbirthdate}, 1)    
+		values (#{mno}, #{email}, #{passwd}, #{mname}, #{mbirthdate}, 1)    
     </insert>
     
 </mapper>

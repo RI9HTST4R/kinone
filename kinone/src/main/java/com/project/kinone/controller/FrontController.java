@@ -1,16 +1,14 @@
 package com.project.kinone.controller;
 
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.Service;
 
@@ -64,7 +62,7 @@ public class FrontController {
 		String d = sdf.format(new Date(System.currentTimeMillis()));
 		System.out.println(d);
 		if(whendata == null || !sdf.format(new Date(System.currentTimeMillis())).equals(d)) {
-		
+			System.out.println("세션 새로 설정");
 			// 매치 슬라이드 부분 데이터
 			List<Date> k1MatchDays = matchService.get7MatchDays("K1");
 			System.out.println("K1 리그 매치 날짜 : " + k1MatchDays);
@@ -81,8 +79,17 @@ public class FrontController {
 		}
 		
 		// 리그 별 클럽 순위 리스트
-		List<Club_season> k1ClubSeasonRankList = clubService.getClubSeasonRankList(seasoncode, "K1");
-		List<Club_season> k2ClubSeasonRankList = clubService.getClubSeasonRankList(seasoncode, "K2");
+
+		List<Club_season> k1ClubSeasonRankList = clubService.getClubSeasonRankList(seasoncode,"K1");
+		System.out.println("k1 size : "+ k1ClubSeasonRankList.size());
+	//	for(Club_season cs : k1ClubSeasonRankList) {
+	//		System.out.println("k1:"+cs.toString());
+	//	}
+		List<Club_season> k2ClubSeasonRankList = clubService.getClubSeasonRankList(seasoncode,"K2");
+		System.out.println("k2 size : "+ k2ClubSeasonRankList.size());
+	//	for(Club_season cs : k2ClubSeasonRankList) {
+	//		System.out.println("k2:"+cs.toString());
+	//	}
 
 		// 리그 별 선수 순위 리스트
 		// 득점랭크
@@ -107,6 +114,29 @@ public class FrontController {
 	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
 	public String login(Model model) {
 		return "login";
+	}
+	
+	// 매치 일정 페이지로 이동
+	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
+	public String matchList(@RequestParam(required=false, defaultValue="K1") String lcode,
+							@RequestParam(required=false) String seasoncode, Model model) {
+		
+		if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
+			seasoncode = adminService.getTopSeason();
+		}
+		Timestamp sysdate = new Timestamp(System.currentTimeMillis());
+		System.out.println(sysdate);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM");
+		String month = sdf.format(sysdate);
+		// 월 별로 매치일과 매치정보 가져옴
+		List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
+		List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
+		
+		model.addAttribute("sysdate", sysdate);
+		model.addAttribute("matchDaysInMonth", matchDaysInMonth);
+		model.addAttribute("matchInMonth", matchInMonth);
+		
+		return "match_List";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -169,6 +199,7 @@ public class FrontController {
 	@RequestMapping(value = "/join_ok.do", method = RequestMethod.POST)
 	public String join(Model model, @RequestParam("email") String email,@RequestParam("mname")String mname,@RequestParam("passwd")String passwd, @RequestParam("mbirthdate1")String mbirthdate) {
 
+
 		System.out.println("회원 가입 DB에 등록"+email+mname+passwd+mbirthdate);
 		Member member = new Member();
 		member.setEmail(email);
@@ -193,6 +224,7 @@ public class FrontController {
 		System.out.println("DB에 등록 성공");
 		model.addAttribute("result", result);
 		return "join_result";
+
 
 	}
 	@RequestMapping(value = "/register_encrypt.do")

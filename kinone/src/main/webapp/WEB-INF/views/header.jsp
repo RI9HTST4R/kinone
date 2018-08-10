@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${url}/resources/images/favicon.png" type="image/png">
-<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous|Jua|Do+Hyeon|Nanum+Gothic" rel="stylesheet">
 <title>K in One</title>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -631,6 +631,33 @@ a#totalmatch {
 	background-color: white;
 	color: black;
 }
+
+/* 페이지 별로 타이틀과 하위 메뉴들 들어가는 박스 */
+.pagetitle {
+	width: 100%;
+	height: 150px;
+	/* border: 1px solid red; */
+	text-align: left;
+	margin-top: 20px;
+	padding: 0 20px;
+	font-family: Jua;
+}
+.pagetitle > span {
+	color: white;
+	font-size: 25pt;
+	line-height: 120px;
+}
+.smenu {
+	color: white;
+	font-size: 18pt;
+	margin-right: 20px;
+	position: relative;
+	top: -10px;
+}
+.smenu:hover, .menuselected{
+	border-bottom: 2px solid white;
+	color: white;
+}
 </style>
 
 </head>
@@ -654,13 +681,13 @@ a#totalmatch {
 							</li>
 							
 							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
-							<li class="nav-item"><a class="nav-link" href="matchReserv.do">경기예매</a></li>
-							<li class="nav-item"><a class="nav-link" href="leagueRank.do">리그순위</a></li>
+							<li class="nav-item"><a class="nav-link" href="reservation.do">경기예매</a></li>
+							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
 						</ul>
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
 								<li class="nav-item"><a class="nav-link member-text"
-									href="login.do"><i class="fa fa-lock"></i> 로그인</a></li>
+									href="login.do"><i class="fa fa-lock"></i> 로그인</a>
 								<li class="nav-item"><a class="nav-link member-text"
 									href="join_form.do">회원가입</a></li>
 							</ul>
@@ -673,9 +700,13 @@ a#totalmatch {
 		
 		<%-- 세션에 저장된 데이터 설정 --%>
 		<c:set var="k1MatchDays" value="${sessionScope.k1MatchDays}"/>
+		<%-- ${k1MatchDays} --%>
 		<c:set var="k1MatchMapList" value="${sessionScope.k1MatchMapList}"/>
+		<%-- ${k1MatchMapList} --%>
 		<c:set var="k2MatchDays" value="${sessionScope.k2MatchDays}"/>
+		<%-- ${k2MatchDays} --%>
 		<c:set var="k2MatchMapList" value="${sessionScope.k2MatchMapList}"/>
+		<%-- ${k2MatchMapList} --%>
 		<%-- 세션에 저장된 데이터 설정 끝--%>
 		
 		<!-- 매치 일정 슬라이드 -->
@@ -944,3 +975,5 @@ a#totalmatch {
 		</div>
 		<!-- 매치 일정 슬라이드 끝 -->
 		
+		<!-- 페이지 내용 들어가는 부분 -->
+		<div class="wrap_page">

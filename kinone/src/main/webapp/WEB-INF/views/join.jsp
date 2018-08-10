@@ -2,11 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="header.jsp"%>
-<!DOCTYPE html>
-<html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <c:set var="url" value="<%=request.getContextPath()%>" />
+<<<<<<< HEAD
 <link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
+=======
+
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 <style>
 * {
 	box-sizing: border-box;
@@ -85,7 +87,11 @@ button:hover {
 .step.finish {
 	background-color: #4CAF50;
 }
+.pagetitle {
+	background-color: green;
+}
 </style>
+<<<<<<< HEAD
 
 <script type="text/javascript">
 $(function(){
@@ -177,8 +183,41 @@ $(function(){
 				</div>
 			</form>
 
+=======
+<div class="pagetitle">K In One 회원가입</div>
+<hr>
+<form id="regForm" action="join_ok.do" method="post">
+	<h1>Register</h1>
+	<br/><br/>
+	<div class="tab">
+		<p>
+			<input placeholder="로그인에 사용하실 이메일을 입력하세요"
+				oninput="this.className = ''" name="email">
+		</p>
+		<p>
+			<input placeholder="로그인에 사용하실 비밀번호를 입력하세요"
+				oninput="this.className = ''" name="passwd" type="password">
+		</p>
+	</div>
+	<div class="tab">
+		<font face="bing">기본정보</font>
+		<p>
+			<input placeholder="이름을 입력하세요." oninput="this.className = ''"
+				name="mname">
+		</p>
+		<p>
+			<input type="date" placeholder="생년월일을 입력하세요."
+				oninput="this.className = ''" name="mbirthdate1">
+		</p>
+	</div>
+	<div style="overflow: auto;">
+		<div style="float: right;">
+			<button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+			<button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 		</div>
 	</div>
+<<<<<<< HEAD
 	<script>
 	var checked =0;
 	var email_number;
@@ -192,7 +231,7 @@ $(function(){
 		        success: function (data){
 		        	if(data>0){
 			        	alert("가입 완료"); 
-			        	location.href="main.do";
+			        	location.href="login.do";
 		        	}else{
 		        		alert("가입 실패");
 		        	}
@@ -202,7 +241,28 @@ $(function(){
 		}else{
 			alert("인증용 번호가 다릅니다.");
 			return false;
+=======
+	<!-- Circles which indicates the steps of the form: -->
+	<div style="text-align: center; margin-top: 40px;">
+		<span class="step finish"></span> <span class="step"></span>
+	</div>
+</form>
+<script>
+	var currentTab = 0; // Current tab is set to be the first tab (0)
+	showTab(currentTab); // Display the crurrent tab
+
+	function showTab(n) {
+		// This function will display the specified tab of the form...
+		var x = document.getElementsByClassName("tab");
+		x[n].style.display = "block";
+		//... and fix the Previous/Next buttons:
+		if (n == 0) {
+			document.getElementById("prevBtn").style.display = "none";
+		} else {
+			document.getElementById("prevBtn").style.display = "inline";
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 		}
+<<<<<<< HEAD
 	}
 	function check_contract(){
 		if($("#contract_check").is(":checked")){
@@ -217,8 +277,34 @@ $(function(){
 			 $("#step3").attr('class','step');
 		}else{
 			alert("약관에 동의해주세요");
+=======
+		if (n == (x.length - 1)) {
+			document.getElementById("nextBtn").innerHTML = "Submit";
+		} else {
+			document.getElementById("nextBtn").innerHTML = "Next";
+		}
+		//... and run a function that will display the correct step indicator:
+		fixStepIndicator(n)
+	}
+
+	function nextPrev(n) {
+		// This function will figure out which tab to display
+		var x = document.getElementsByClassName("tab");
+		// Exit the function if any field in the current tab is invalid:
+		if (n == 1 && !validateForm())
+			return false;
+		// Hide the current tab:
+		x[currentTab].style.display = "none";
+		// Increase or decrease the current tab by 1:
+		currentTab = currentTab + n;
+		// if you have reached the end of the form...
+		if (currentTab >= x.length) {
+			// ... the form gets submitted:
+			document.getElementById("regForm").submit();
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 			return false;
 		}
+<<<<<<< HEAD
 	}
 	function checking(){
 		$.ajax({
@@ -262,7 +348,28 @@ $(function(){
 			 $("#step1").attr('class','step finish');
 			 $("#step2").attr('class','step');
 			 $("#step3").attr('class','step');
+=======
+		// Otherwise, display the correct tab:
+		showTab(currentTab);
+	}
+
+	function validateForm() {
+		// This function deals with validation of the form fields
+		var x, y, i, valid = true;
+		x = document.getElementsByClassName("tab");
+		y = x[currentTab].getElementsByTagName("input");
+		// A loop that checks every input field in the current tab:
+		for (i = 0; i < y.length; i++) {
+			// If a field is empty...
+			if (y[i].value == "") {
+				// add an "invalid" class to the field:
+				y[i].className += " invalid";
+				// and set the current valid status to false
+				valid = false;
+			}
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 		}
+<<<<<<< HEAD
 		function nextPrev3(){
 			$(".tab1").hide();
 			$(".tab3").hide();
@@ -273,7 +380,22 @@ $(function(){
 			 $("#step1").attr('class','step');
 			 $("#step2").attr('class','step finish');
 			 $("#step3").attr('class','step');
+=======
+		// If the valid status is true, mark the step as finished and valid:
+		if (valid) {
+			document.getElementsByClassName("step")[currentTab].className += " finish";
 		}
+		return valid; // return the valid status
+	}
+
+	function fixStepIndicator(n) {
+		// This function removes the "active" class of all steps...
+		var i, x = document.getElementsByClassName("step");
+		for (i = 0; i < x.length; i++) {
+			x[i].className = x[i].className.replace(" active", "");
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
+		}
+<<<<<<< HEAD
 		function validateForm2(){
 			if($("#register_name").val().trim()==""){
 				alert("이름을 입력하세요");
@@ -365,8 +487,21 @@ $(function(){
 
 		
 	</script>
+=======
+		//... and adds the "active" class on the current step:
+		x[n].className += " active";
+	}
+>>>>>>> branch 'master' of https://github.com/kcoc/kinone.git
 
-</body>
-</html>
+	// 회원가입 유효성 검사 후 서브밋
+	function submitJoin() {
+
+	}
+	
+	// 아이디(이메일) 체크검사(ajax)
+
+	
+
+</script>
 <%@ include file="footer.jsp"%>
 

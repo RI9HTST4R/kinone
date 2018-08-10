@@ -44,6 +44,15 @@ public class MatchDAOImpl implements MatchDAOInter {
 		return session.selectOne("matchmapper.matchDetail", mcode);
 	}
 
+	// 월 별 매치일 리스트 가져옴
+	public List<Date> getMatchDaysInMonth(HashMap<String, String> map) {
+		return session.selectList("matchmapper.matchDaysInMonth", map);
+	}
+
+	public List<Match> getMatchInMonth(HashMap<String, String> map) {
+		return session.selectList("matchmapper.matchInMonth", map);
+	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 }

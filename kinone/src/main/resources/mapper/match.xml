@@ -3,6 +3,8 @@
 
 <mapper namespace="matchmapper">
     
+    <!-- #####################################한동준############################################### -->   
+    
     <select id="middleDay" parameterType="String" resultType="java.sql.Date">
     	select mdate
 	  	from (select trunc(mdate) mdate 
@@ -63,6 +65,25 @@
 		from match M, club Ch, club Ca
 		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode and mcode = #{mcode}
     </select>
+    
+    <select id="matchDaysInMonth" parameterType="java.util.HashMap" resultType="java.sql.Date">
+		select to_date(trunc(mdate)) mdate
+		from match
+		where lcode = #{lcode}
+		group by trunc(mdate)
+		having to_char(trunc(mdate),'yyyymm') = #{seasoncode}||#{month}
+		order by trunc(mdate)
+    </select>
+    
+    <select id="matchInMonth" parameterType="java.util.HashMap" resultType="match">
+    	select M.*, Ch.cname_short cname_short_h, Ch.emblem emblem_h, Ca.cname_short cname_short_a, Ca.emblem emblem_a, S.sname
+		from match M, club Ch, club Ca, stadium S
+		where M.ccode_home = Ch.ccode and M.ccode_away = Ca.ccode
+		and M.lcode = #{lcode} and to_char(trunc(M.mdate),'yyyymm') = #{seasoncode}||#{month} and M.ccode_home = S.ccode
+		order by mdate
+    </select>
+    
+    <!-- ############################################################################################# -->   
     
 </mapper>
 

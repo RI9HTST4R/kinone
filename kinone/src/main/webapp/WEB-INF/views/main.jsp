@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
 		
-		<!-- 페이지 내용 들어가는 부분 -->
-		<div class="wrap_page">
+		
 			<div class="wrap_content" align="center">
 				<div class="wrap_remain">
 					<!-- 왼쪽 페이지 -->
@@ -284,7 +283,6 @@
 				</div>
 			</div>
 
-		</div>
-		<!-- 페이지 내용 들어가는 부분 끝 -->
+		
 		
 <%@ include file="footer.jsp" %>
