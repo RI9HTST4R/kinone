@@ -5,8 +5,6 @@
 
 <c:set var="url" value="<%=request.getContextPath()%>" />
 
-<script type="text/javascript"
-	src="http://code.jquery.com/latest-jquery.com"></script>
 <style>
 * {
 	box-sizing: border-box;

@@ -19,6 +19,9 @@ public class MatchServiceImpl implements MatchServiceInter {
 	@Autowired
 	private MatchDAOImpl matchDao;
 
+//////////////////////////////////////////////한 동 준 /////////////////////////////////////////////////////////
+	
+	// 메인 페이지의 매치 슬라이드에서 노출될 매치 일정일 목록
 	@Override
 	public List<Date> get7MatchDays(String lcode) {
 		Date middleDay = matchDao.getMiddleDay(lcode);
@@ -32,6 +35,7 @@ public class MatchServiceImpl implements MatchServiceInter {
 		return matchDays;
 	}
 
+	// 매치 슬라이드의 날짜 목록으로 해당 매치 정보를 가져옴
 	@Override
 	public HashMap<String, HashMap> getAllMatchInDay(List<Date> matchDays, String lcode) {
 		HashMap map = new HashMap(); // 디비에서 사용하기 위한 map
@@ -80,7 +84,25 @@ public class MatchServiceImpl implements MatchServiceInter {
 		return matchMapList;
 	}
 
-	
+	// 월 별 매치가 있는 날짜 리스트를 가져온다.
+	public List<Date> getMatchDaysInMonth(String lcode, String seasoncode, String month) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("lcode", lcode);
+		map.put("seasoncode", seasoncode);
+		map.put("month", month);
+		return matchDao.getMatchDaysInMonth(map);
+	}
+
+	// 월 별 매치 정보를 가져온다.
+	public List<Match> getMatchInMonth(String lcode, String seasoncode, String month) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("lcode", lcode);
+		map.put("seasoncode", seasoncode);
+		map.put("month", month);
+		return matchDao.getMatchInMonth(map);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 	
 }

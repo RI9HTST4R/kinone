@@ -1,5 +1,6 @@
 package com.project.kinone.controller;
 
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -113,7 +114,24 @@ public class FrontController {
 	
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
-	public String matchList(Model model) {
+	public String matchList(@RequestParam(required=false, defaultValue="K1") String lcode,
+							@RequestParam(required=false) String seasoncode, Model model) {
+		
+		if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
+			seasoncode = adminService.getTopSeason();
+		}
+		Timestamp sysdate = new Timestamp(System.currentTimeMillis());
+		System.out.println(sysdate);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM");
+		String month = sdf.format(sysdate);
+		// 월 별로 매치일과 매치정보 가져옴
+		List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
+		List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
+		
+		model.addAttribute("sysdate", sysdate);
+		model.addAttribute("matchDaysInMonth", matchDaysInMonth);
+		model.addAttribute("matchInMonth", matchInMonth);
+		
 		return "match_List";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

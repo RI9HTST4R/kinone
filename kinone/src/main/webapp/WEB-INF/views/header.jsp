@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${url}/resources/images/favicon.png" type="image/png">
-<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Raleway|Righteous|Jua|Do+Hyeon|Nanum+Gothic" rel="stylesheet">
 <title>K in One</title>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
@@ -637,12 +637,26 @@ a#totalmatch {
 	width: 100%;
 	height: 150px;
 	/* border: 1px solid red; */
+	text-align: left;
 	margin-top: 20px;
+	padding: 0 20px;
+	font-family: Jua;
+}
+.pagetitle > span {
 	color: white;
 	font-size: 25pt;
-	text-align: left;
 	line-height: 120px;
-	padding: 0 20px;
+}
+.smenu {
+	color: white;
+	font-size: 18pt;
+	margin-right: 20px;
+	position: relative;
+	top: -10px;
+}
+.smenu:hover, .menuselected{
+	border-bottom: 2px solid white;
+	color: white;
 }
 </style>
 
