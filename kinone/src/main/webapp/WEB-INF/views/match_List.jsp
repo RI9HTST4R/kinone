@@ -99,8 +99,11 @@
 <div class="page-content">
 	<!-- 월 별 매치 일정 -->
 	<div class="matchInMonth">
-		<i class="fas fa-caret-left"></i><span id="month">8월</span><i class="fas fa-caret-right"></i>
+		<a href="#"><i class="fas fa-caret-left"></i></a><span id="month">8월</span><a href="#"><i class="fas fa-caret-right"></i></a>
 	</div>
+	
+	<%-- 예매버튼을 오늘 날짜와 비교하여 나타내도록 하기 위해서  --%>
+	<jsp:useBean id="toDay" class="java.util.Date"/>
 	
 <c:forEach var="matchday" items="${matchDaysInMonth}">
 	<%-- 날짜 부분 --%>
@@ -130,14 +133,13 @@
 			<td class="match-btn" align="right">
 			<c:if test="${match.mstatus == 0}"><%-- 경기전 --%>
 				<button class="btn btn-warning" type="button">전력비교 &gt;</button>
-				
-			<fmt:formatDate var="today" value="${sysdate}" pattern="yyyy/MM/dd"/>
-			${today}
-			<fmt:parseDate var="dtoday" value="${today}" pattern="yyyy/MM/dd"/>
-			${dtoday}
-			<fmt:parseNumber var="ntoday" value="${sysdate}" integerOnly="true" />
-			${ntoday}
-				<button class="btn btn-info" type="button">경기예매 &gt;</button>
+			<%-- 해당 매치의 날짜 --%>
+			<fmt:parseDate var="regDate" value="${match.mdate}" pattern="yyyy-MM-dd HH:mm:ss" />
+			<%-- 오늘 날짜와 매치 날짜를 숫자로 변환하여 계산했을 때 1일 이하가 남은 경기는 예매할 수 없도록 --%>
+			<fmt:parseNumber value="${toDay.time / (1000*60*60*24)}" integerOnly="true" var="nowDays" scope="request"/>
+			<fmt:parseNumber value="${regDate.time / (1000*60*60*24)}" integerOnly="true" var="matchDates" scope="request" />
+			
+				<button class="btn btn-info" type="button" <c:if test="${matchDates - nowDays < 1}">disabled</c:if>>경기예매 &gt;</button>
 			</c:if>
 			<c:if test="${match.mstatus == 1}"><%-- 경기종료 --%>
 				<button class="btn btn-danger" type="button">경기결과 &gt;</button>

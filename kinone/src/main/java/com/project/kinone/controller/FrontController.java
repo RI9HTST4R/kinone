@@ -121,14 +121,13 @@ public class FrontController {
 			seasoncode = adminService.getTopSeason();
 		}
 		Timestamp sysdate = new Timestamp(System.currentTimeMillis());
-		System.out.println(sysdate);
+	//	System.out.println(sysdate);
 		SimpleDateFormat sdf = new SimpleDateFormat("MM");
 		String month = sdf.format(sysdate);
 		// 월 별로 매치일과 매치정보 가져옴
 		List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
 		List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
 		
-		model.addAttribute("sysdate", sysdate);
 		model.addAttribute("matchDaysInMonth", matchDaysInMonth);
 		model.addAttribute("matchInMonth", matchInMonth);
 		
