@@ -238,6 +238,17 @@ public class FrontController {
 		return"main";
 	}
 	
+	//프론트 클럽 리스트
+	@RequestMapping("/clubList.do")
+	public String clubList(Model model) {
+
+		System.out.println("리그 클럽 목록");
+		List<Club> mngClubList = clubService.getClubList();
+		System.out.println(mngClubList.toString());
+		model.addAttribute("mngClubList", mngClubList);
+
+		return "club_list";
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
