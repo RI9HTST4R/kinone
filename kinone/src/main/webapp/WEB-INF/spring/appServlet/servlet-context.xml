@@ -31,4 +31,19 @@
 		<beans:property name="maxUploadSize" value="10000000"/>	
 	</beans:bean>
 	
+	
+	<!-- 인터셉터 설정 -->	
+	<beans:bean id="sessionChk" class="com.project.kinone.util.sessionchckr"/>	
+	 <interceptors>
+		<interceptor>
+			<mapping path="/member_edit.nhn"/>
+			<mapping path="/member_edit_ok.nhn"/>			
+			<mapping path="/member_del.nhn"/>
+			<mapping path="/member_del_ok.nhn"/>
+			<mapping path="/member_logout.nhn"/>
+			<beans:ref bean="sessionChk"/>
+		</interceptor>
+	</interceptors>
+	
+	
 </beans:beans>
