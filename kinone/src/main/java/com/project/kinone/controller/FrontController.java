@@ -215,8 +215,8 @@ public class FrontController {
 		String email = memberService.find_email(register_email);
 		System.out.println("확인된 email"+email);
 		System.out.println("회원 가입");
-		model.addAttribute("email", email);
-		return "register_email_check_result";
+		model.addAttribute("ajax", email);
+		return "ajax";
 	}
 	
 	
@@ -247,8 +247,8 @@ public class FrontController {
 		int result = memberService.insertJoin(member);
 		if(result == 1 )
 		System.out.println("DB에 등록 성공");
-		model.addAttribute("result", result);
-		return "join_result";
+		model.addAttribute("ajax", result);
+		return "ajax";
 
 
 	}
@@ -258,8 +258,8 @@ public class FrontController {
 		System.out.println("입력비밀번호 잘 나오낭?"+register_passwd);
 		String passwd = Sha256.encrypt(register_passwd);
 		System.out.println("암호화된 email"+passwd);
-		model.addAttribute("passwd", passwd);
-		return "register_encrypt_result";
+		model.addAttribute("ajax", passwd);
+		return "ajax";
 	}
 	@RequestMapping(value ="/email_send.do")
 	public String email_send(@RequestParam("email_number")String email_number,@RequestParam("email")String email1,@RequestParam("name")String name, Model model) {
@@ -299,9 +299,9 @@ public class FrontController {
 			System.out.println(e);
 		}
 		
-		model.addAttribute("result", "good~!!\n 등록된 E-Mail 확인");
+		model.addAttribute("ajax", "good~!!\n 등록된 E-Mail 확인");
 
-		return "email_send_result";
+		return "ajax";
 	}
 
 	////////////////////////////////////////////
