@@ -33,5 +33,11 @@ public class MemberServiceImpl implements MemberServiceInter{
 	public int insertJoin(Member member) {
 		return memberDAO.join(member);
 	}
+
+	public String find_email(String register_email) {
+		// TODO Auto-generated method stub
+		return memberDAO.find_email(register_email);
+	}
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////
+
 }

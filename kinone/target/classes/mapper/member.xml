@@ -17,7 +17,9 @@
 		select count(*) from member	where email =#{email} and passwd=#{passwd}
 	</select>
     <!-- ############################################################################################# -->
-    
+     <select id="find_email" parameterType="String" resultType="String">
+		select email from member where email =#{email}
+	</select>
     
     
     

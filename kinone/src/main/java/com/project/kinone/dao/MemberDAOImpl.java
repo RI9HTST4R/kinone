@@ -23,8 +23,13 @@ public class MemberDAOImpl implements MemberDAOInter{
 	public int logincheck(Member member) {
 		return session.selectOne("membermapper.logincheck", member);
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public int join(Member member) {
 		return session.insert("membermapper.insertJoin", member);
 	}
+	public String find_email(String register_email) {
+		// TODO Auto-generated method stub
+		return session.selectOne("membermapper.find_email", register_email);
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
