@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
@@ -118,25 +119,49 @@ public class FrontController {
 	
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
-	public String matchList(@RequestParam(required=false, defaultValue="K1") String lcode,
-							@RequestParam(required=false) String seasoncode, Model model) {
+	public String matchList(Model model) {
 		
-		if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
-			seasoncode = adminService.getTopSeason();
+	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
+	//		seasoncode = adminService.getTopSeason();
+	//	}
+	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
+	//	System.out.println(sysdate);
+	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
+	//	String month = sdf.format(sysdate);
+		// 월 별로 매치일과 매치정보 가져옴
+	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
+	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
+		
+		List<String> seasonList = adminService.getAllSeason();
+		
+	//	model.addAttribute("matchDaysInMonth", matchDaysInMonth);
+	//	model.addAttribute("matchInMonth", matchInMonth);
+		model.addAttribute("seasonList", seasonList);
+		
+		return "match_List";
+	}
+	
+	@RequestMapping(value="/matchListAjax.do", method=RequestMethod.POST)
+	@ResponseBody
+	public HashMap matchListAjax(@RequestParam(required=false) String lcode,
+								 @RequestParam(required=false) String seasoncode,
+								 @RequestParam(required=false) String month) throws Exception {
+		System.out.println("lcode:"+lcode);
+		System.out.println("seasoncode:"+seasoncode);
+		System.out.println("month:"+month);
+		if(Integer.parseInt(month) < 10) {
+			month = "0"+ month;
 		}
-		Timestamp sysdate = new Timestamp(System.currentTimeMillis());
-		System.out.println(sysdate);
-		SimpleDateFormat sdf = new SimpleDateFormat("MM");
-		String month = sdf.format(sysdate);
+		
+		HashMap reqMap = new HashMap();
 		// 월 별로 매치일과 매치정보 가져옴
 		List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
 		List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
 		
-		model.addAttribute("sysdate", sysdate);
-		model.addAttribute("matchDaysInMonth", matchDaysInMonth);
-		model.addAttribute("matchInMonth", matchInMonth);
+		reqMap.put("day", matchDaysInMonth);
+		reqMap.put("match", matchInMonth);
 		
-		return "match_List";
+		return reqMap;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 

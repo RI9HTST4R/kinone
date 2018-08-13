@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${url}/resources/images/favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css?family=Raleway|Righteous|Jua|Do+Hyeon|Nanum+Gothic" rel="stylesheet">
-<title>K in One</title>
+<title>K In One</title>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
 	integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
@@ -681,7 +681,7 @@ a#totalmatch {
 							</li>
 							
 							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
-							<li class="nav-item"><a class="nav-link" href="reservation.do">경기예매</a></li>
+							<li class="nav-item"><a class="nav-link" href="reservation.do">티켓예매</a></li>
 							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
 						</ul>
 						<div class="collapse navbar-collapse justify-content-end">
