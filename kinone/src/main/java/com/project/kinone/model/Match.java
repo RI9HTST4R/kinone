@@ -21,6 +21,9 @@ public class Match {
 	private String cname_short_a; // 어웨이팀 명
 	private String emblem_a;	  // 어웨이팀 엠블럼
 	
+	/*월별 매치 일정 페이지에서 사용할 프로퍼티*/
+	private String sname; // 홈팀 경기장명
+	
 	public String getMcode() {
 		return mcode;
 	}
@@ -100,12 +103,19 @@ public class Match {
 		this.emblem_a = emblem_a;
 	}
 	
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
 	@Override
 	public String toString() {
 		return "Match [mcode=" + mcode + ", lcode=" + lcode + ", mdate=" + mdate + ", mround=" + mround + ", mstatus="
 				+ mstatus + ", ccode_home=" + ccode_home + ", ccode_away=" + ccode_away + ", homescore=" + homescore
 				+ ", awayscore=" + awayscore + ", cname_short_h=" + cname_short_h + ", emblem_h=" + emblem_h
-				+ ", cname_short_a=" + cname_short_a + ", emblem_a=" + emblem_a + "]";
+				+ ", cname_short_a=" + cname_short_a + ", emblem_a=" + emblem_a + ", sname=" + sname + "]";
 	}
+	
 	
 }

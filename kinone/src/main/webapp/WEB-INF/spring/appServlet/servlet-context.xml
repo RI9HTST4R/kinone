@@ -36,11 +36,7 @@
 	<beans:bean id="sessionChk" class="com.project.kinone.util.sessionchckr"/>	
 	 <interceptors>
 		<interceptor>
-			<mapping path="/member_edit.nhn"/>
-			<mapping path="/member_edit_ok.nhn"/>			
-			<mapping path="/member_del.nhn"/>
-			<mapping path="/member_del_ok.nhn"/>
-			<mapping path="/member_logout.nhn"/>
+			<mapping path="/reserve.do"/>
 			<beans:ref bean="sessionChk"/>
 		</interceptor>
 	</interceptors>
