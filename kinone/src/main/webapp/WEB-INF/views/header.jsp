@@ -697,9 +697,9 @@ a#totalmatch {
 						<c:if test="${sessionScope.email != null}">
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
-							<li class="nav-item"><font class="nav-link" size="0.8em">${mname }님, 환영합니다</font></li>
+							<li class="nav-item"><font color="white" size="0.8em">${sessionScope.name}님, 환영합니다</font></li>
 							<li class="nav-item"><a class="nav-link member-text" 
-									href="myticket.do"><font size="0.8em">내 예매 보기</font></a></li>
+									href="mypage.do"><font size="0.8em">마이페이지</font></a></li>
 							<li class="nav-item"><a class="nav-link member-text" 
 									href="logout.do"><font size="0.8em">로그아웃</font></a></li>
 							</ul>

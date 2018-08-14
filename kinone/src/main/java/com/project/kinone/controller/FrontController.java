@@ -119,8 +119,19 @@ public class FrontController {
 	
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
-	public String matchList(Model model) {
-	
+	public String matchList( Model model) {
+		
+	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
+	//		seasoncode = adminService.getTopSeason();
+	//	}
+	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
+	//	System.out.println(sysdate);
+	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
+	//	String month = sdf.format(sysdate);
+		// 월 별로 매치일과 매치정보 가져옴
+	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
+	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
+		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
 		
@@ -236,43 +247,41 @@ public class FrontController {
 		Member om = memberService.logincheck(email);
 		
 		
-		if (om.getEmail()==null) {
+		if (om==null) {
 			
 			System.out.println("email does not exist");
 			out.println("<script>");
 			out.println("alert('아이디나 비밀번호가 틀립니다')");
-			out.println("history.back()");
+			out.println("history.go(-1)");
 			out.println("</script>");
 			
-			return "login";
-		}else if (!om.getPasswd().equals(passwd)){
-			System.out.println("passwd does not match");
-			out.println("<script>");
-			out.println("alert('아이디나 비밀번호가 틀립니다')");
-			out.println("history.back()");
-			out.println("</script>");
-			return "login";
-		}else if(om.getEmail().equals(email)&&om.getPasswd().equals(passwd)) {
-			System.out.println("login sucess");
-			out.println("<script>");
-			out.println("alert('로그인 성공')");
-			out.println("history.back()");
-			out.println("</script>");
-			session.setAttribute("email", om.getEmail());
-			model.addAttribute("mname",om.getMname());
-			System.out.println("email="+om.getEmail());
-			if(om.getEmail().equals("admin")) {
+		}else {
+		
+			if (!om.getPasswd().equals(passwd)){
+				System.out.println("passwd does not match");
+				out.println("<script>");
+				out.println("alert('아이디나 비밀번호가 틀립니다')");
+				out.println("history.go(-1)");
+				out.println("</script>");
+			}else if(om.getEmail().equals(email)&&om.getPasswd().equals(passwd)) {
+				System.out.println("login sucess");
+				out.println("<script>");
+				out.println("alert('로그인 성공')");
+				out.println("</script>");
+				session.setAttribute("email", om.getEmail());
+				session.setAttribute("name", om.getMname());
+				System.out.println("email="+om.getEmail());
+				if(om.getEmail().equals("admin")) {
 				System.out.println("admin");
-				return"/admin/main";
+				return"redirect:/admin/main.do";
+				
 			}else {
 				System.out.println("not admin");
-			return "main";
+				return "redirect:/main.do";
+				}
 			}
-		}else {
-			System.out.println("unknown error");
-			return "null";
 		}
-		
+		return null;
 	}
 	//로그아웃
 	@RequestMapping(value="/logout.do")
@@ -298,7 +307,7 @@ public class FrontController {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
-	/////////////////// 김동환////////////////////
+	/////////////////// 김현준////////////////////
 
 	// 회원 가입 폼으로 이동
 	@RequestMapping(value = "/join_form.do")
@@ -316,8 +325,8 @@ public class FrontController {
 		String email = memberService.find_email(register_email);
 		System.out.println("확인된 email"+email);
 		System.out.println("회원 가입");
-		model.addAttribute("email", email);
-		return "register_email_check_result";
+		model.addAttribute("ajax", email);
+		return "ajax";
 	}
 	
 	
@@ -348,8 +357,8 @@ public class FrontController {
 		int result = memberService.insertJoin(member);
 		if(result == 1 )
 		System.out.println("DB에 등록 성공");
-		model.addAttribute("result", result);
-		return "join_result";
+		model.addAttribute("ajax", result);
+		return "ajax";
 
 
 	}
@@ -359,8 +368,8 @@ public class FrontController {
 		System.out.println("입력비밀번호 잘 나오낭?"+register_passwd);
 		String passwd = Sha256.encrypt(register_passwd);
 		System.out.println("암호화된 email"+passwd);
-		model.addAttribute("passwd", passwd);
-		return "register_encrypt_result";
+		model.addAttribute("ajax", passwd);
+		return "ajax";
 	}
 	@RequestMapping(value ="/email_send.do")
 	public String email_send(@RequestParam("email_number")String email_number,@RequestParam("email")String email1,@RequestParam("name")String name, Model model) {
@@ -400,10 +409,45 @@ public class FrontController {
 			System.out.println(e);
 		}
 		
-		model.addAttribute("result", "good~!!\n 등록된 E-Mail 확인");
+		model.addAttribute("ajax", "good~!!\n 등록된 E-Mail 확인");
 
-		return "email_send_result";
+		return "ajax";
 	}
+	
+	
 
-	////////////////////////////////////////////
+	
+	// 티켓 예매/////// 
+	@RequestMapping(value = "/reserve.do")
+	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) {
+		
+		System.out.println("예약 페이지로 이동 mcode:"+mcode);
+		model.addAttribute("mcode", mcode);
+		Match match = matchService.get_the_match(mcode);
+		System.out.println("mcode"+match.getAwayscore()+match.getCcode_away());
+		Club home = clubService.getClub(match.getCcode_home());
+		Club away = clubService.getClub(match.getCcode_away());
+		
+		model.addAttribute("home",home);
+		model.addAttribute("away",away);
+		model.addAttribute("m", match);
+		return "reserve";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////////
 }

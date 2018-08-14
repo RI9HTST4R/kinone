@@ -83,6 +83,10 @@
 		order by mdate
     </select>
     
+    <select id="get_the_match" parameterType="String" resultType="match">
+    	select * from match where mcode = #{mcode}
+    </select>
+    
     <!-- ############################################################################################# -->   
     
 </mapper>
