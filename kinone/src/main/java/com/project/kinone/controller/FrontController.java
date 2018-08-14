@@ -197,7 +197,7 @@ public class FrontController {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
-	/////////////////// 김동환////////////////////
+	/////////////////// 김현준////////////////////
 
 	// 회원 가입 폼으로 이동
 	@RequestMapping(value = "/join_form.do")
@@ -303,6 +303,36 @@ public class FrontController {
 
 		return "ajax";
 	}
+	
+	
 
 	////////////////////////////////////////////
+	// 티켓 예매/////// 
+	
+	@RequestMapping(value = "/reserve.do")
+	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) {
+		
+		System.out.println("예약 페이지로 이동 mcode:"+mcode);
+		model.addAttribute("mcode", mcode);
+		Match match = matchService.get_the_match(mcode);
+		System.out.println("mcode"+match.getAwayscore()+match.getCcode_away());
+		return "reserve";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	////////////////////////////////////
 }

@@ -102,6 +102,11 @@ public class MatchServiceImpl implements MatchServiceInter {
 		return matchDao.getMatchInMonth(map);
 	}
 
+	public Match get_the_match(String mcode) {
+		// TODO Auto-generated method stub
+		return matchDao.get_the_match(mcode);
+	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 	
