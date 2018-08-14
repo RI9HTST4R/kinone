@@ -684,6 +684,7 @@ a#totalmatch {
 							<li class="nav-item"><a class="nav-link" href="reservation.do">티켓예매</a></li>
 							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
 						</ul>
+						<c:if test="${empty sessionScope.email}">
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
 								<li class="nav-item"><a class="nav-link member-text"
@@ -692,6 +693,18 @@ a#totalmatch {
 									href="join_form.do">회원가입</a></li>
 							</ul>
 						</div>
+						</c:if>
+						<c:if test="${sessionScope.email != null}">
+						<div class="collapse navbar-collapse justify-content-end">
+							<ul class="navbar-nav navbar-right">
+							<li class="nav-item"><font color="white" size="0.8em">${sessionScope.name}님, 환영합니다</font></li>
+							<li class="nav-item"><a class="nav-link member-text" 
+									href="mypage.do"><font size="0.8em">마이페이지</font></a></li>
+							<li class="nav-item"><a class="nav-link member-text" 
+									href="logout.do"><font size="0.8em">로그아웃</font></a></li>
+							</ul>
+						</div>
+						</c:if>
 					</div>
 				</div>
 			</nav>

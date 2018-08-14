@@ -66,7 +66,7 @@
 	<c:if test="${not empty players.seasoncode}">
 	<tr>
 		<td>${players.seasoncode}</td>
-		<td><c:set var="key" value="${player.ccode}"/>
+		<td><c:set var="key" value="${players.ccode}"/>
 					<c:out value="${cn[key]}"/></td>
 		<td>${players.gamecount}</td>
 		<td>${players.p_ggoal}</td>

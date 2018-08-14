@@ -1,16 +1,16 @@
 package com.project.kinone.controller;
 
-
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.Service;
 
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,6 @@ import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
-import com.project.kinone.util.EmailCheck;
 import com.project.kinone.util.Sha256;
 
 @Controller
@@ -120,8 +119,19 @@ public class FrontController {
 	
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
-	public String matchList(Model model) {
-	
+	public String matchList( Model model) {
+		
+	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
+	//		seasoncode = adminService.getTopSeason();
+	//	}
+	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
+	//	System.out.println(sysdate);
+	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
+	//	String month = sdf.format(sysdate);
+		// 월 별로 매치일과 매치정보 가져옴
+	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
+	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
+		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
 		
@@ -214,32 +224,86 @@ public class FrontController {
 //////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////		
 	//로그인 요청
 	@RequestMapping(value="/logincall.do")
-	public String logincall(HttpServletRequest request, HttpSession session, Member member) {
-		//id, passwd 확인
-		//id, pass 같이
-		int result1 = memberService.logincheck(member);
+	public String logincall(@RequestParam String email,@RequestParam String passwd, 
+										HttpServletResponse response, HttpSession session, Model model) 
+												throws Exception{
+		System.out.println("logincall");
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();// 출력스트림 객체 생성
 		
-		//따로?
-//		int result1 = memberService.emailcheck(member.getEmail());
-//		if(result1==1) {
-//		int result2 = memberService.passwdcheck(member.getEmail(),member.getPasswd())
-//			if(result2==1){
-//				result1=3
-//				}else{result1=2}
-//		}
-		if (result1==1) {
-			session.setAttribute("username", member.getMname());
+		if ( session.getAttribute("email") != null ){
+            // 기존에 세션 값이 존재한다면
+            session.removeAttribute("email"); // 기존값을 제거해 준다.
+        }
+
+
+//		String pass=Sha256.encrypt(member.getPasswd());
+		
+		System.out.println(email+passwd);
+		
+		
+		
+		//로긴체크
+		Member om = memberService.logincheck(email);
+		
+		
+		if (om==null) {
 			
-			return "main.do";
+			System.out.println("email does not exist");
+			out.println("<script>");
+			out.println("alert('아이디나 비밀번호가 틀립니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+			
 		}else {
-			
-			return "login";
-		}
 		
+			if (!om.getPasswd().equals(passwd)){
+				System.out.println("passwd does not match");
+				out.println("<script>");
+				out.println("alert('아이디나 비밀번호가 틀립니다')");
+				out.println("history.go(-1)");
+				out.println("</script>");
+			}else if(om.getEmail().equals(email)&&om.getPasswd().equals(passwd)) {
+				System.out.println("login sucess");
+				out.println("<script>");
+				out.println("alert('로그인 성공')");
+				out.println("</script>");
+				session.setAttribute("email", om.getEmail());
+				session.setAttribute("name", om.getMname());
+				System.out.println("email="+om.getEmail());
+				if(om.getEmail().equals("admin")) {
+				System.out.println("admin");
+				return"redirect:/admin/main.do";
+				
+			}else {
+				System.out.println("not admin");
+				return "redirect:/main.do";
+				}
+			}
+		}
+		return null;
+	}
+	//로그아웃
+	@RequestMapping(value="/logout.do")
+	public String logout(HttpServletRequest request, HttpSession session,Member member) {
+		System.out.println("logout");
+		
+		session.invalidate();
+		
+		return"main";
 	}
 	
-	
-	
+	//프론트 클럽 리스트
+	@RequestMapping("/clubList.do")
+	public String clubList(Model model) {
+
+		System.out.println("리그 클럽 목록");
+		List<Club> mngClubList = clubService.getClubList();
+		System.out.println(mngClubList.toString());
+		model.addAttribute("mngClubList", mngClubList);
+
+		return "club_list";
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
@@ -352,9 +416,8 @@ public class FrontController {
 	
 	
 
-	////////////////////////////////////////////
-	// 티켓 예매/////// 
 	
+	// 티켓 예매/////// 
 	@RequestMapping(value = "/reserve.do")
 	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) {
 		
@@ -386,5 +449,5 @@ public class FrontController {
 	
 	
 	
-	////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
 }

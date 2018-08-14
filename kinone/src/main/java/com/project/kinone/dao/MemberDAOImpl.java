@@ -1,5 +1,7 @@
 package com.project.kinone.dao;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,8 +22,8 @@ public class MemberDAOImpl implements MemberDAOInter{
 	////////////////////////////////////////////// 심 규 진
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////
 	
-	public int logincheck(Member member) {
-		return session.selectOne("membermapper.logincheck", member);
+	public Member logincheck(String email) {
+		return session.selectOne("membermapper.logincheck", email);
 	}
 	public int join(Member member) {
 		return session.insert("membermapper.insertJoin", member);

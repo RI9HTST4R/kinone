@@ -31,4 +31,15 @@
 		<beans:property name="maxUploadSize" value="10000000"/>	
 	</beans:bean>
 	
+	
+	<!-- 인터셉터 설정 -->	
+	<beans:bean id="sessionChk" class="com.project.kinone.util.sessionchckr"/>	
+	 <interceptors>
+		<interceptor>
+			<mapping path="/reserve.do"/>
+			<beans:ref bean="sessionChk"/>
+		</interceptor>
+	</interceptors>
+	
+	
 </beans:beans>

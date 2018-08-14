@@ -5,17 +5,11 @@
 
 <!-- #####################################심규진############################################### --> 
    
-   
-   
-    
-	
-
-
-
-
-    <select id="getPtotal" parameterType="member" resultType="int">
-		select count(*) from member	where email =#{email} and passwd=#{passwd}
+   <!-- 로그인 체크 -->
+    <select id="logincheck" parameterType="String" resultType="member">
+		select * from member where email =#{email} and mstatus=1
 	</select>
+	<!--  -->
     <!-- ############################################################################################# -->
      <select id="find_email" parameterType="String" resultType="String">
 		select email from member where email =#{email}
