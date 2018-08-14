@@ -103,6 +103,9 @@ h1#title {
 					<li><h4>매치</h4></li>
 					<li <c:if test='${fn:contains(cpage, "match_List")}'>class="active"</c:if>><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
 					<li <c:if test='${fn:contains(cpage, "match_Form")}'>class="active"</c:if>><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
+					<li><h4>게시판</h4></li>
+					<li><a href="/kinone/admin/boardList.do">글 목록</a></li>
+					<li><a href="/kinone/admin/boardwrite.do">글 작성</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-9">

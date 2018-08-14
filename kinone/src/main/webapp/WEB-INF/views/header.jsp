@@ -712,7 +712,7 @@ a#totalmatch {
 		<!-- 매치 일정 슬라이드 -->
 		<div class="match-slide">
 			<div class="container">
-				<a id="totalmatch" href="matchList.do">전체 일정 보기 ></a>
+				<a id="totalmatch" href="matchList.do">전체 일정 보기 &gt;</a>
 				<ul class="nav nav-tabs match-slide-tabs">
 					<li class="nav-item"><a
 						class="nav-link active font-weight-bold" data-toggle="tab"
@@ -751,7 +751,7 @@ a#totalmatch {
 								<div id="K1${matchday}" class="tab-pane <c:if test="${s1.count == 4}">active</c:if> each-match">
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="">&lt;</a></c:when>
+										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#">&lt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&lt;</span></c:when>
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
@@ -834,7 +834,7 @@ a#totalmatch {
 									
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="">&gt;</a></c:when>
+										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#">&gt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&gt;</span></c:when>
 										<c:otherwise><span>&gt;</span></c:otherwise>
 										</c:choose>
@@ -873,7 +873,7 @@ a#totalmatch {
 								<div id="K2${matchday}" class="tab-pane <c:if test="${s1.count == 4}">active</c:if> each-match">
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="">&lt;</a></c:when>
+										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#">&lt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&lt;</span></c:when>
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
@@ -957,7 +957,7 @@ a#totalmatch {
 									
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="">&gt;</a></c:when>
+										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#">&gt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&gt;</span></c:when>
 										<c:otherwise><span>&gt;</span></c:otherwise>
 										</c:choose>
