@@ -58,7 +58,8 @@
 			</div>
 			<div style="clear:both"></div>
 	    </div>
-
+		<input type="hidden" id="mcode" value="${m.mcode}">
+		<input type="hidden" id="rcode" value="${m.mcode}+회원번호">
 			<script type="text/javascript">
 			
 			
