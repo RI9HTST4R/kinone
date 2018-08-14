@@ -11,8 +11,9 @@
 <script>
 	$(window).load(function() {
 	//	location.href = "main.do";
-		location.href="matchList.do"
-	//	location.href = "admin/main.do";
+	//	location.href = "rank.do"
+	//	location.href = "matchList.do"
+		location.href = "admin/main.do";
 	//	location.href = "admin/club_view.do";
 	});	
 

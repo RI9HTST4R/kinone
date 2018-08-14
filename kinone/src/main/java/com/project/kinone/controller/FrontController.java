@@ -16,6 +16,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.SystemPropertyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,11 +95,11 @@ public class FrontController {
 
 		// 리그 별 선수 순위 리스트
 		// 득점랭크
-		List<Player> k1PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g");
-		List<Player> k2PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "g");
+		List<Player> k1PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g", 2);
+		List<Player> k2PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "g", 2);
 		// 도움랭크
-		List<Player> k1PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a");
-		List<Player> k2PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "a");
+		List<Player> k1PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 2);
+		List<Player> k2PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "a", 2);
 
 		model.addAttribute("clubList", clubList);
 		model.addAttribute("k1ClubSeasonRankList", k1ClubSeasonRankList);
@@ -120,40 +121,30 @@ public class FrontController {
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
 	public String matchList(Model model) {
-		
-	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
-	//		seasoncode = adminService.getTopSeason();
-	//	}
-	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
-	//	System.out.println(sysdate);
-	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
-	//	String month = sdf.format(sysdate);
-		// 월 별로 매치일과 매치정보 가져옴
-	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
-	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
-		
+	
 		List<String> seasonList = adminService.getAllSeason();
-		
-	//	model.addAttribute("matchDaysInMonth", matchDaysInMonth);
-	//	model.addAttribute("matchInMonth", matchInMonth);
 		model.addAttribute("seasonList", seasonList);
 		
 		return "match_List";
 	}
 	
+	// 매치 데이터 가져오는 메소드
 	@RequestMapping(value="/matchListAjax.do", method=RequestMethod.POST)
 	@ResponseBody
-	public HashMap matchListAjax(@RequestParam(required=false) String lcode,
+	public HashMap<String, List> matchListAjax(@RequestParam(required=false) String lcode,
 								 @RequestParam(required=false) String seasoncode,
 								 @RequestParam(required=false) String month) throws Exception {
 		System.out.println("lcode:"+lcode);
 		System.out.println("seasoncode:"+seasoncode);
 		System.out.println("month:"+month);
+		if(seasoncode == null) {
+			seasoncode = adminService.getTopSeason();
+		}
 		if(Integer.parseInt(month) < 10) {
 			month = "0"+ month;
 		}
 		
-		HashMap reqMap = new HashMap();
+		HashMap<String, List> reqMap = new HashMap<String, List>();
 		// 월 별로 매치일과 매치정보 가져옴
 		List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
 		List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
@@ -162,6 +153,61 @@ public class FrontController {
 		reqMap.put("match", matchInMonth);
 		
 		return reqMap;
+	}
+	
+	// 리그 순위표 및 선수 기록 페이지
+	@RequestMapping(value="/rank.do", method=RequestMethod.GET)
+	public String rank(Model model) {
+		
+		List<String> seasonlist = adminService.getAllSeason();
+		List<String> leaguelist = adminService.getAllLeague();
+		
+		String seasoncode = adminService.getTopSeason();
+		List<Club_season> clubSeasonRankList = clubService.getClubSeasonRankList(seasoncode,"K1");
+		List<Player> playerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g", 10);
+		List<Player> playerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 10);
+		
+		System.out.println("클럽갯수:" +clubSeasonRankList.size());
+		System.out.println("골 선수 명수:" +playerSeasonGRankList.size());
+		System.out.println("도움 선수 명수:" +playerSeasonARankList.size());
+		
+		model.addAttribute("clubSeasonRankList", clubSeasonRankList);
+		model.addAttribute("playerSeasonGRankList", playerSeasonGRankList);
+		model.addAttribute("playerSeasonARankList", playerSeasonARankList);
+		
+		model.addAttribute("seasonlist", seasonlist);
+		model.addAttribute("leaguelist", leaguelist);
+		return "rank";
+	}
+	
+	// 랭킹 데이터 가져오는 메소드
+	@RequestMapping(value="/rankListAjax.do", method=RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, List> rankListAjax(@RequestParam(required=false) String seasoncode,
+											  @RequestParam(required=false) String lcode) throws Exception {
+		HashMap<String, List> reqMap = new HashMap<String, List>();
+		
+		System.out.println("seasoncode:"+seasoncode);
+		System.out.println("lcode:"+lcode);
+		
+		List<Club_season> clubSeasonRankList = clubService.getClubSeasonRankList(seasoncode,lcode);
+		List<Player> playerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, lcode, "g", 10);
+		List<Player> playerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, lcode, "a", 10);
+		
+		reqMap.put("club", clubSeasonRankList);
+		reqMap.put("player_g", playerSeasonGRankList);
+		reqMap.put("player_a", playerSeasonARankList);
+		return reqMap;
+	}
+	
+	// 예매 페이지
+	@RequestMapping(value="/reservation.do", method=RequestMethod.GET)
+	public String reservation(Model model) {
+		
+		List<String> seasonList = adminService.getAllSeason();
+		model.addAttribute("seasonList", seasonList);
+		
+		return "reservation";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
