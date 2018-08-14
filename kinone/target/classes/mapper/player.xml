@@ -19,7 +19,7 @@
 		order by 
 		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
 		<if test='sort != null and sort == "a"'>PS.p_assist</if> desc, PS.gamecount asc) T
-		where rownum <![CDATA[<]]>= 2
+		where rownum <![CDATA[<]]>= ${rownum}
 	</select>
 	
 	<select id="playerList" parameterType="java.lang.String" resultType="player">

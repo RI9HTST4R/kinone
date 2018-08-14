@@ -218,7 +218,17 @@ public class AdminController {
 		return "ajax";
 	}
 
+	// 게시판 리스트 페이지
+	@RequestMapping(value="/admin/boardList.do", method=RequestMethod.GET)
+	public String boardList(Model model) {
+		return "admin/board_List";
+	}
 	
+	// 게시판 글 작성 페이지
+	@RequestMapping(value="/admin/boardwrite.do", method=RequestMethod.GET)
+	public String boardwrite() {
+		return "admin/board_write";
+	}
 	
 	
 	

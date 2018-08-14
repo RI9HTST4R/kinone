@@ -53,6 +53,11 @@ public class MatchDAOImpl implements MatchDAOInter {
 		return session.selectList("matchmapper.matchInMonth", map);
 	}
 
+	public Match get_the_match(String mcode) {
+		// TODO Auto-generated method stub
+		return session.selectOne("matchmapper.get_the_match", mcode);
+	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 }

@@ -26,5 +26,10 @@ public class ClubDAOImpl implements ClubDAOInter {
 		return session.selectList("clubmapper.clubSeasonRankList", map);
 	}
 
+	public Club getClub(String club_code) {
+		// TODO Auto-generated method stub
+		return session.selectOne("clubmapper.getClub", club_code);
+	}
+
 	
 }
