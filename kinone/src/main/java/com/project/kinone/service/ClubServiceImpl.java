@@ -31,5 +31,10 @@ public class ClubServiceImpl implements ClubServiceInter {
 		return clubDao.getClubSeasonRankList(map);
 	}
 
+	public Club getClub(String club_code) {
+		// TODO Auto-generated method stub
+		return clubDao.getClub(club_code);
+	}
+
 	
 }

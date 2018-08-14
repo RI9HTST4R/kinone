@@ -14,6 +14,9 @@
     	order by (CS.win*3+CS.draw*1) desc,(CS.c_ggoal-CS.c_lgoal) desc, CS.c_ggoal desc, (CS.win+CS.draw+CS.lose) asc
     	
     </select>
+    <select id="getClub" parameterType="String" resultType="club">
+    	select * from club where ccode = #{club_code}
+    </select>
     
     
     

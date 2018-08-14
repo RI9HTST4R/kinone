@@ -362,6 +362,12 @@ public class FrontController {
 		model.addAttribute("mcode", mcode);
 		Match match = matchService.get_the_match(mcode);
 		System.out.println("mcode"+match.getAwayscore()+match.getCcode_away());
+		Club home = clubService.getClub(match.getCcode_home());
+		Club away = clubService.getClub(match.getCcode_away());
+		
+		model.addAttribute("home",home);
+		model.addAttribute("away",away);
+		model.addAttribute("m", match);
 		return "reserve";
 	}
 	
