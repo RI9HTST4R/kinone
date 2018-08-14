@@ -237,7 +237,7 @@ public class FrontController {
         }
 
 
-//		String pass=Sha256.encrypt(member.getPasswd());
+		passwd=Sha256.encrypt(passwd);
 		
 		System.out.println(email+passwd);
 		
@@ -290,8 +290,15 @@ public class FrontController {
 		
 		session.invalidate();
 		
-		return"main";
+		return"redirect:/main.do";
 	}
+	
+	//아이디 찾기
+		@RequestMapping("/find.do")
+	public String findemail() {
+			System.out.println("find");
+			return "find";
+		}
 	
 	//프론트 클럽 리스트
 	@RequestMapping("/clubList.do")
@@ -304,6 +311,9 @@ public class FrontController {
 
 		return "club_list";
 	}
+	
+	
+	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
@@ -377,12 +387,12 @@ public class FrontController {
 		System.out.println(name+email1+email_number);
 		// Mail Server 설정
 		String charSet = "utf-8";
-		String hostSMTP = "smtp.naver.com";
-		String hostSMTPid = "zun1091@naver.com";
-		String hostSMTPpwd = "000000"; // 비밀번호 입력해야함
+		String hostSMTP = "smtp.mail.nate.com";
+		String hostSMTPid = "babamandu@nate.com";
+		String hostSMTPpwd = "qsef1357!"; // 비밀번호 입력해야함
 
 		// 보내는 사람 EMail, 제목, 내용
-		String fromEmail = "zun1091@naver.com";
+		String fromEmail = "babamandu@nate.com";
 		String fromName = name+"씨에게";
 		String subject = "K In One 인증메일입니다.";
 
@@ -413,7 +423,6 @@ public class FrontController {
 
 		return "ajax";
 	}
-	
 	
 
 	
