@@ -118,7 +118,7 @@ public class FrontController {
 	
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
-	public String matchList(Model model) {
+	public String matchList( Model model) {
 		
 	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
 	//		seasoncode = adminService.getTopSeason();
@@ -190,43 +190,41 @@ public class FrontController {
 		Member om = memberService.logincheck(email);
 		
 		
-		if (om.getEmail()==null) {
+		if (om==null) {
 			
 			System.out.println("email does not exist");
 			out.println("<script>");
 			out.println("alert('아이디나 비밀번호가 틀립니다')");
-			out.println("history.back()");
+			out.println("history.go(-1)");
 			out.println("</script>");
 			
-			return "login";
-		}else if (!om.getPasswd().equals(passwd)){
-			System.out.println("passwd does not match");
-			out.println("<script>");
-			out.println("alert('아이디나 비밀번호가 틀립니다')");
-			out.println("history.back()");
-			out.println("</script>");
-			return "login";
-		}else if(om.getEmail().equals(email)&&om.getPasswd().equals(passwd)) {
-			System.out.println("login sucess");
-			out.println("<script>");
-			out.println("alert('로그인 성공')");
-			out.println("history.back()");
-			out.println("</script>");
-			session.setAttribute("email", om.getEmail());
-			model.addAttribute("mname",om.getMname());
-			System.out.println("email="+om.getEmail());
-			if(om.getEmail().equals("admin")) {
+		}else {
+		
+			if (!om.getPasswd().equals(passwd)){
+				System.out.println("passwd does not match");
+				out.println("<script>");
+				out.println("alert('아이디나 비밀번호가 틀립니다')");
+				out.println("history.go(-1)");
+				out.println("</script>");
+			}else if(om.getEmail().equals(email)&&om.getPasswd().equals(passwd)) {
+				System.out.println("login sucess");
+				out.println("<script>");
+				out.println("alert('로그인 성공')");
+				out.println("</script>");
+				session.setAttribute("email", om.getEmail());
+				session.setAttribute("name", om.getMname());
+				System.out.println("email="+om.getEmail());
+				if(om.getEmail().equals("admin")) {
 				System.out.println("admin");
-				return"/admin/main";
+				return"redirect:/admin/main.do";
+				
 			}else {
 				System.out.println("not admin");
-			return "main";
+				return "redirect:/main.do";
+				}
 			}
-		}else {
-			System.out.println("unknown error");
-			return "null";
 		}
-		
+		return null;
 	}
 	//로그아웃
 	@RequestMapping(value="/logout.do")

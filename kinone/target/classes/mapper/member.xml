@@ -5,10 +5,11 @@
 
 <!-- #####################################심규진############################################### --> 
    
-   
+   <!-- 로그인 체크 -->
     <select id="logincheck" parameterType="String" resultType="member">
 		select * from member where email =#{email} and mstatus=1
 	</select>
+	<!--  -->
     <!-- ############################################################################################# -->
      <select id="find_email" parameterType="String" resultType="String">
 		select email from member where email =#{email}
