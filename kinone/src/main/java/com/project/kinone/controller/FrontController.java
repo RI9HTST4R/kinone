@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,7 +15,6 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.SystemPropertyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -228,25 +226,23 @@ public class FrontController {
 										HttpServletResponse response, HttpSession session, Model model) 
 												throws Exception{
 		System.out.println("logincall");
+		// 출력스트림 객체 생성
 		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();// 출력스트림 객체 생성
+		PrintWriter out = response.getWriter();
 		
+		// 기존에 세션 값이 존재한다면
 		if ( session.getAttribute("email") != null ){
-            // 기존에 세션 값이 존재한다면
             session.removeAttribute("email"); // 기존값을 제거해 준다.
         }
 
-
+		//비밀번호 암호화
 		passwd=Sha256.encrypt(passwd);
-		
 		System.out.println(email+passwd);
-		
-		
 		
 		//로긴체크
 		Member om = memberService.logincheck(email);
 		
-		
+		//해당 이메일이 없음
 		if (om==null) {
 			
 			System.out.println("email does not exist");
@@ -254,15 +250,16 @@ public class FrontController {
 			out.println("alert('아이디나 비밀번호가 틀립니다')");
 			out.println("history.go(-1)");
 			out.println("</script>");
-			
+		//이메일 있는데
 		}else {
-		
+			//패스워드 틀림
 			if (!om.getPasswd().equals(passwd)){
 				System.out.println("passwd does not match");
 				out.println("<script>");
 				out.println("alert('아이디나 비밀번호가 틀립니다')");
 				out.println("history.go(-1)");
 				out.println("</script>");
+			//로그인ok
 			}else if(om.getEmail().equals(email)&&om.getPasswd().equals(passwd)) {
 				System.out.println("login sucess");
 				out.println("<script>");
@@ -271,11 +268,13 @@ public class FrontController {
 				session.setAttribute("email", om.getEmail());
 				session.setAttribute("name", om.getMname());
 				System.out.println("email="+om.getEmail());
+				
+				//admin이면 admin페이지로
 				if(om.getEmail().equals("admin")) {
 				System.out.println("admin");
 				return"redirect:/admin/main.do";
-				
-			}else {
+				//일반 사용자는 일반 사용자 페이지로
+				}else {
 				System.out.println("not admin");
 				return "redirect:/main.do";
 				}
@@ -287,18 +286,128 @@ public class FrontController {
 	@RequestMapping(value="/logout.do")
 	public String logout(HttpServletRequest request, HttpSession session,Member member) {
 		System.out.println("logout");
-		
+		//세션 삭제
 		session.invalidate();
 		
 		return"redirect:/main.do";
 	}
 	
-	//아이디 찾기
-		@RequestMapping("/find.do")
+	//아이디&비번 찾기페이지 열기
+	@RequestMapping("/find.do")
 	public String findemail() {
 			System.out.println("find");
 			return "find";
+	}
+	
+	//아이디 찾기 팝업창 열기
+	@RequestMapping("/emailfindform.do")
+	public String emailfindform() {
+		System.out.println("emailfindform");
+		return "emailfindform";
+	}
+	
+	//비밀번호 찾기 팝업창 열기
+	@RequestMapping("/passwdfindform.do")
+	public String passwdfindform() throws Exception{
+		System.out.println("passwdfindform");
+			return "passwdfindform";
+	}
+	
+	//이메일 맞으면 인증번호 메일 보내기
+	@RequestMapping("/passwdfind.do")
+	public String passwdfind(@RequestParam("email") String email1, HttpServletResponse response,Model model) throws Exception{
+		//이메일 인증번호 생성
+		int email_number =  (int) Math.floor((Math.random()*900000) + 100000);
+			response.setContentType("text/html;charset=UTF-8");
+		// 출력스트림 객체 생성
+		PrintWriter out = response.getWriter();
+		//이메일 일치 확인
+		Member om = memberService.logincheck(email1);
+		
+		//해당 이메일 없음
+		if(om==null) {
+			System.out.println("email does not exist");
+			out.println("<script>");
+			out.println("alert('가입된 이메일이 아닙니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+		//해당 이메일 있음->인증메일 발송
+		}else {
+			// Mail Server 설정
+			String charSet = "utf-8";
+			String hostSMTP = "smtp.mail.nate.com";
+			String hostSMTPid = "babamandu@nate.com";
+			String hostSMTPpwd = "qsef1357!"; 
+
+			// 보내는 사람 EMail, 제목, 내용
+			String fromEmail = "babamandu@nate.com";
+			String fromName = om.getMname()+"씨에게";
+			String subject = "K In One 인증메일입니다.";
+
+			// 받는 사람 E-Mail 주소
+			String mail = email1;
+			try {
+				HtmlEmail email = new HtmlEmail();
+				email.setDebug(true);
+				email.setCharset(charSet);
+				email.setSSL(true);
+				email.setHostName(hostSMTP);
+				email.setSmtpPort(587);
+
+				email.setAuthentication(hostSMTPid, hostSMTPpwd);
+				email.setTLS(true);
+				email.addTo(mail, charSet);
+				email.setFrom(fromEmail, fromName, charSet);
+				email.setSubject(subject);
+				email.setHtmlMsg("<p align = 'center'>K in One 비밀번호 변경 인증 메일입니다.</p><br>" 
+								 + "<div align='center'> 인증번호 : " + email_number + "</div>");
+				email.send();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			
+			model.addAttribute("emailnumber",email_number);
+			model.addAttribute("email",email1);
+			
+		return "vailidatepasswd";
 		}
+		return null;
+	}
+	
+	//인증번호 확인하기
+	@RequestMapping("/validateEmailnumber.do")
+	public String validateEmailnumber(@RequestParam String email, 
+			@RequestParam String emailnumber, @RequestParam String putemailnumber,  
+																		HttpServletResponse response, Model model) throws Exception{
+		response.setContentType("text/html;charset=UTF-8");
+		System.out.println("validateEmailnumber");
+		PrintWriter out = response.getWriter();// 출력스트림 객체 생성
+		//인증번호 틀림
+		
+		if(emailnumber.equals(putemailnumber)){
+			model.addAttribute("email",email);
+			return"passwdchange";
+		}else {
+			System.out.println("validatenumber does not match");
+			out.println("<script>");
+			out.println("alert('인증번호가 틀립니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+		}
+		return null;
+		
+	}
+	
+	//비밀번호 재설정
+	@RequestMapping("/passwdchange.do")
+	public String passwdchange(Member member, Model model) {
+		
+		int result = memberService.chagepasswd(member);
+		
+		model.addAttribute("result",result);
+		
+		return "compl";
+	}
 	
 	//프론트 클럽 리스트
 	@RequestMapping("/clubList.do")
