@@ -2,11 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="header.jsp"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>경기 예매 페이지</title>
 <style>
 .pagetitle {
 	background-color: violet;
@@ -15,19 +10,19 @@
 <link href='//fonts.googleapis.com/css?family=Kotta+One' rel='stylesheet' type='text/css'>
 <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
 <link href="${url}/resources/css/style.css" rel="stylesheet" type="text/css" media="all" />
-<script src="${url}/resources/js/jquery-1.11.0.min.js"></script>
 <script src="${url}/resources/js/jquery.seat-charts.js"></script>
-</head>
-<body>
+
 <div class="pagetitle"><span>K In One 경기 예매</span></div>
 <%-- <img width=80% height =80% src="${url}/resources/images/cowboys_seating_chart.jpg"></img>
  --%>
 
 
 <div class="content">
-	<h1><font color=black>${home.cname} vs ${away.cname}</font></h1>
+
+
+	<h1><font color=black>${home.cname} vs ${away.cname} </font></h1>
 	<div class="main" style="width:920px; padding-right:0px;padding-left:0px;">
-		<h2>좌석 선택</h2>
+		<h2>${sta_name}</h2>
 		<div class="demo">
 			<div id="seat-map" style="width:757px;">
 			</div>
@@ -59,7 +54,7 @@
 			<div style="clear:both"></div>
 	    </div>
 		<input type="hidden" id="mcode" value="${m.mcode}">
-		<input type="hidden" id="rcode" value="${m.mcode}+회원번호">
+		<input type="hidden" id="rcode" value="${m.mcode}+${mno}">
 			<script type="text/javascript">
 			
 			
@@ -69,22 +64,56 @@
 			var seat_num4 = 1;
 				var price = 0; //price
 				var total = 0;
+				var key2 = new Array();
+				var num = new Array();
 				$(document).ready(function() {
 					$(".checkout-button").click(function(){
-						$("#selected-seats li").each(function(){
+						$("#selected-seats li").each(function(index){
+							//alert("인덱스:"+index);
 				            var regExp = /\d+/i;
 				            var ke = $(this).text();
-				            var num = ke.match(regExp);
+				             num[index] = ke.match(regExp);
 				            var key = $(this).attr('id');
 				            var key1 = key.replace('cart-item-',''); //좌석번호 아이디 ;
-				            var key2 = ke.slice(0,1); //좌석의 구역;
-				            if(num.toString().length!=2){
-				            	num = "0"+num;
+				             key2[index] = ke.slice(0,1); //좌석의 구역;
+				            if(num[index].toString().length!=2){
+				            	num[index] = "0"+num[index];
 				            }
-				            alert(key1);
+				            /* alert(key1);
 				            alert(key2);
-				            alert(num);
+				            alert(num); */
 				        });
+						if(key2!=null&&num!=null){
+							//alert("예매코드:"+"${m.mcode}"+"${mno}");
+							//alert("경기코드:"+"${m.mcode}");
+							var seatcode = new Array();
+							for(var i=0;i<key2.length;i++){
+								//alert("좌석코드:"+"${m.ccode_home}"+key2[i]+num[i]);
+								seatcode.push("${m.ccode_home}"+key2[i]+num[i]);
+							}
+							//alert("회원번호:"+"${m.mcode}");
+							//alert("구단코드:"+"${m.ccode_home}");
+							var rcode = "${m.mcode}"+"${mno}";
+							var mcode = "${m.mcode}";
+							var ccode = "${m.ccode_home}";
+							
+							
+							var tempa = new Array();
+							$("#selected-seats li").each(function(){
+							tempa.push($(this).text());
+							});
+							
+							var ref="payment.do?stadium='${sta_name}'&tempa="+tempa+"&rcode="+rcode+"&mcode="+mcode+"&seatcode="+seatcode+"&ccode="+ccode;
+							window.open(ref, "a", "width=850, height=600, left=100, top=50");
+
+							
+							
+ 						}else{
+							alert("좌석을 골라주세요~!!");
+						}
+						
+						key2=null;
+						num=null;
 					});
 					
 					
@@ -133,8 +162,8 @@
 								$(".selected").each(function(){
 									k++;
 								});
-								if(k>10){
-									alert("10개까지 가능합니다.");
+								if(k>10-${bought}){
+									alert("한 경기당 총 예매는 10개까지 가능합니다. 변경 및 환불은 마이페이지에서 가능합니다.");
 									return false;
 								}
 								
@@ -263,9 +292,48 @@
 							}
 
 						}
+						if(l==13){
+							sold();
+						}
 					}
+					
+					function sold(){
+						 <c:forEach var="b" items="${sold}"> 
+							var color;
+							var seat_num = ${b.seat_num};
+					      	if('${b.seat_type}'=="A"){
+								color = "rgb(135, 206, 235)";
+							}else if('${b.seat_type}'=="B"){
+								color = "rgb(255, 215, 0)";
+							}else if('${b.seat_type}'=="C"){
+								color = "rgb(0, 128, 0)";
+							}else if('${b.seat_type}'=="D"){
+								color = "rgb(125, 38, 205)";
+							}
+					      	
+					      	
+					      	$("#seat-map div").each(function(){
+					    		  /* alert(seat_num);
+					    		  alert($(this).text()); */
+					    		   if($(this).text()==seat_num){
+					    			  if($(this).css('background-color')==color){
+					    				  sc.get([$(this).attr("id")]).status('unavailable');
+											$("#"+$(this).attr("id")).css('background-color','#949494');
+					    			  }
+					    		  }  
+					    		  
+					    		  
+					    	  });
+					      
+					      </c:forEach>
+					}
+					
+					
+					
+					
 				});
+				
 			</script>
 	</div>
-</body>
-</html>
+
+<%@ include file="footer.jsp"%>	

@@ -15,7 +15,9 @@
 		select email from member where email =#{email}
 	</select>
     
-    
+    <select id="getMember" parameterType="String" resultType="member">
+		select * from member where email =#{email}
+	</select>
     
     <insert id="insertJoin" parameterType="member">
     	<selectKey keyProperty="mno" resultType="java.lang.Integer" order="BEFORE">
