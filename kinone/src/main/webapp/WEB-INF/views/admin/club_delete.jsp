@@ -6,6 +6,7 @@
 		<h1 id="title">클럽 삭제</h1>
 		<hr>
 		<form action="${url}/admin/delete_club_ok.do">
+			<input type="hidden" name="ccode" value="${ccode}"/>
 			<table border=1px class="table table-sm">
 				<tr>
 					<th>클럽명(풀네임)</th>

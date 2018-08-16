@@ -16,7 +16,6 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.SystemPropertyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +31,7 @@ import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
+import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
 
 @Controller
@@ -121,17 +121,6 @@ public class FrontController {
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
 	public String matchList( Model model) {
 		
-	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
-	//		seasoncode = adminService.getTopSeason();
-	//	}
-	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
-	//	System.out.println(sysdate);
-	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
-	//	String month = sdf.format(sysdate);
-		// 월 별로 매치일과 매치정보 가져옴
-	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
-	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
-		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
 		
@@ -219,6 +208,21 @@ public class FrontController {
 		
 		return "reservation";
 	}
+	
+	// 경기 상세정보 페이지
+	@RequestMapping(value="/matchDetail.do", method=RequestMethod.GET)
+	public String matchDetail(@RequestParam String mcode,Model model) throws Exception{
+		System.out.println("mcode:"+mcode);
+		
+		Match match = adminService.getMatchInfo(mcode);
+		String ccode = match.getCcode_home();
+		
+		Lineup lineup = adminService.getMatchDetail(mcode);
+		
+		model.addAttribute("match", match);
+		model.addAttribute("lineup", lineup);
+		return "match_detail";
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 //////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////		
@@ -237,7 +241,7 @@ public class FrontController {
         }
 
 
-//		String pass=Sha256.encrypt(member.getPasswd());
+		passwd=Sha256.encrypt(passwd);
 		
 		System.out.println(email+passwd);
 		
@@ -288,7 +292,8 @@ public class FrontController {
 	public String logout(HttpServletRequest request, HttpSession session,Member member) {
 		System.out.println("logout");
 		
-		session.invalidate();
+		session.removeAttribute("email");
+		session.removeAttribute("name");
 		
 		return"main";
 	}
@@ -377,12 +382,12 @@ public class FrontController {
 		System.out.println(name+email1+email_number);
 		// Mail Server 설정
 		String charSet = "utf-8";
-		String hostSMTP = "smtp.naver.com";
-		String hostSMTPid = "zun1091@naver.com";
-		String hostSMTPpwd = "000000"; // 비밀번호 입력해야함
+		String hostSMTP = "smtp.mail.nate.com";
+		String hostSMTPid = "babamandu@nate.com";
+		String hostSMTPpwd = "qsef1357!"; // 비밀번호 입력해야함
 
 		// 보내는 사람 EMail, 제목, 내용
-		String fromEmail = "zun1091@naver.com";
+		String fromEmail = "babamandu@nate.com";
 		String fromName = name+"씨에게";
 		String subject = "K In One 인증메일입니다.";
 
@@ -395,7 +400,7 @@ public class FrontController {
 			email.setCharset(charSet);
 			email.setSSL(true);
 			email.setHostName(hostSMTP);
-			email.setSmtpPort(587);
+			email.setSmtpPort(465);
 
 			email.setAuthentication(hostSMTPid, hostSMTPpwd);
 			email.setTLS(true);

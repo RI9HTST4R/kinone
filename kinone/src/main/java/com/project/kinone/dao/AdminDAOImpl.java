@@ -122,14 +122,14 @@ public class AdminDAOImpl implements AdminDAOInter {
 		session.insert("adminmapper.mngInsertStadium", mngClub);
 	}
 
-	public Club getClubCont(String cname) throws Exception {
+	public Club getClubCont(String ccode) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectOne("adminmapper.mngClubCont", cname);
+		return session.selectOne("adminmapper.mngClubCont", ccode);
 	}
 
-	public void deleteClub(String cname) throws Exception {
+	public void deleteClub(String ccode) throws Exception {
 		// TODO Auto-generated method stub
-		session.update("adminmapper.mngDeleteClub", cname);
+		session.update("adminmapper.mngDeleteClub", ccode);
 	}
 
 	public Club getClubDetail(String ccode) throws Exception {
