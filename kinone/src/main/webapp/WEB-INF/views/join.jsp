@@ -128,6 +128,10 @@ $(function(){
 			<input placeholder="로그인에 사용하실 비밀번호를 입력하세요" id="register_passwd"
 				oninput="this.className = ''" name="passwd" type="password">
 		</p>
+		<p>
+			<input placeholder="비밀번호 확인을 위해 다시 한번 입력해주세요" id="register_passwd_check"
+				oninput="this.className = ''" name="passwd" type="password">
+		</p>
 	</div>
 	<div class="tab3">
 		<h3>기본 정보 입력</h3>
@@ -347,7 +351,14 @@ $(function(){
 			$("#register_passwd").focus();
 			return false; 
 		}
-		
+		if($("#register_passwd_check").val()==$("#register_passwd").val()){
+			
+		}else{
+			alert("비밀번호 확인이 일치하지 않습니다.");
+			$("#register_passwd_check").val("");
+			$("#register_passwd_check").focus();
+			return false; 
+		}
 		if(checked==1){
 			$(".tab1").hide();
 			 $(".tab2").hide();

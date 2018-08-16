@@ -25,6 +25,7 @@ body {
  			  <input type="submit" value="로그인">
  			  <input type="button" onclick="location.href='/join.do'" value="회원가입">
   		</form>
+  			<br><a href="/kinone/find.do"> 아이디나 비밀번호를 잊으셨나요?</a>
   			
   			
 	</div>

@@ -12,6 +12,8 @@
 		<typeAlias alias="match" type="com.project.kinone.model.Match" />
 		<typeAlias alias="match_detail" type="com.project.kinone.model.Match_detail" />
 		<typeAlias alias="member" type="com.project.kinone.model.Member" />
+		<typeAlias alias="stadium" type="com.project.kinone.model.Stadium" />
+		<typeAlias alias="reservation" type="com.project.kinone.model.Reservation" />
 	</typeAliases>
 
 </configuration>
