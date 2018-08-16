@@ -12,8 +12,7 @@ body {
 </style>
 <div class="pagetitle"><span>K In One 로그인</span></div>
 <br><br>
-<div class="container">
-	<div class="wrapper">
+
 		<form action="/kinone/logincall.do" method="post">
    			 <div class="form-group">
    			   <label for="usr">이메일:</label>
@@ -31,4 +30,5 @@ body {
   			
 	</div>
 </div>
+
 <%@ include file="footer.jsp"%>

@@ -35,6 +35,8 @@ import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
+import com.project.kinone.service.ReservServiceImpl;
+import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
 
 @Controller
@@ -54,6 +56,9 @@ public class FrontController {
 	
 	@Autowired
 	private MemberServiceImpl memberService;
+	
+	@Autowired
+	private ReservServiceImpl reservService;
 	
 	@RequestMapping(value="/main.do", method=RequestMethod.GET)
 	public String main(Model model, HttpSession ses) {
@@ -123,17 +128,6 @@ public class FrontController {
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
 	public String matchList( Model model) {
-		
-	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
-	//		seasoncode = adminService.getTopSeason();
-	//	}
-	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
-	//	System.out.println(sysdate);
-	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
-	//	String month = sdf.format(sysdate);
-		// 월 별로 매치일과 매치정보 가져옴
-	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
-	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
 		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
@@ -222,6 +216,23 @@ public class FrontController {
 		
 		return "reservation";
 	}
+	
+	// 경기 상세정보 페이지
+	@RequestMapping(value="/matchDetail.do", method=RequestMethod.GET)
+	public String matchDetail(@RequestParam String mcode,Model model) throws Exception{
+		System.out.println("mcode:"+mcode);
+		
+		Match match = adminService.getMatchInfo(mcode);
+		String ccode = match.getCcode_home();
+		Stadium stadium = clubService.getStadium(ccode);
+		
+		Lineup lineup = adminService.getMatchDetail(mcode);
+		
+		model.addAttribute("match", match);
+		model.addAttribute("stadium", stadium.getSname());
+		model.addAttribute("lineup", lineup);
+		return "match_detail";
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 //////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////		
@@ -291,7 +302,8 @@ public class FrontController {
 	public String logout(HttpServletRequest request, HttpSession session,Member member) {
 		System.out.println("logout");
 		
-		session.invalidate();
+		session.removeAttribute("email");
+		session.removeAttribute("name");
 		
 		return"redirect:/main.do";
 	}
@@ -408,7 +420,7 @@ public class FrontController {
 			email.setCharset(charSet);
 			email.setSSL(true);
 			email.setHostName(hostSMTP);
-			email.setSmtpPort(587);
+			email.setSmtpPort(465);
 
 			email.setAuthentication(hostSMTPid, hostSMTPpwd);
 			email.setTLS(true);

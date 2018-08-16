@@ -22,7 +22,7 @@
 							<td><a href="detail_club.do?ccode=${mngClub.ccode}">${ mngClub.cname }</a></td>
 							<td>${ mngClub.cmanager }</td>
 							<td><input type="button" value="삭제"
-								onclick="location.href='delete_club.do'"></td>
+								onclick="location.href='delete_club.do?ccode=${mngClub.ccode}'"></td>
 						</tr>
 					</c:forEach>
 				</tbody>

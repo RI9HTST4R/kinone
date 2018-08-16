@@ -68,7 +68,13 @@ a, a:hover {
 .navbar-dark .navbar-nav .nav-link {
 	color: white;
 }
-
+.nav-text {
+	font-size: 0.8rem;
+	color: white;
+}
+#welcome:hover {
+	color: white;
+}
 .wrap_content {
 	/* border: 1px solid blue; */
 	width: 100%;
@@ -471,10 +477,6 @@ a#totalmatch {
 	width: 60%;
 }
 
-.member-text {
-	font-size: 0.8em;
-}
-
 .nav-rank {
 	width: 100%;
 }
@@ -684,27 +686,27 @@ a#totalmatch {
 							<li class="nav-item"><a class="nav-link" href="reservation.do">티켓예매</a></li>
 							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
 						</ul>
-						<c:if test="${empty sessionScope.email}">
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
-								<li class="nav-item"><a class="nav-link member-text"
-									href="login.do"><i class="fa fa-lock"></i> 로그인</a>
-								<li class="nav-item"><a class="nav-link member-text"
-									href="join_form.do">회원가입</a></li>
+							<c:if test="${not empty sessionScope.email}">
+								<li class="nav-item">
+									<span id="welcome" class="nav-link">${sessionScope.name}님, 환영합니다</span>
+								</li>
+							</c:if>
+								<li class="nav-item">
+								<c:if test="${empty sessionScope.email}">
+									<a class="nav-link nav-text" href="join_form.do">회원가입</a>
+								</c:if>
+								<c:if test="${not empty sessionScope.email}">
+									<a class="nav-link nav-text" href="mypage.do">마이페이지</a>
+								</c:if>
+								</li>
+								<li class="nav-item">
+									<c:if test="${empty sessionScope.email}"><a class="nav-link nav-text" href="login.do"><i class="fa fa-lock"></i> 로그인</a></c:if>
+								<c:if test="${not empty sessionScope.email}"><a class="nav-link nav-text" href="logout.do"><i class="fa fa-lock"></i> 로그아웃</a></c:if>
+								</li>
 							</ul>
 						</div>
-						</c:if>
-						<c:if test="${sessionScope.email != null}">
-						<div class="collapse navbar-collapse justify-content-end">
-							<ul class="navbar-nav navbar-right">
-							<li class="nav-item"><font color="white" size="0.8em">${sessionScope.name}님, 환영합니다</font></li>
-							<li class="nav-item"><a class="nav-link member-text" 
-									href="mypage.do"><font size="0.8em">마이페이지</font></a></li>
-							<li class="nav-item"><a class="nav-link member-text" 
-									href="logout.do"><font size="0.8em">로그아웃</font></a></li>
-							</ul>
-						</div>
-						</c:if>
 					</div>
 				</div>
 			</nav>
@@ -796,7 +798,7 @@ a#totalmatch {
 												<td colspan="3">
 												<c:if test="${amatch.mstatus == 0}">
 													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> 
-													<a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
+													<a href="${url}/reserve.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
 												</c:if>
 												<c:if test="${amatch.mstatus == 1}">
 													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">경기결과</a> 
@@ -919,7 +921,7 @@ a#totalmatch {
 												<td colspan="3">
 												<c:if test="${amatch.mstatus == 0}">
 													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">전력비교</a> 
-													<a href="${url}/matchReserv.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
+													<a href="${url}/reserve.do?mcode=${amatch.mcode}" class="resmatch">경기예매</a>
 												</c:if>
 												<c:if test="${amatch.mstatus == 1}">
 													<a href="${url}/matchDetail.do?mcode=${amatch.mcode}" class="lineup">경기결과</a> 
