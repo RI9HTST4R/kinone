@@ -37,5 +37,9 @@ public class MemberDAOImpl implements MemberDAOInter{
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public Member getMember(String email) {
+		// TODO Auto-generated method stub
+		return session.selectOne("membermapper.getMember", email);
+	}
 
 }

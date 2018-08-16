@@ -4,8 +4,10 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +27,16 @@ import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
+import com.project.kinone.model.Reservation;
+import com.project.kinone.model.Seats;
+import com.project.kinone.model.Stadium;
 import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
+import com.project.kinone.service.ReservServiceImpl;
+import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
 
 @Controller
@@ -49,6 +56,9 @@ public class FrontController {
 	
 	@Autowired
 	private MemberServiceImpl memberService;
+	
+	@Autowired
+	private ReservServiceImpl reservService;
 	
 	@RequestMapping(value="/main.do", method=RequestMethod.GET)
 	public String main(Model model, HttpSession ses) {
@@ -118,17 +128,6 @@ public class FrontController {
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
 	public String matchList( Model model) {
-		
-	//	if(seasoncode == null) { // 처음 페이지 로드시에는 가장 최근의 시즌 매치 일정을 가져옴
-	//		seasoncode = adminService.getTopSeason();
-	//	}
-	//	Timestamp sysdate = new Timestamp(System.currentTimeMillis());
-	//	System.out.println(sysdate);
-	//	SimpleDateFormat sdf = new SimpleDateFormat("MM");
-	//	String month = sdf.format(sysdate);
-		// 월 별로 매치일과 매치정보 가져옴
-	//	List<Date> matchDaysInMonth = matchService.getMatchDaysInMonth(lcode, seasoncode, month);
-	//	List<Match> matchInMonth = matchService.getMatchInMonth(lcode, seasoncode, month);
 		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
@@ -217,6 +216,23 @@ public class FrontController {
 		
 		return "reservation";
 	}
+	
+	// 경기 상세정보 페이지
+	@RequestMapping(value="/matchDetail.do", method=RequestMethod.GET)
+	public String matchDetail(@RequestParam String mcode,Model model) throws Exception{
+		System.out.println("mcode:"+mcode);
+		
+		Match match = adminService.getMatchInfo(mcode);
+		String ccode = match.getCcode_home();
+		Stadium stadium = clubService.getStadium(ccode);
+		
+		Lineup lineup = adminService.getMatchDetail(mcode);
+		
+		model.addAttribute("match", match);
+		model.addAttribute("stadium", stadium.getSname());
+		model.addAttribute("lineup", lineup);
+		return "match_detail";
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 //////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////		
@@ -287,7 +303,8 @@ public class FrontController {
 	public String logout(HttpServletRequest request, HttpSession session,Member member) {
 		System.out.println("logout");
 		//세션 삭제
-		session.invalidate();
+		session.removeAttribute("email");
+		session.removeAttribute("name");
 		
 		return"redirect:/main.do";
 	}
@@ -514,7 +531,7 @@ public class FrontController {
 			email.setCharset(charSet);
 			email.setSSL(true);
 			email.setHostName(hostSMTP);
-			email.setSmtpPort(587);
+			email.setSmtpPort(465);
 
 			email.setAuthentication(hostSMTPid, hostSMTPpwd);
 			email.setTLS(true);
@@ -538,6 +555,27 @@ public class FrontController {
 	// 티켓 예매/////// 
 	@RequestMapping(value = "/reserve.do")
 	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) {
+		String email = (String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		List<Reservation> list = clubService.getSeatsList(mcode);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("mno", member.getMno());
+		map.put("mcode", mcode);
+		int bought = clubService.getTickets(map);
+		Seats seats;
+		List<Seats> list2 = new ArrayList<Seats>();
+		for(int i = 0; i<list.size();i++) {
+			String seatcode = list.get(i).getSeatcode().substring(list.get(i).getSeatcode().length()-2, list.get(i).getSeatcode().length());
+			String seat_type = list.get(i).getSeatcode().substring(list.get(i).getSeatcode().length()-3, list.get(i).getSeatcode().length()-2);
+			String seat_num=seatcode;
+			if(seatcode.substring(0,1).equals("0")) {
+			seat_num = seatcode.replace("0", "");
+			}
+			seats = new Seats();
+			seats.setSeat_num(seat_num);
+			seats.setSeat_type(seat_type);
+			list2.add(seats);
+		}
 		
 		System.out.println("예약 페이지로 이동 mcode:"+mcode);
 		model.addAttribute("mcode", mcode);
@@ -546,17 +584,81 @@ public class FrontController {
 		Club home = clubService.getClub(match.getCcode_home());
 		Club away = clubService.getClub(match.getCcode_away());
 		
+		Stadium sta = clubService.getStadium(home.getCcode());
+		model.addAttribute("sold", list2);
+		model.addAttribute("sta_name",sta.getSname());
+		model.addAttribute("mno",member.getMno());
 		model.addAttribute("home",home);
 		model.addAttribute("away",away);
 		model.addAttribute("m", match);
+		model.addAttribute("bought", bought);
 		return "reserve";
 	}
 	
+	@RequestMapping(value = "/payment.do")
+	public String payment(@RequestParam("stadium")String stadium,@RequestParam("tempa")String tempa) {
+
+		System.out.println("stadium"+stadium);
+		System.out.println("tempa"+tempa);
+		System.out.println("회원 가입");
+
+		return "payment";
+	}
+//	@RequestMapping(value = "/payment2.do")
+//	public String payment2(Model model, @RequestParam("stadium")String stadium,@RequestParam("tempa")String tempa
+//			,@RequestParam("rcode")String rcode,@RequestParam("mcode")String mcode,@RequestParam("ccode")String ccode,@RequestParam("seatcode")String seatcode
+//			) {
+//		
+//		System.out.println("stadium"+stadium);
+//		System.out.println("tempa"+tempa);
+//		int ajax =1;
+//		model.addAttribute("ajax", ajax);
+//		return "ajax";
+//	}
 	
+	//pay_complete.do
+	@RequestMapping(value = "/pay_complete.do")
+	public String pay_complete(HttpSession session, Model model,@RequestParam("rcode")String rcode,@RequestParam("mcode")String mcode,@RequestParam("ccode")String ccode,
+			@RequestParam("seatcode")String seatcode) {	
+		System.out.println("ccode"+ccode);
+		List<Reservation> list = new ArrayList<Reservation>();
+		String email = (String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		Reservation resv;
+		System.out.println("좌석코드:"+seatcode);
+		String real = seatcode.replace("\'","");
+		System.out.println("수정된 코드:"+real);
+		String[] seatcodes = real.split(",");
+		for(int i =0; i<seatcodes.length;i++) {
+			String end = seatcodes[i].substring(seatcodes[i].length()-3, seatcodes[i].length());
+			resv = new Reservation();
+			resv.setCcode(ccode);
+			resv.setMcode(mcode);
+			resv.setRcode(rcode+end);
+			resv.setSeatcode(seatcodes[i]);
+			resv.setMno(member.getMno());
+			list.add(resv);
+			System.out.println("좌석코드:"+seatcodes[i]);
+		}
+		int checking =0;
+		for(int i =0; i<list.size();i++) {
+			Reservation re = clubService.checkReserv(list.get(i));
+			if(re!=null) {
+				checking++;
+			}
+		}
+		System.out.println("하나라도 있는가?"+checking);
+		
+		if(checking!=0) {
+			System.out.println("그 새에 누가 했나벼");
+			return "payment_failure";
+		}else {
+			int result = clubService.insertReserve(list);
+			System.out.println("insert잘 되었는가?"+result);
+			return "payment_result";
+		}
 	
-	
-	
-	
+	}
 	
 	
 	

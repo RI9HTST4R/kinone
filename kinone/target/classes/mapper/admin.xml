@@ -135,12 +135,12 @@
 
 	<select id="mngClubCont" parameterType="String"
 		resultType="club">
-		select * from club where cname = #{cname}
+		select * from club where ccode = #{ccode}
 	</select>
 
 	<!-- 관리자 구단 삭제 -->
 	<update id="mngDeleteClub" parameterType="String">
-		update club set isbeing = 0 where cname = #{cname}
+		update club set isbeing = 0 where ccode = #{ccode}
 	</update>
 
 	<!-- 관리자 경기장 삭제 -->
@@ -277,17 +277,17 @@
 	
 	<!-- 관리자 선수 삭제 -->
 	<update id="pdelete" parameterType="String">
-		delete from player where pcode=#{pcode} 
+		delete from player where pcode=#{pcode}
 	</update>
 	
 	<!-- 관리자 선수 삭제 디테일 -->
 	<update id="pdeleted" parameterType="String">
-		delete from player_detail where pcode=#{pcode} 
+		delete from player_detail where pcode=#{pcode}
 	</update>
 	
 	<!-- 관리자 선수 삭제 시즌 -->
 	<update id="pdeletes" parameterType="String">
-		delete from player_season where pcode=#{pcode} 
+		delete from player_season where pcode=#{pcode}
 	</update>
     
     <!-- #################################################################################### -->

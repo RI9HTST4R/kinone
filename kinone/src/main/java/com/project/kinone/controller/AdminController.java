@@ -276,21 +276,21 @@ public class AdminController {
 
 	// 클럽 삭제 페이지
 	@RequestMapping("/admin/delete_club.do")
-	public String deleteClubView() {
+	public String deleteClubView(@RequestParam String ccode, Model model) {
 
 		System.out.println("클럽 삭제 페이지");
-
+		model.addAttribute("ccode", ccode);
 		return "admin/club_delete";
 
 	}
 
 	// 클럽 삭제 페이지에서 클럽 삭제
 	@RequestMapping("/admin/delete_club_ok.do")
-	public String deleteClub(String cname, String cmanager, HttpServletResponse response) throws Exception {
+	public String deleteClub(String ccode, String cname, String cmanager, HttpServletResponse response) throws Exception {
 
 		System.out.println("클럽 삭제");
 
-		adminService.deleteClub(response, cname, cmanager);
+		adminService.deleteClub(response, ccode, cname, cmanager);
 //		mngServ.deleteStadium(ccode,);	//경기장 삭제
 
 		return "redirect:/admin/club_view.do";

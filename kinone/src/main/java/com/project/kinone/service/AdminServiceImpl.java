@@ -250,13 +250,13 @@ public class AdminServiceImpl implements AdminServiceInter {
 		adminDao.insertStadium(mngClub);
 	}
 
-	public int deleteClub(HttpServletResponse response, String cname, String cmanager) throws Exception {
+	public int deleteClub(HttpServletResponse response, String ccode, String cname, String cmanager) throws Exception {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		System.out.println("delete service");
 
-		Club mclub = adminDao.getClubCont(cname);
+		Club mclub = adminDao.getClubCont(ccode);
 		int result = 0;
 		if (!mclub.getCmanager().equals(cmanager)) {
 			out.println("<script>");
@@ -268,7 +268,7 @@ public class AdminServiceImpl implements AdminServiceInter {
 			return result;
 
 		} else {
-			adminDao.deleteClub(cname);
+			adminDao.deleteClub(ccode);
 
 			result = 1;
 		}
