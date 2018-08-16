@@ -224,10 +224,12 @@ public class FrontController {
 		
 		Match match = adminService.getMatchInfo(mcode);
 		String ccode = match.getCcode_home();
+		Stadium stadium = clubService.getStadium(ccode);
 		
 		Lineup lineup = adminService.getMatchDetail(mcode);
 		
 		model.addAttribute("match", match);
+		model.addAttribute("stadium", stadium.getSname());
 		model.addAttribute("lineup", lineup);
 		return "match_detail";
 	}

@@ -13,11 +13,24 @@
 	padding-bottom: 20px;
 	overflow: auto;
 }
+#homelineup, #versus, #awaylineup {
+	display: inline-block;
+}
 </style>
-<div class="pagetitle"><span>제 ${match.mround}라운드 </span></div>
+<div class="pagetitle">
+	<span>제 ${match.mround}라운드 </span>
+	<a class="smenu">${stadium}</a>
+</div>
 
 <div class="page-content">
-${match.cname_short_h} vs ${match.cname_short_a}
+	<div id="homelineup">
+		<div class="lineup-top">
+			<img src="${url}/resources/emblem/"/>${match.emblem_h}
+		</div>
+	</div>
+	<span id="versus">vs</span>
+	<div id="awaylineup"></div>
+	${match.cname_short_h} vs ${match.cname_short_a}
 
 
 </div>
