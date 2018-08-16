@@ -35,6 +35,7 @@ import com.project.kinone.service.ClubServiceImpl;
 import com.project.kinone.service.MatchServiceImpl;
 import com.project.kinone.service.MemberServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
+import com.project.kinone.service.ReservServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
 
@@ -55,6 +56,9 @@ public class FrontController {
 	
 	@Autowired
 	private MemberServiceImpl memberService;
+	
+	@Autowired
+	private ReservServiceImpl reservService;
 	
 	@RequestMapping(value="/main.do", method=RequestMethod.GET)
 	public String main(Model model, HttpSession ses) {
