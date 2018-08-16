@@ -9,7 +9,10 @@
     <select id="logincheck" parameterType="String" resultType="member">
 		select * from member where email =#{email} and mstatus=1
 	</select>
-	<!--  -->
+	<!-- 비밀번호 변경 -->
+	<update id="change_passwd" parameterType="member">
+		update member set passwd=#{passwd} where email=#{email}
+	</update>
     <!-- ############################################################################################# -->
      <select id="find_email" parameterType="String" resultType="String">
 		select email from member where email =#{email}
