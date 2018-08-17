@@ -97,8 +97,11 @@ a {
   
   
     <hr>
-
-    <button type="button" class="registerbtn" onclick="location.href='boardList.do?page=${page}'">게시판 목록</button>
+<div id="button-group" align = center >
+<button type="button" class="btn btn-info" onclick="location.href='boardList_edit.do?page=${page}&bno=${bcont.bno}'" >수정</button>
+<button type="button" class="btn btn-info" onclick="location.href='boardList_del.do?page=${page}&bno=${bcont.bno}'" >삭제 </button>
+<button type="button" class="btn btn-info" onclick="location.href='boardList.do?page=${page}'" >게시판 목록</button>
+  </div>
   </div>
   
  

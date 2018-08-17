@@ -453,4 +453,14 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.addReadCount(bno);
 	}
 
+	public int delBoard(int bno) {
+		// TODO Auto-generated method stub
+		return adminDao.delBoard(bno);
+	}
+
+	public int board_edit_update(Board board) {
+		// TODO Auto-generated method stub
+		return adminDao.board_edit_update(board);
+	}
+
 }
