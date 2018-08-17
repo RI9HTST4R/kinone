@@ -435,7 +435,10 @@ $(function(){
 				<c:if test="${empty match.awayscore}">value="0"</c:if>
 				<c:if test="${not empty match.awayscore}">value="${match.awayscore}"</c:if> > ${match.cname_short_a}(away)
 			<br/>
-			<br/>	
+			<br/>
+			<form id="scorerForm">
+				
+			</form>
 			<c:if test="${match.mstatus == 0 and not empty lu.hStarting and not empty lu.hSubstitute and not empty lu.aStarting and not empty lu.aSubstitute}">
 				<a class="anchor-btn" id="scorebtn" onClick="saveScore('${match.mcode}')">저장</a>
 				<a class="anchor-btn" onClick="javascript:history.go(-1)">취소</a>

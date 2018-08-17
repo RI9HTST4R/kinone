@@ -6,7 +6,7 @@
     
 		<!-- 푸터 -->
 		<div class="wrap_footer"><br/><br/>
-			<input type="button" value="어드민페이지!!" onClick="location.href='admin/main.do'"/>
+			사이트맵 및... 등등
 		</div>
 		<!-- 푸터 끝 -->
 	</div>

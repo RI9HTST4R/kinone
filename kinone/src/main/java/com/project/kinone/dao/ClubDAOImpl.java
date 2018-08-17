@@ -39,6 +39,22 @@ public class ClubDAOImpl implements ClubDAOInter {
 		return session.selectOne("clubmapper.getStadium", ccode);
 	}
 
+	// 현재 시즌의 클럽 정보
+	public Club_season getClubSeasonInfo(HashMap<String, Object> map) {
+		return session.selectOne("clubmapper.clubSeasonInfo", map);
+	}
+	
+	// 클럽 랭크 리스트를 구하기 위한 현재 시즌 클럽의 순위
+	public int getClubSeasonRank(HashMap<String, Object> map) {
+		return session.selectOne("clubmapper.clubSeasonRank", map);
+	}
+	
+	// 클럽 상세정보 페이지에 필요한 랭크 리스트(3개)
+	public List<Club_season> getClubSeasonRankMini(HashMap<String, Object> map) {
+		return session.selectList("clubmapper.clubSeasonRankMini", map);
+	}
+
+
 	
 
 	
