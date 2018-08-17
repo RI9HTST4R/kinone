@@ -327,6 +327,12 @@
 	<update id="addReadCount" parameterType="int">
 		update board set readcount = readcount+1 where bno = #{bno}
 	</update>
+	<update id="delBoard" parameterType="int">
+		delete from board where bno=#{bno}
+	</update>
+	<update id="board_edit_update" parameterType="board">
+		update board set subject= #{subject}, image=#{image}, content = #{content}  where bno = #{bno}
+	</update>
 </mapper>
 
 

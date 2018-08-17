@@ -86,21 +86,21 @@
 				<li class="page-item"><span class="page-link" style="color: lightgray; cursor: default;">&lt;</span></li>
 			</c:if>
 			<c:if test="${page > 1 }">
-				<li class="page-item"><a class="page-link" href="kleagueNews.do?page=${page-1}">&lt;</a></li>
+				<li class="page-item"><a class="page-link" href="boardList.do?page=${page-1}">&lt;</a></li>
 			</c:if>			
 			<c:forEach var="a" begin="${startpage}" end="${endpage}">
 				<c:if test="${a == page }">
 					<li class="page-item"><span class="page-link" style="background-color: skyblue; color:white; cursor: default;">${a}</span></li>
 				</c:if>
 				<c:if test="${a != page }">
-					<li class="page-item"><a class="page-link" href="kleagueNews.do?page=${a}">${a}</a></li>
+					<li class="page-item"><a class="page-link" href="boardList.do?page=${a}">${a}</a></li>
 				</c:if>
 			</c:forEach>			
 			<c:if test="${page >= maxpage }">
 				<li class="page-item"><span class="page-link" style="color: lightgray; cursor: default;">&gt;</span></li> 
 			</c:if>
 			<c:if test="${page < maxpage }">
-				<li class="page-item"><a class="page-link" href="kleagueNews.do?page=${page+1}">&gt;</a></li>
+				<li class="page-item"><a class="page-link" href="boardList.do?page=${page+1}">&gt;</a></li>
 			</c:if>			
 			</ul>
 		</div>

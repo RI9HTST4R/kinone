@@ -277,7 +277,82 @@ public class AdminController{
 		return "admin/board_cont";
 	}
 	
-	
+		@RequestMapping(value="/admin/boardList_edit.do", method=RequestMethod.GET)
+	public String boardList_edit(@RequestParam("bno") String bno,Model model,String page) {
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+		Board bcont = adminService.getBoard(Integer.parseInt(bno));
+		
+		model.addAttribute("bcont", bcont);
+		model.addAttribute("page", page);
+		
+		
+		
+		return "admin/board_cont_edit";
+	}
+		//board_edit_update
+		
+		@RequestMapping(value="/admin/board_edit_update.do", method=RequestMethod.POST)
+		public String board_edit_update(@RequestParam("bno") String bno,@RequestParam("image1") MultipartFile mf, Model model, HttpServletRequest request,HttpSession session,Board board,String page) throws Exception {
+			if(page == null || page.equals("")) {
+				page = "1";
+			}
+			board.setBno(Integer.parseInt(bno));
+			Board bcont = adminService.getBoard(Integer.parseInt(bno));
+			String filename;
+			if(mf.isEmpty()) {
+				board.setImage(bcont.getImage());
+			}else {
+				filename = mf.getOriginalFilename();
+				int size = (int) mf.getSize();
+				
+				
+				String path = request.getRealPath("/resources/board_upload");
+				System.out.println(mf);
+				System.out.println(filename);
+				System.out.println(path);
+				System.out.println(size);
+				int result= 0; 
+				String file[] = filename.split("\\.");
+				System.out.println(file[1]);
+				if(size>10000000) {
+					result= 1; 
+					model.addAttribute("ajax",result);
+					return "ajax"; 
+				}
+				if(size>0) {
+					mf.transferTo(new File(path+"/"+filename));
+				}
+				
+				board.setImage(filename);
+			}
+			
+			int result = adminService.board_edit_update(board);
+
+			model.addAttribute("result", result);
+			model.addAttribute("page", page);
+			
+			
+			
+			return "admin/board_edit_update";
+		}
+		
+		@RequestMapping(value="/admin/boardList_del.do", method=RequestMethod.GET)
+	public String boardList_del(@RequestParam("bno") String bno,Model model,String page) {
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+		int result = adminService.delBoard(Integer.parseInt(bno));
+		
+		model.addAttribute("result", result);
+		model.addAttribute("page", page);
+		
+		
+		return "admin/boardList_del";
+	}
 	
 	// 게시판 글 작성 insert
 	@RequestMapping(value="/admin/board_insert.do", method=RequestMethod.POST)

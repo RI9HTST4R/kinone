@@ -259,5 +259,15 @@ public class AdminDAOImpl implements AdminDAOInter {
 		return session.update("adminmapper.addReadCount",bno);
 	}
 
+	public int delBoard(int bno) {
+		// TODO Auto-generated method stub
+		return session.update("adminmapper.delBoard",bno);
+	}
+
+	public int board_edit_update(Board board) {
+		// TODO Auto-generated method stub
+		return session.update("adminmapper.board_edit_update",board);
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
