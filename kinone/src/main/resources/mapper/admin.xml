@@ -110,6 +110,12 @@
     <update id="updateMatchStatScore" parameterType="match">
     	update match set mstatus = 1, homescore = #{homescore}, awayscore = #{awayscore} where mcode = #{mcode}
     </update>
+    
+    <update id="updateSeasonGrade" parameterType="club_season">
+    	update club_season set win = win + #{win}, draw = draw + #{draw}, lose = lose + #{lose},
+    						   c_ggoal = c_ggoal + #{c_ggoal}, c_lgoal = c_lgoal + #{c_lgoal}
+    	where ccode = #{ccode} and seasoncode = #{seasoncode} and lcode = #{lcode}
+    </update>
 <!-- ############################################################################################# -->    
 
 
@@ -299,7 +305,7 @@
     	<selectKey order="BEFORE" keyProperty="bno" resultType="int">
     		select NVL(MAX(bno),0)+1 from board
     	</selectKey>
-    	insert into board (BNO,SUBJECT,IMAGE,CONTENT,REGIDATE,READCOUNT) values(#{bno},#{subject},#{image},#{content},sysdate,0)
+    	insert into board (BNO,SUBJECT,IMAGE,CONTENT,REGIDATE,READCOUNT) values(#{bno},#{subject},#{image},#{content},#{regidate},0)
     </insert>
     <select id="getBoardList" parameterType="int" resultType="board">
 	    <![CDATA[

@@ -18,6 +18,7 @@ import com.project.kinone.dao.MatchDAOImpl;
 import com.project.kinone.dao.PlayerDAOImpl;
 import com.project.kinone.model.Board;
 import com.project.kinone.model.Club;
+import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
@@ -208,7 +209,39 @@ public class AdminServiceImpl implements AdminServiceInter {
 	}
 	
 	// 매치 상태 수정 및 스코어 수정
+	@Transactional
 	public int matchEnd(Match match) {
+		// 스코어를 통해 득점 실점, 승,무,패의 정보를 시즌 테이블에 기록
+		Club_season cs_h = new Club_season();
+		Club_season cs_a = new Club_season();
+		
+		cs_h.setLcode(match.getMcode().substring(0, 2));
+		cs_a.setLcode(match.getMcode().substring(0, 2));
+		
+		cs_h.setSeasoncode(match.getMcode().substring(6, 10));
+		cs_a.setSeasoncode(match.getMcode().substring(6, 10));
+		
+		cs_h.setCcode(match.getCcode_home());
+		cs_a.setCcode(match.getCcode_away());
+		int ggoal = match.getHomescore();
+		int lgoal = match.getAwayscore();
+		cs_h.setC_ggoal(ggoal);
+		cs_h.setC_lgoal(lgoal);
+		cs_a.setC_ggoal(lgoal);
+		cs_a.setC_lgoal(ggoal);
+		
+		if(ggoal > lgoal) {
+			cs_h.setWin(1);
+			cs_a.setLose(1);
+		}else if(ggoal == lgoal) {
+			cs_h.setDraw(1);
+			cs_a.setDraw(1);
+		}else {
+			cs_h.setLose(1);
+			cs_a.setWin(1);
+		}
+		adminDao.updateSeasonGrade(cs_h);
+		adminDao.updateSeasonGrade(cs_a);
 		
 		// 매치 상태 변경 0 -> 1, 스코어 입력
 		int result = adminDao.updateMatchStatScore(match);

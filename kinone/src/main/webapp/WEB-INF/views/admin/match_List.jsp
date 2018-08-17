@@ -84,7 +84,10 @@ span.example {
       font-size: 15px;
 }
 .pagingwrapper {
-	padding-left: 255px;
+	width: 980px;
+}
+.pagination {
+	display: inline-flex;
 }
 
 </style>
@@ -354,7 +357,7 @@ span.example {
 			</c:if>
 				</tbody>
 			</table>
-			<div class="pagingwrapper">
+			<div class="pagingwrapper" align="center">
 				<ul class="pagination">
 				<c:choose>
 					<%-- 전체 목록의 페이징 처리 --%>

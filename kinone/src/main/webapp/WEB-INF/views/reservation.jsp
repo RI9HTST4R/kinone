@@ -11,7 +11,7 @@
 		cursor: default;
 	}
 	.pagetitle {
-		background-color: purple;
+		background-color: orange;
 		position: relative;
 	}
 	#seasoncode {

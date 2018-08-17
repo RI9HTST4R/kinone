@@ -679,9 +679,8 @@ a#totalmatch {
 					<div class="nav-container">
 						<a class="navbar-brand nav-logo" href="main.do">K In One</a>
 						<ul class="navbar-nav nav-menu">
-							<li class="nav-item"><a class="nav-link" href="matchList.do">경기일정/결과</a>
-							</li>
-							
+							<li class="nav-item"><a class="nav-link" href="kleagueNews.do">K리그 소식</a></li>
+							<li class="nav-item"><a class="nav-link" href="matchList.do">경기일정/결과</a></li>
 							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
 							<li class="nav-item"><a class="nav-link" href="reservation.do">티켓예매</a></li>
 							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
