@@ -2,13 +2,12 @@ package com.project.kinone.controller;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -414,6 +413,35 @@ public class AdminController{
 
 		return "admin/club_create";
 	}
+	//clubIntro입력하기
+	@RequestMapping("/admin/clubIntro.do")
+	public String clubIntro(Model model) throws Exception {
+		List<Club> clubs = adminService.getMngClubList();
+		
+		model.addAttribute("clubs", clubs);
+		System.out.println("클럽 소개 생성");
+
+		return "admin/club_intro_write";
+	}
+	
+	//클럽 소개 정보 입력
+	@RequestMapping(value="/admin/club_intro_insert.do", method=RequestMethod.POST)
+	public String club_intro_insert(@RequestParam("ccode") String ccode, @RequestParam("content") String content, Model model,HttpSession session) throws Exception {
+		
+		System.out.println("ccode:"+ccode);
+		System.out.println("content:"+content);
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("ccode",ccode);
+		map.put("intro",content);
+		
+		
+		int result = adminService.club_intro_insert(map);
+		System.out.println("club_intro_insert 결과:"+result);
+		model.addAttribute("result", result);
+		
+		return "/admin/club_intro_insert_result";
+	}
+	
 
 	// 클럽 생성 페이지에서 클럽 생성
 	@RequestMapping(value = "/admin/create_club_ok.do", method = RequestMethod.POST)

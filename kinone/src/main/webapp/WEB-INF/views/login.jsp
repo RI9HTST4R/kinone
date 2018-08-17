@@ -23,7 +23,7 @@ body {
       				<input type="password" class="form-control" name="passwd" placeholder="비밀번호를 입력해주세요">
  			  </div>
  			  <input type="submit" value="로그인">
- 			  <input type="button" onclick="location.href='/join.do'" value="회원가입">
+ 			  <input type="button" onclick="location.href='/kinone/join_form.do'" value="회원가입">
   		</form>
   			<br><a href="/kinone/find.do"> 아이디나 비밀번호를 잊으셨나요?</a>
   			
