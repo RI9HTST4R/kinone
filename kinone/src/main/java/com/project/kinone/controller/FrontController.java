@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.kinone.model.Board;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
@@ -61,10 +62,14 @@ public class FrontController {
 	private ReservServiceImpl reservService;
 	
 	@RequestMapping(value="/main.do", method=RequestMethod.GET)
-	public String main(Model model, HttpSession ses) {
+	public String main(Model model, HttpSession ses) throws Exception{
 		List<Club> clubList = clubService.getClubList();
 		System.out.println(clubList.toString());
 		String seasoncode = adminService.getTopSeason();
+		List<Board> news_list = adminService.getRecentNews();
+		System.out.println("list의 개수:"+news_list.size());
+		
+		
 		
 		String whendata = (String)ses.getAttribute("whendata");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
@@ -107,7 +112,8 @@ public class FrontController {
 		// 도움랭크
 		List<Player> k1PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 2);
 		List<Player> k2PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "a", 2);
-
+		
+		model.addAttribute("news_list", news_list);
 		model.addAttribute("clubList", clubList);
 		model.addAttribute("k1ClubSeasonRankList", k1ClubSeasonRankList);
 		model.addAttribute("k2ClubSeasonRankList", k2ClubSeasonRankList);
@@ -121,13 +127,13 @@ public class FrontController {
 
 	// 로그인 페이지로 이동
 	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
-	public String login(Model model) {
+	public String login(Model model) throws Exception{
 		return "login";
 	}
 	
 	// 매치 일정 페이지로 이동
 	@RequestMapping(value="/matchList.do", method=RequestMethod.GET)
-	public String matchList( Model model) {
+	public String matchList( Model model) throws Exception{
 		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
@@ -164,7 +170,7 @@ public class FrontController {
 	
 	// 리그 순위표 및 선수 기록 페이지
 	@RequestMapping(value="/rank.do", method=RequestMethod.GET)
-	public String rank(Model model) {
+	public String rank(Model model) throws Exception{
 		
 		List<String> seasonlist = adminService.getAllSeason();
 		List<String> leaguelist = adminService.getAllLeague();
@@ -209,7 +215,7 @@ public class FrontController {
 	
 	// 예매 페이지
 	@RequestMapping(value="/reservation.do", method=RequestMethod.GET)
-	public String reservation(Model model) {
+	public String reservation(Model model) throws Exception{
 		
 		List<String> seasonList = adminService.getAllSeason();
 		model.addAttribute("seasonList", seasonList);
@@ -232,6 +238,22 @@ public class FrontController {
 		model.addAttribute("stadium", stadium.getSname());
 		model.addAttribute("lineup", lineup);
 		return "match_detail";
+	}
+	
+	// 클럽 리스트 페이지
+	@RequestMapping(value="/clubList.do", method=RequestMethod.GET)
+	public String clubList(Model model) throws Exception {
+		List<Club> clubList = adminService.getMngClubList();
+		model.addAttribute("clubList", clubList);
+		return "club_List";
+	}
+	
+	// 클럽 상세 정보 페이지
+	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
+	public String clubDetail(@RequestParam(required=false) String ccode, Model model) throws Exception {
+		Club club = adminService.getClubDetail(ccode);
+		model.addAttribute("club", club);
+		return "club_detail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -312,14 +334,14 @@ public class FrontController {
 	
 	//아이디&비번 찾기페이지 열기
 	@RequestMapping("/find.do")
-	public String findemail() {
+	public String findemail() throws Exception{
 			System.out.println("find");
 			return "find";
 	}
 	
 	//아이디 찾기 팝업창 열기
 	@RequestMapping("/emailfindform.do")
-	public String emailfindform() {
+	public String emailfindform() throws Exception{
 		System.out.println("emailfindform");
 		return "emailfindform";
 	}
@@ -440,35 +462,20 @@ public class FrontController {
 		System.out.println("passwdchange");
 		String pass=Sha256.encrypt(member.getPasswd());
 		member.setPasswd(pass);
+		
 		int result = memberService.chagepasswd(member);
 		
 		model.addAttribute("ajax",result+"개 업데이트성공");
 		
 		return "ajax";
 	}
-	
-	//프론트 클럽 리스트
-	@RequestMapping("/clubList.do")
-	public String clubList(Model model) {
-
-		System.out.println("리그 클럽 목록");
-		List<Club> mngClubList = clubService.getClubList();
-		System.out.println(mngClubList.toString());
-		model.addAttribute("mngClubList", mngClubList);
-
-		return "club_list";
-	}
-	
-	
-	
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 	/////////////////// 김현준////////////////////
 
 	// 회원 가입 폼으로 이동
 	@RequestMapping(value = "/join_form.do")
-	public String joinForm() {
+	public String joinForm() throws Exception{
 
 		System.out.println("회원 가입");
 
@@ -476,7 +483,7 @@ public class FrontController {
 	}
 	// 회원가입 폼 이메일 중복체크 확인 아작스 요청 
 	@RequestMapping(value = "/register_email_check.do")
-	public String register_email_check(@RequestParam("register_email")String register_email ,Model model) {
+	public String register_email_check(@RequestParam("register_email")String register_email ,Model model) throws Exception{
 		
 		System.out.println("입력아이디 잘 나오낭?"+register_email);
 		String email = memberService.find_email(register_email);
@@ -489,7 +496,9 @@ public class FrontController {
 	
 	// 회원 가입 처리
 	@RequestMapping(value = "/join_ok.do", method = RequestMethod.POST)
-	public String join(Model model, @RequestParam("email") String email,@RequestParam("mname")String mname,@RequestParam("passwd")String passwd, @RequestParam("mbirthdate1")String mbirthdate) {
+	public String join(Model model, @RequestParam("email") String email,@RequestParam("mname")String mname,
+						@RequestParam("passwd")String passwd, @RequestParam("mbirthdate1")String mbirthdate) 
+								throws Exception{
 
 
 		System.out.println("회원 가입 DB에 등록"+email+mname+passwd+mbirthdate);
@@ -520,7 +529,7 @@ public class FrontController {
 
 	}
 	@RequestMapping(value = "/register_encrypt.do")
-	public String register_encrypt(@RequestParam("register_passwd")String register_passwd ,Model model) {
+	public String register_encrypt(@RequestParam("register_passwd")String register_passwd ,Model model) throws Exception{
 		
 		System.out.println("입력비밀번호 잘 나오낭?"+register_passwd);
 		String passwd = Sha256.encrypt(register_passwd);
@@ -529,7 +538,8 @@ public class FrontController {
 		return "ajax";
 	}
 	@RequestMapping(value ="/email_send.do")
-	public String email_send(@RequestParam("email_number")String email_number,@RequestParam("email")String email1,@RequestParam("name")String name, Model model) {
+	public String email_send(@RequestParam("email_number")String email_number,@RequestParam("email")String email1,
+			@RequestParam("name")String name, Model model) throws Exception{
 		
 		System.out.println(name+email1+email_number);
 		// Mail Server 설정
@@ -575,14 +585,14 @@ public class FrontController {
 	
 	// 티켓 예매/////// 
 	@RequestMapping(value = "/reserve.do")
-	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) {
+	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) throws Exception{
 		String email = (String) session.getAttribute("email");
 		Member member = memberService.getMember(email);
-		List<Reservation> list = clubService.getSeatsList(mcode);
+		List<Reservation> list = reservService.getSeatsList(mcode);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("mno", member.getMno());
 		map.put("mcode", mcode);
-		int bought = clubService.getTickets(map);
+		int bought = reservService.getTickets(map);
 		Seats seats;
 		List<Seats> list2 = new ArrayList<Seats>();
 		for(int i = 0; i<list.size();i++) {
@@ -617,7 +627,7 @@ public class FrontController {
 	}
 	
 	@RequestMapping(value = "/payment.do")
-	public String payment(@RequestParam("stadium")String stadium,@RequestParam("tempa")String tempa) {
+	public String payment(@RequestParam("stadium")String stadium,@RequestParam("tempa")String tempa) throws Exception{
 
 		System.out.println("stadium"+stadium);
 		System.out.println("tempa"+tempa);
@@ -639,8 +649,8 @@ public class FrontController {
 	
 	//pay_complete.do
 	@RequestMapping(value = "/pay_complete.do")
-	public String pay_complete(HttpSession session, Model model,@RequestParam("rcode")String rcode,@RequestParam("mcode")String mcode,@RequestParam("ccode")String ccode,
-			@RequestParam("seatcode")String seatcode) {	
+	public String pay_complete(HttpSession session, Model model,@RequestParam("rcode")String rcode,@RequestParam("mcode")String mcode,
+			@RequestParam("ccode")String ccode,@RequestParam("seatcode")String seatcode) throws Exception{	
 		System.out.println("ccode"+ccode);
 		List<Reservation> list = new ArrayList<Reservation>();
 		String email = (String) session.getAttribute("email");
@@ -663,7 +673,7 @@ public class FrontController {
 		}
 		int checking =0;
 		for(int i =0; i<list.size();i++) {
-			Reservation re = clubService.checkReserv(list.get(i));
+			Reservation re = reservService.checkReserv(list.get(i));
 			if(re!=null) {
 				checking++;
 			}
@@ -674,17 +684,66 @@ public class FrontController {
 			System.out.println("그 새에 누가 했나벼");
 			return "payment_failure";
 		}else {
-			int result = clubService.insertReserve(list);
+			int result = reservService.insertReserve(list);
 			System.out.println("insert잘 되었는가?"+result);
 			return "payment_result";
 		}
 	
 	}
+	// KLeague 소식!!
 	
 	
+	@RequestMapping(value = "/kleagueNews.do")
+	public String kleagueNews(Model model, String page) throws Exception{
+
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+		List<Board> list = adminService.getBoardList(Integer.parseInt(page));
+		int listcount = adminService.getBoardListCount();
+		int limit = 10;
+		int maxpage = (int) ((double) listcount / limit + 0.95); // 0.95를 더해서 올림
+																	// 처리.
+		int startpage = (((int) ( Double.parseDouble(page) / 10 + 0.9)) - 1) * 10 + 1;
+		// 현재 페이지에 보여줄 마지막 페이지 수.(10, 20, 30 등...)
+		int endpage = maxpage;
+
+		if (endpage > startpage + 10 - 1)
+			endpage = startpage + 10 - 1;
+		
+		
+		model.addAttribute("page", page);
+		model.addAttribute("startpage", startpage);
+		model.addAttribute("endpage", endpage);
+		model.addAttribute("maxpage", maxpage);
+		model.addAttribute("list", list);
+		model.addAttribute("listcount", listcount);
+		
+		
+		
+		
+		return "news_List";
+	}
 	
-	
-	
+	//news_cont.do
+	@RequestMapping(value="/news_cont.do", method=RequestMethod.GET)
+	public String news_cont(@RequestParam("bno") String bno,Model model,String page) throws Exception{
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		System.out.println("글번호?"+bno);
+		int result = adminService.addReadCount(Integer.parseInt(bno));
+		
+		Board bcont = adminService.getBoard(Integer.parseInt(bno));
+		
+		model.addAttribute("bcont", bcont);
+		model.addAttribute("page", page);
+		System.out.println("조회수 증가?"+result);
+		
+		
+		return "news_cont";
+	}
 	
 	
 	
