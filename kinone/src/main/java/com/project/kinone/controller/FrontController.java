@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -38,6 +37,7 @@ import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.service.ReservServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
+import com.project.kinone.util.StringToTimestamp;
 
 @Controller
 public class FrontController {
@@ -298,9 +298,10 @@ public class FrontController {
 		}
 		return null;
 	}
+	
 	//로그아웃
 	@RequestMapping(value="/logout.do")
-	public String logout(HttpServletRequest request, HttpSession session,Member member) {
+	public String logout(HttpSession session,Member member) {
 		System.out.println("logout");
 		//세션 삭제
 		session.removeAttribute("email");
@@ -323,6 +324,48 @@ public class FrontController {
 		return "emailfindform";
 	}
 	
+	//아이디 찾기
+	@RequestMapping("/emailfind.do")
+	public String emailfind(Member member, Model model,HttpServletResponse response,
+			@RequestParam("mbirthdate1") String mbirthdate1) throws Exception {
+		
+		System.out.println("emailfind");
+		//출력객체
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+//		Timestamp mbirthdate=StringToTimestamp.convert(mbirthdate1);
+		//date -> timestamp 변환
+		System.out.println(mbirthdate1);
+		String mbirthdate2 = mbirthdate1 + " 00:00:00";
+		System.out.println(mbirthdate2);
+		member.setMbirthdate(Timestamp.valueOf(mbirthdate2));
+		
+		String em = memberService.emailfind(member);
+		
+		if (em==null) {
+			System.out.println("해당 성명/생년월일에 아이디 없음");
+			out.println("<script>");
+			out.println("alert('해당하는 아이디가 없습니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+			
+		}else {
+			int t=em.length()-4;
+			String p = "*";
+			String rp =new String(new char[t]).replace("\0", p);
+			String ttm=em.substring(0, 4);
+			String fem=ttm+rp;
+			System.out.println(fem);
+			
+			System.out.println("confirm창으로 넘김");
+			model.addAttribute("email",fem);
+			return "emailfindend";
+		}
+		
+		return null;
+	}
+	
+	
 	//비밀번호 찾기 팝업창 열기
 	@RequestMapping("/passwdfindform.do")
 	public String passwdfindform() throws Exception{
@@ -330,100 +373,78 @@ public class FrontController {
 			return "passwdfindform";
 	}
 	
-	//이메일 맞으면 인증번호 메일 보내기
-	@RequestMapping("/passwdfind.do")
-	public String passwdfind(@RequestParam("email") String email1, HttpServletResponse response,Model model) throws Exception{
-		//이메일 인증번호 생성
-		int email_number =  (int) Math.floor((Math.random()*900000) + 100000);
-			response.setContentType("text/html;charset=UTF-8");
-		// 출력스트림 객체 생성
-		PrintWriter out = response.getWriter();
-		//이메일 일치 확인
-		Member om = memberService.logincheck(email1);
-		
-		//해당 이메일 없음
-		if(om==null) {
-			System.out.println("email does not exist");
-			out.println("<script>");
-			out.println("alert('가입된 이메일이 아닙니다')");
-			out.println("history.go(-1)");
-			out.println("</script>");
-		//해당 이메일 있음->인증메일 발송
-		}else {
-			// Mail Server 설정
-			String charSet = "utf-8";
-			String hostSMTP = "smtp.mail.nate.com";
-			String hostSMTPid = "babamandu@nate.com";
-			String hostSMTPpwd = "qsef1357!"; 
-
-			// 보내는 사람 EMail, 제목, 내용
-			String fromEmail = "babamandu@nate.com";
-			String fromName = om.getMname()+"씨에게";
-			String subject = "K In One 인증메일입니다.";
-
-			// 받는 사람 E-Mail 주소
-			String mail = email1;
-			try {
-				HtmlEmail email = new HtmlEmail();
-				email.setDebug(true);
-				email.setCharset(charSet);
-				email.setSSL(true);
-				email.setHostName(hostSMTP);
-				email.setSmtpPort(587);
-
-				email.setAuthentication(hostSMTPid, hostSMTPpwd);
-				email.setTLS(true);
-				email.addTo(mail, charSet);
-				email.setFrom(fromEmail, fromName, charSet);
-				email.setSubject(subject);
-				email.setHtmlMsg("<p align = 'center'>K in One 비밀번호 변경 인증 메일입니다.</p><br>" 
-								 + "<div align='center'> 인증번호 : " + email_number + "</div>");
-				email.send();
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-			
-			model.addAttribute("emailnumber",email_number);
-			model.addAttribute("email",email1);
-			
-		return "vailidatepasswd";
-		}
-		return null;
+	//비번 찾기 이메일 맞나 확인
+	@RequestMapping(value = "/findemailchk.do")
+	public String findemailchk(@RequestParam("email") String email, Model model) {
+		System.out.println("findemailchk");
+		String em = memberService.find_email(email);
+		System.out.println("체크한 이메일 값="+em);
+		model.addAttribute("ajax", em);
+		return "ajax";
 	}
 	
-	//인증번호 확인하기
-	@RequestMapping("/validateEmailnumber.do")
-	public String validateEmailnumber(@RequestParam String email, 
-			@RequestParam String emailnumber, @RequestParam String putemailnumber,  
-																		HttpServletResponse response, Model model) throws Exception{
-		response.setContentType("text/html;charset=UTF-8");
-		System.out.println("validateEmailnumber");
-		PrintWriter out = response.getWriter();// 출력스트림 객체 생성
-		//인증번호 틀림
+	//비번 찾기 이메일 맞으면 인증번호 메일 보내기
+	@RequestMapping(value ="/findemailsend.do")
+	public String findemailsend(@RequestParam("email_number")String email_number,
+			@RequestParam("email")String email1, Model model) {
 		
-		if(emailnumber.equals(putemailnumber)){
-			model.addAttribute("email",email);
-			return"passwdchange";
-		}else {
-			System.out.println("validatenumber does not match");
-			out.println("<script>");
-			out.println("alert('인증번호가 틀립니다')");
-			out.println("history.go(-1)");
-			out.println("</script>");
+		System.out.println(email1+email_number);
+		
+		//이름 꺼내기용
+		Member om = memberService.logincheck(email1);
+		
+		// Mail Server 설정
+		String charSet = "utf-8";
+		String hostSMTP = "smtp.mail.nate.com";
+		String hostSMTPid = "babamandu@nate.com";
+		String hostSMTPpwd = "qsef1357!"; // 비밀번호 입력해야함
+
+		// 보내는 사람 EMail, 제목, 내용
+		String fromEmail = "babamandu@nate.com";
+		String fromName = om.getMname()+"씨에게";
+		String subject = "K In One 인증메일입니다.";
+
+		// 받는 사람 E-Mail 주소
+		String mail = email1;
+
+		try {
+			HtmlEmail email = new HtmlEmail();
+			email.setDebug(true);
+			email.setCharset(charSet);
+			email.setSSL(true);
+			email.setHostName(hostSMTP);
+			email.setSmtpPort(465);
+
+			email.setAuthentication(hostSMTPid, hostSMTPpwd);
+			email.setTLS(true);
+			email.addTo(mail, charSet);
+			email.setFrom(fromEmail, fromName, charSet);
+			email.setSubject(subject);
+			email.setHtmlMsg("<p align = 'center'>K in One의 비밀번호 재설정 인증메일.</p><br>" 
+							 + "<div align='center'> 인증번호 : " + email_number + "</div>");
+			email.send();
+		} catch (Exception e) {
+			System.out.println(e);
 		}
-		return null;
 		
+		model.addAttribute("ajax", "good~!!\n 등록된 E-Mail 확인");
+
+		return "ajax";
 	}
+	
+	
 	
 	//비밀번호 재설정
 	@RequestMapping("/passwdchange.do")
 	public String passwdchange(Member member, Model model) {
-		
+		System.out.println("passwdchange");
+		String pass=Sha256.encrypt(member.getPasswd());
+		member.setPasswd(pass);
 		int result = memberService.chagepasswd(member);
 		
-		model.addAttribute("result",result);
+		model.addAttribute("ajax",result+"개 업데이트성공");
 		
-		return "compl";
+		return "ajax";
 	}
 	
 	//프론트 클럽 리스트

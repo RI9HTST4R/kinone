@@ -9,6 +9,7 @@
 <body>
 <form action="/kinone/passwdchange.do" method="POST">
 <input type=hidden name=email value="${email}">
+재설정할 비밀번호를 입력해주세요
 <input type="text" name=passwd>
 
 <input type="submit" value="확인">
