@@ -333,6 +333,11 @@
 	<update id="board_edit_update" parameterType="board">
 		update board set subject= #{subject}, image=#{image}, content = #{content}  where bno = #{bno}
 	</update>
+	
+	<update id="club_intro_insert" parameterType="map">
+	update club set intro=#{intro} where ccode = #{ccode}
+	</update>
+	
 </mapper>
 
 

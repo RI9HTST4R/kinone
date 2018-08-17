@@ -2,6 +2,7 @@ package com.project.kinone.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -267,6 +268,11 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int board_edit_update(Board board) {
 		// TODO Auto-generated method stub
 		return session.update("adminmapper.board_edit_update",board);
+	}
+
+	public int club_intro_insert(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return session.update("adminmapper.club_intro_insert",map);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////

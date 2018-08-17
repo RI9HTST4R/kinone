@@ -100,7 +100,7 @@ h1#title {
 					<li><h4 class="sidemenu">클럽</h4></li>
 					<li <c:if test='${fn:contains(cpage, "club_view")}'>class="active"</c:if>><a href="/kinone/admin/club_view.do">클럽 리스트</a></li>
 					<li <c:if test='${fn:contains(cpage, "club_create")}'>class="active"</c:if>><a href="/kinone/admin/create_club.do">클럽 등록</a></li>
-					<li><a href="">클럽 소개글 등록</a></li>
+					<li><a href="/kinone/admin/clubIntro.do">클럽 소개글 등록</a></li>
 					<li><h4 class="sidemenu">선수</h4></li>
 					<li <c:if test='${fn:contains(cpage, "player_list")}'>class="active"</c:if>><a href="/kinone/admin/plist.do">선수 리스트</a></li>
 					<li <c:if test='${fn:contains(cpage, "player_Form")}'>class="active"</c:if>><a href="/kinone/admin/pinsertForm1.do">선수 등록</a></li>

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -494,6 +495,11 @@ public class AdminServiceImpl implements AdminServiceInter {
 	public int board_edit_update(Board board) {
 		// TODO Auto-generated method stub
 		return adminDao.board_edit_update(board);
+	}
+
+	public int club_intro_insert(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return adminDao.club_intro_insert(map);
 	}
 
 }
