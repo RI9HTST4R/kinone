@@ -30,6 +30,7 @@ import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Reservation;
 import com.project.kinone.model.Seats;
+import com.project.kinone.model.Shopping;
 import com.project.kinone.model.Stadium;
 import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.ClubServiceImpl;
@@ -613,6 +614,17 @@ public class FrontController {
 
 		return "payment";
 	}
+	@RequestMapping(value = "/barcode.do")
+	public String barcode(@RequestParam("rcode") String rcode, Model model) throws Exception{
+
+		System.out.println("rcode="+rcode);
+		String rcode1 = Sha256.encrypt(rcode).substring(0, 35);
+		System.out.println("rcode1:"+rcode1);
+		System.out.println("회원 가입");
+		model.addAttribute("rcode", rcode1);
+		
+		return "barcode";
+	}
 //	@RequestMapping(value = "/payment2.do")
 //	public String payment2(Model model, @RequestParam("stadium")String stadium,@RequestParam("tempa")String tempa
 //			,@RequestParam("rcode")String rcode,@RequestParam("mcode")String mcode,@RequestParam("ccode")String ccode,@RequestParam("seatcode")String seatcode
@@ -722,8 +734,45 @@ public class FrontController {
 		
 		return "news_cont";
 	}
-	
-	
+	// 마이페이지 콘트롤러 
+	@RequestMapping(value = "/mypage.do")
+	public String payment(HttpSession session, Model model) throws Exception{
+		
+		String email =(String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		System.out.println("마이페이지:"+member.getMno());
+		List<Reservation> shopping_list = reservService.getAllTickets(member.getMno());
+		
+		String name = member.getMname();
+		List<Match> match_list = new ArrayList<Match>();
+		List<Shopping> basket = new ArrayList<Shopping>();
+		Match match;
+		Shopping shopping;
+		for(int i=0;i<shopping_list.size();i++) {
+		match = matchService.get_the_match(shopping_list.get(0).getMcode());
+		match_list.add(match);
+		}
+		for(int i=0;i<match_list.size();i++) {
+			Club home = clubService.getClub(match_list.get(i).getCcode_home());
+			Club away = clubService.getClub(match_list.get(i).getCcode_away());
+			Stadium stadium = clubService.getStadium(home.getCcode());
+			shopping = new Shopping();
+			shopping.setRdate(match_list.get(i).getMdate());
+			shopping.setSname(stadium.getSname());
+			shopping.setHome_name(home.getCname());
+			shopping.setAway_name(away.getCname());
+			shopping.setRcode(shopping_list.get(i).getRcode());
+			shopping.setAway_code(home.getCcode());
+			shopping.setHome_code(away.getCcode());
+			basket.add(shopping);
+		}
+		
+		model.addAttribute("basket", basket);
+		model.addAttribute("name", name);
+		
+		
+		return "mypage";
+	}
 	
 	
 	

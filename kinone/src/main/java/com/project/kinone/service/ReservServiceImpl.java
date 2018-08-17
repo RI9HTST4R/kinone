@@ -31,4 +31,8 @@ public class ReservServiceImpl implements ReservServiceInter{
 		// TODO Auto-generated method stub
 		return reservDao.insertReserve(list);
 	}
+	public List<Reservation> getAllTickets(int mno) {
+		// TODO Auto-generated method stub
+		return reservDao.getAllTickets(mno);
+	}
 }

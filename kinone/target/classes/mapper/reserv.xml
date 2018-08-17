@@ -22,5 +22,8 @@
 				(#{item.rcode},#{item.mcode},#{item.seatcode},sysdate,#{item.mno},#{item.ccode})
         </foreach>
 	</insert>
+	 <select id="getAllTickets" parameterType="int" resultType="reservation">
+    	select * from reservation where mno = #{mno}
+    </select>
     
 </mapper>
