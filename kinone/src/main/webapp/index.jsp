@@ -15,7 +15,7 @@
 	//	location.href = "matchList.do"
 	//	location.href = "admin/main.do";
 	//	location.href = "admin/club_view.do";
-	});	
+	});
 
 </script>
 <style>
