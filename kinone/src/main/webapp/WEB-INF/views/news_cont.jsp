@@ -1,106 +1,59 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="header.jsp" %>
+	pageEncoding="UTF-8"%>
+<%@ include file="header.jsp"%>
 <style>
-
-
-* {
-    box-sizing: border-box;
+.pagetitle {
+	background-color: lightgray;
 }
-
 /* Add padding to containers */
-.container {
-    padding: 16px;
-    background-color: white;
+.board-wrapper {
+	padding: 16px;
+	background-color: white;
+	text-align: justify;
+	width: 100%;
 }
-
-/* Full-width input fields */
-input[type=text], input[type=password] {
-    width: 100%;
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    display: inline-block;
-    border: none;
-    background: #f1f1f1;
+#board-title {
+	position: relative;
+	margin-bottom: 40px;
 }
-
-input[type=text]:focus, input[type=password]:focus {
-    background-color: #ddd;
-    outline: none;
-}
-
-/* Overwrite default styles of hr */
 hr {
-    border: 1px solid #f1f1f1;
-    margin-bottom: 25px;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 }
-
 /* Set a style for the submit button */
 .registerbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
+	background-color: #4CAF50;
+	color: white;
+	padding: 16px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+	opacity: 0.9;
 }
-
 .registerbtn:hover {
-    opacity: 1;
-}
-
-/* Add a blue text color to links */
-a {
-    color: dodgerblue;
-}
-
-/* Set a grey background color and center the text of the "sign in" section */
-.signin {
-    background-color: #f1f1f1;
-    text-align: center;
+	opacity: 1;
 }
 </style>
-</head>
-<body>
-
-<form >
-  <div class="container">
-    <h1>KLeague News!!</h1>
-    <hr>
-
-	
-	<font size="10px">제목 : ${bcont.subject}</font>  <font size="4px" style="float:right;font-style: italic;padding-top:20px;" > readcount: ${bcont.readcount}  </font>
-	
+<div class="pagetitle">
+	<span>K리그 소식</span>
+</div>
+<div class="board-wrapper">
+	<div id="board-title">
+		<span style="font-size: 25pt;">${bcont.subject}</span><br/>
+		<span style="font-size:12pt; font-style: italic; position: absolute; right: 0px;">조회수: ${bcont.readcount}</span>
+	</div>
 	<hr>
-  	<div id="content" align="center">
-  	
-  	
-  	
-  	<c:if test="${empty bcont.image}">
-       &nbsp;
-       </c:if>
-       <c:if test="${!empty bcont.image}">
-       <img src="${url}/resources/board_upload/${bcont.image}" /><br><br><br><br>
-       </c:if>
-      <font size="4px" style="float:right;font-style: italic;" > written by admin</font><br><br><br><br>
-  	${bcont.content}
-  	
-  	
-  	
-  	</div>
-  
-  
-  
-  
-  
-  
-    <hr>
-
-    <button type="button" class="registerbtn" onclick="location.href='kleagueNews.do?page=${page}'">게시판 목록</button>
-  </div>
-  
- 
-</form>
-<%@ include file="footer.jsp" %>
+	<div id="content" align="justify">
+		<img src="${url}/resources/board_upload/${bcont.image}" width="100%"/>
+		<br><br/>
+		${bcont.content}
+	</div>
+	<div id="board-footer" align="right">
+		<span style="font-size: 12pt; font-style: italic;">written by admin</span>
+	</div>
+	<hr>
+	<button type="button" class="registerbtn"
+		onclick="location.href='kleagueNews.do?page=${page}'">게시판 목록</button>
+</div>
+<%@ include file="footer.jsp"%>
