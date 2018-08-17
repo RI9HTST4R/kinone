@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.kinone.model.Board;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
@@ -65,6 +66,10 @@ public class FrontController {
 		List<Club> clubList = clubService.getClubList();
 		System.out.println(clubList.toString());
 		String seasoncode = adminService.getTopSeason();
+		List<Board> news_list = adminService.getRecentNews();
+		System.out.println("list의 개수:"+news_list.size());
+		
+		
 		
 		String whendata = (String)ses.getAttribute("whendata");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
@@ -107,7 +112,8 @@ public class FrontController {
 		// 도움랭크
 		List<Player> k1PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 2);
 		List<Player> k2PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "a", 2);
-
+		
+		model.addAttribute("news_list", news_list);
 		model.addAttribute("clubList", clubList);
 		model.addAttribute("k1ClubSeasonRankList", k1ClubSeasonRankList);
 		model.addAttribute("k2ClubSeasonRankList", k2ClubSeasonRankList);
@@ -446,11 +452,11 @@ public class FrontController {
 	public String reserve(@RequestParam("mcode")String mcode ,Model model,HttpSession session) {
 		String email = (String) session.getAttribute("email");
 		Member member = memberService.getMember(email);
-		List<Reservation> list = clubService.getSeatsList(mcode);
+		List<Reservation> list = reservService.getSeatsList(mcode);
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("mno", member.getMno());
 		map.put("mcode", mcode);
-		int bought = clubService.getTickets(map);
+		int bought = reservService.getTickets(map);
 		Seats seats;
 		List<Seats> list2 = new ArrayList<Seats>();
 		for(int i = 0; i<list.size();i++) {
@@ -531,7 +537,7 @@ public class FrontController {
 		}
 		int checking =0;
 		for(int i =0; i<list.size();i++) {
-			Reservation re = clubService.checkReserv(list.get(i));
+			Reservation re = reservService.checkReserv(list.get(i));
 			if(re!=null) {
 				checking++;
 			}
@@ -542,17 +548,66 @@ public class FrontController {
 			System.out.println("그 새에 누가 했나벼");
 			return "payment_failure";
 		}else {
-			int result = clubService.insertReserve(list);
+			int result = reservService.insertReserve(list);
 			System.out.println("insert잘 되었는가?"+result);
 			return "payment_result";
 		}
 	
 	}
+	// KLeague 소식!!
 	
 	
+	@RequestMapping(value = "/kleagueNews.do")
+	public String kleagueNews(Model model, String page) {
+
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+		List<Board> list = adminService.getBoardList(Integer.parseInt(page));
+		int listcount = adminService.getBoardListCount();
+		int limit = 10;
+		int maxpage = (int) ((double) listcount / limit + 0.95); // 0.95를 더해서 올림
+																	// 처리.
+		int startpage = (((int) ( Double.parseDouble(page) / 10 + 0.9)) - 1) * 10 + 1;
+		// 현재 페이지에 보여줄 마지막 페이지 수.(10, 20, 30 등...)
+		int endpage = maxpage;
+
+		if (endpage > startpage + 10 - 1)
+			endpage = startpage + 10 - 1;
+		
+		
+		model.addAttribute("page", page);
+		model.addAttribute("startpage", startpage);
+		model.addAttribute("endpage", endpage);
+		model.addAttribute("maxpage", maxpage);
+		model.addAttribute("list", list);
+		model.addAttribute("listcount", listcount);
+		
+		
+		
+		
+		return "kleagueNews";
+	}
 	
-	
-	
+	//news_cont.do
+	@RequestMapping(value="/news_cont.do", method=RequestMethod.GET)
+	public String news_cont(@RequestParam("bno") String bno,Model model,String page) {
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		System.out.println("글번호?"+bno);
+		int result = adminService.addReadCount(Integer.parseInt(bno));
+		
+		Board bcont = adminService.getBoard(Integer.parseInt(bno));
+		
+		model.addAttribute("bcont", bcont);
+		model.addAttribute("page", page);
+		System.out.println("조회수 증가?"+result);
+		
+		
+		return "news_cont";
+	}
 	
 	
 	

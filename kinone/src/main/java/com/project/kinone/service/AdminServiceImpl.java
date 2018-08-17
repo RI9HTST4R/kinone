@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.kinone.dao.AdminDAOImpl;
 import com.project.kinone.dao.MatchDAOImpl;
 import com.project.kinone.dao.PlayerDAOImpl;
+import com.project.kinone.model.Board;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Match_detail;
@@ -421,5 +422,35 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.pdeletes(pcode);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public int board_insert(Board board) {
+		// TODO Auto-generated method stub
+		return adminDao.board_insert(board);
+	}
+
+	public List<Board> getBoardList(int page) {
+		// TODO Auto-generated method stub
+		return adminDao.getBoardList(page);
+	}
+
+	public int getBoardListCount() {
+		// TODO Auto-generated method stub
+		return adminDao.getBoardListCount();
+	}
+
+	public Board getBoard(int bno) {
+		// TODO Auto-generated method stub
+		return adminDao.getBoard(bno);
+	}
+
+	public List<Board> getRecentNews() {
+		// TODO Auto-generated method stub
+		return adminDao.getRecentNews();
+	}
+
+	public int addReadCount(int bno) {
+		// TODO Auto-generated method stub
+		return adminDao.addReadCount(bno);
+	}
 
 }

@@ -20,7 +20,6 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="http://code.jquery.com/latest-jquery.js"></script>
 <style>
 /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
 body {

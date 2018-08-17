@@ -83,7 +83,22 @@
 									class="more" href="${url}/kleagueNews.do">더보기 &gt;</a>
 							</div>
 							<div class="news-content" align="center">
+								<c:forEach var="news" items="${news_list}">
 								<div class="news">
+									<div class="news-image">
+										<a href="${url}/news_cont.do?bno=${news.bno}"><img src="${url}/resources/board_upload/${news.image}" title="${news.subject}"></a>
+									</div>
+									<div class="news-title" align="justify">
+										<a href="${url}/news_cont.do?bno=${news.bno}" title="">${news.subject}</a>
+									</div>
+								</div>
+								
+								
+								
+								</c:forEach>
+								
+								
+								<%-- <div class="news">
 									<div class="news-image">
 										<a href=""><img src="${url}/resources/news/samplenews.jpg" title="[전북] 전북, 국민연금공단과 MOU 체결"></a>
 									</div>
@@ -115,7 +130,7 @@
 									<div class="news-title" align="justify">
 										<a href="" title="">뉴스제목</a>
 									</div>
-								</div>
+								</div> --%>
 							</div>
 						</div>
 						<!-- 뉴스 끝 -->

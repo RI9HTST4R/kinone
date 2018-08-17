@@ -39,25 +39,13 @@ public class ClubDAOImpl implements ClubDAOInter {
 		return session.selectOne("clubmapper.getStadium", ccode);
 	}
 
-	public Reservation checkReserv(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return session.selectOne("clubmapper.checkReserv", reservation);
-	}
+	
 
-	public int insertReserve(List<Reservation> list) {
-		// TODO Auto-generated method stub
-		return session.insert("clubmapper.insertReserve", list);
-	}
+	
 
-	public List<Reservation> getSeatsList(String mcode) {
-		// TODO Auto-generated method stub
-		return session.selectList("clubmapper.getSeatsList", mcode);
-	}
+	
 
-	public int getTickets(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return session.selectOne("clubmapper.getTickets", map);
-	}
+	
 
 	
 }
