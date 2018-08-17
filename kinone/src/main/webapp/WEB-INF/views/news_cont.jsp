@@ -46,7 +46,9 @@ hr {
 	</div>
 	<hr>
 	<div id="content" align="justify">
-		<img src="${url}/resources/board_upload/${bcont.image}" width="100%"/>
+		<div align="center" style="width: 100%;">
+			<img src="${url}/resources/board_upload/${bcont.image}" width="80%" height="500px"/>
+		</div>
 		<br><br/>
 		${bcont.content}
 	</div>
