@@ -108,6 +108,12 @@
     <update id="updateMatchStatScore" parameterType="match">
     	update match set mstatus = 1, homescore = #{homescore}, awayscore = #{awayscore} where mcode = #{mcode}
     </update>
+    
+    <update id="updateSeasonGrade" parameterType="club_season">
+    	update club_season set win = win + #{win}, draw = draw + #{draw}, lose = lose + #{lose},
+    						   c_ggoal = c_ggoal + #{c_ggoal}, c_lgoal = c_lgoal + #{c_lgoal}
+    	where ccode = #{ccode} and seasoncode = #{seasoncode} and lcode = #{lcode}
+    </update>
 <!-- ############################################################################################# -->    
 
 

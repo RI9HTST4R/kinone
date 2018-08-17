@@ -211,7 +211,6 @@ public class AdminController {
 		System.out.println("mcode : "+match.getMcode());
 		System.out.println("homescore : "+match.getHomescore());
 		System.out.println("awayscore : "+match.getAwayscore());
-		
 		int result = adminService.matchEnd(match);
 		model.addAttribute("ajax", result);
 		

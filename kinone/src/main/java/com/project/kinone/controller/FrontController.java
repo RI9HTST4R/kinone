@@ -233,6 +233,22 @@ public class FrontController {
 		model.addAttribute("lineup", lineup);
 		return "match_detail";
 	}
+	
+	// 클럽 리스트 페이지
+	@RequestMapping(value="/clubList.do", method=RequestMethod.GET)
+	public String clubList(Model model) throws Exception {
+		List<Club> clubList = adminService.getMngClubList();
+		model.addAttribute("clubList", clubList);
+		return "club_List";
+	}
+	
+	// 클럽 상세 정보 페이지
+	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
+	public String clubDetail(@RequestParam(required=false) String ccode, Model model) throws Exception {
+		Club club = adminService.getClubDetail(ccode);
+		model.addAttribute("club", club);
+		return "club_detail";
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 //////////////////////////////////////////////심 규 진 /////////////////////////////////////////////////////////		
@@ -425,22 +441,6 @@ public class FrontController {
 		
 		return "compl";
 	}
-	
-	//프론트 클럽 리스트
-	@RequestMapping("/clubList.do")
-	public String clubList(Model model) {
-
-		System.out.println("리그 클럽 목록");
-		List<Club> mngClubList = clubService.getClubList();
-		System.out.println(mngClubList.toString());
-		model.addAttribute("mngClubList", mngClubList);
-
-		return "club_list";
-	}
-	
-	
-	
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 	/////////////////// 김현준////////////////////

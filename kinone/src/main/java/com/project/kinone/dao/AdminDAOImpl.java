@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.kinone.model.Club;
+import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
@@ -99,6 +100,12 @@ public class AdminDAOImpl implements AdminDAOInter {
 	// 매치 상태 변경(0 -> 1)
 	public int updateMatchStatScore(Match match) {
 		return session.update("adminmapper.updateMatchStatScore", match);
+	}
+	
+	// 클럽 시즌 기록 수정
+	public void updateSeasonGrade(Club_season cs) {
+		int result = session.update("adminmapper.updateSeasonGrade", cs);
+		if(result == 1) System.out.println("시즌기록 수정 성공");
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,6 +228,5 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int pdeletes(String pcode) {
 		return session.delete("adminmapper.pdeletes",pcode);
 	}
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
