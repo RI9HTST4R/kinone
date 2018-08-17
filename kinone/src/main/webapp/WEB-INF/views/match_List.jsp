@@ -309,7 +309,7 @@
 			var mcode = $this.parents().eq(3).attr("id");
 		//	alert(mcode);
 			if($this.hasClass("btn-warning") || $this.hasClass("btn-danger")){
-				location.href=".do?mcode="+mcode;
+				location.href="matchDetail.do?mcode="+mcode;
 			}else if($this.hasClass("btn-info")){
 				location.href="reserve.do?mcode="+mcode;
 			}

@@ -27,6 +27,9 @@ public class MemberServiceImpl implements MemberServiceInter{
 	public Member logincheck(String email) {
 		return memberDAO.logincheck(email);
 	}
+	public int chagepasswd(Member member) {
+		return memberDAO.chagepasswd(member);
+	}
 	
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////
 	//////////////////////////////////////////////김 동 환

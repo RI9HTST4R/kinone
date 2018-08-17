@@ -165,7 +165,7 @@
 	function changeList(){
 		wrapMask();
 		var formdata = $("#rankform").serialize();
-		alert(formdata);
+	//	alert(formdata);
 		
 		$.post("/kinone/rankListAjax.do", formdata, function(data){
 			var clubarr = data.club;

@@ -20,6 +20,7 @@ public class Lineup {
 		String home = md.getHomelineup();
 		System.out.println("home:"+home);
 		if(home != null) {
+			System.out.println("1");
 			String homearr[] = home.split("/");
 			List<Player> hStarting = dao.getPlayerList(homearr[0].split(","));
 			List<Player> hSubstitute = dao.getPlayerList(homearr[1].split(","));
@@ -31,6 +32,7 @@ public class Lineup {
 		String away = md.getAwaylineup();
 		System.out.println("away:"+away);
 		if(away != null) {
+			System.out.println("2");
 			String awayarr[] = away.split("/");
 			List<Player> aStarting = dao.getPlayerList(awayarr[0].split(","));
 			List<Player> aSubstitute = dao.getPlayerList(awayarr[1].split(","));

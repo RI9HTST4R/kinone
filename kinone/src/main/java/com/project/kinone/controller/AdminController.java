@@ -356,7 +356,6 @@ public class AdminController {
 
 		String epath = mtfRequest.getSession().getServletContext().getRealPath("resources/emblem");
 		String spath = mtfRequest.getSession().getServletContext().getRealPath("resources/sphoto");
-
 		adminService.insertClub(mngclub, fileList, epath);
 		adminService.insertStadium(mngclub, fileList, spath);
 
@@ -393,10 +392,6 @@ public class AdminController {
 		
 		// 상세정보 가져오기
 		Club mngC = adminService.getClubDetail(ccode);
-		
-		
-		File efile = new File(mngC.getEmblem());
-		File sfile = new File(mngC.getSphoto());
 				
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mngC", mngC);

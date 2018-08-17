@@ -93,6 +93,7 @@ h1#title {
 				<ul class="nav nav-pills nav-stacked">
 					<li><h4>메인</h4></li>
 					<li <c:if test='${fn:contains(cpage, "main")}'>class="active"</c:if>><a href="/kinone/admin/main.do">시즌</a></li>
+					<li><a href="/kinone/main.do">메인 홈페이지 이동</a></li>
 					<li><h4>클럽</h4></li>
 					<li <c:if test='${fn:contains(cpage, "club_view")}'>class="active"</c:if>><a href="/kinone/admin/club_view.do">클럽 리스트</a></li>
 					<li <c:if test='${fn:contains(cpage, "club_create")}'>class="active"</c:if>><a href="/kinone/admin/create_club.do">클럽 등록</a></li>
