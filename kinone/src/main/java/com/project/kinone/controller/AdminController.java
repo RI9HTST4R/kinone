@@ -38,7 +38,7 @@ import com.project.kinone.util.PagingPgm;
 import com.project.kinone.util.clubname;
 
 @Controller
-public class AdminController {
+public class AdminController{
 
 	@Autowired
 	private AdminServiceImpl adminService;
@@ -51,7 +51,7 @@ public class AdminController {
 
 	// 어드민 메인페이지
 	@RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
-	public String main(Model model) {
+	public String main(Model model) throws Exception{
 		String seasoncode = adminService.getTopSeason();
 		Date sysdate = new Date();
 		
@@ -62,7 +62,7 @@ public class AdminController {
 	
 	// 시즌 추가 메소드
 	@RequestMapping(value="/admin/addSeason.do", method=RequestMethod.POST)
-	public String addSeason(@RequestParam String seasoncode, Model model) {
+	public String addSeason(@RequestParam String seasoncode, Model model) throws Exception{
 	//	System.out.println("season : "+ seasoncode);
 		int result = adminService.addSeason(seasoncode);
 		
@@ -77,13 +77,13 @@ public class AdminController {
 
 	// 어드민 매치 등록 폼 페이지
 	@RequestMapping(value = "/admin/matchForm.do", method = RequestMethod.GET)
-	public String matchForm() {
+	public String matchForm() throws Exception{
 		return "admin/match_Form";
 	}
 
 	// 매치 등록 폼 페이지에서 입력한 구단을 체크하는 메소드
 	@RequestMapping(value = "/admin/checkClub.do", method = { RequestMethod.POST })
-	public String checkClub(@RequestParam List<String> data, Model model) {
+	public String checkClub(@RequestParam List<String> data, Model model) throws Exception{
 		System.out.println(data);
 		boolean bool = adminService.checkClub(data);
 
@@ -142,7 +142,7 @@ public class AdminController {
 
 	// 매치 리스트 페이지에서 매치 날짜 변경 시 변경될 날짜로 인해 변경되는 mcode를 가진 데이터가 있는지 확인
 	@RequestMapping(value = "/admin/mcodeDuplCheck.do", method = RequestMethod.POST)
-	public String mcodeDuplCheck(@RequestParam HashMap params, Model model) {
+	public String mcodeDuplCheck(@RequestParam HashMap params, Model model) throws Exception{
 		// 모든 조건이 같을 경우 1, 날짜까지 같고 시간이 다를 경우 0, 없을 경우 -1 리턴
 		int result = adminService.mcodeDuplCheck(params);
 		model.addAttribute("ajax", result);
@@ -151,7 +151,7 @@ public class AdminController {
 
 	// 등록된 매치 리스트 페이지에서 매치 날짜 변경 메소드
 	@RequestMapping(value = "/admin/changeMdate.do", method = RequestMethod.POST)
-	public String changeMdate(@RequestParam String mcode, @RequestParam String cdate, Model model) {
+	public String changeMdate(@RequestParam String mcode, @RequestParam String cdate, Model model) throws Exception{
 		System.out.println("mcode:" + mcode); // 변경하고자 하는 매치 코드
 		System.out.println("mdate:" + cdate); // 변경 될 날짜
 
@@ -163,7 +163,7 @@ public class AdminController {
 
 	// 등록된 매치 리스트 페이지에서 매치 삭제
 	@RequestMapping(value = "/admin/deleteMatch.do", method = RequestMethod.POST)
-	public String deleteMatch(@RequestParam String[] array, Model model) {
+	public String deleteMatch(@RequestParam String[] array, Model model) throws Exception{
 		int total = array.length;
 		int result = adminService.deleteMatch(array);
 		String succrate = result + "/" + total;
@@ -173,7 +173,7 @@ public class AdminController {
 	
 	// 매치의 라인업과 상태, 스코어를 편집할 수 있는 페이지로 이동
 	@RequestMapping(value="/admin/matchDetailForm.do", method=RequestMethod.POST)
-	public String matchDetailForm(@RequestParam String mcode, Model model) {
+	public String matchDetailForm(@RequestParam String mcode, Model model) throws Exception{
 		System.out.println("mcode:"+mcode);
 		
 		// 해당 매치의 정보
@@ -197,7 +197,7 @@ public class AdminController {
 }
 	// 라인업 수정
 	@RequestMapping(value="/admin/updateMatchDetail.do", method=RequestMethod.POST)
-	public String updateMatchDetail(Match_detail md, Model model) {
+	public String updateMatchDetail(Match_detail md, Model model) throws Exception{
 		System.out.println("mcode : "+md.getMcode());
 		System.out.println("hLineup : "+md.getHomelineup());
 		System.out.println("aLineup : "+md.getAwaylineup());
@@ -210,7 +210,7 @@ public class AdminController {
 	
 	// 매치 종료 상태로 업데이트 및 스코어 입력
 	@RequestMapping(value="/admin/matchEnd.do", method=RequestMethod.POST)
-	public String matchEnd(Match match, Model model) {
+	public String matchEnd(Match match, Model model) throws Exception{
 		System.out.println("mcode : "+match.getMcode());
 		System.out.println("homescore : "+match.getHomescore());
 		System.out.println("awayscore : "+match.getAwayscore());
@@ -222,7 +222,7 @@ public class AdminController {
 
 	// 게시판 리스트 페이지
 	@RequestMapping(value="/admin/boardList.do", method=RequestMethod.GET)
-	public String boardList(Model model, String page) {
+	public String boardList(Model model, String page) throws Exception{
 		
 		
 		if(page == null || page.equals("")) {
@@ -257,12 +257,12 @@ public class AdminController {
 	
 	// 게시판 글 작성 페이지
 	@RequestMapping(value="/admin/boardwrite.do", method=RequestMethod.GET)
-	public String boardwrite() {
+	public String boardwrite() throws Exception{
 		return "admin/board_write";
 	}
 	// 세부 목록 페이지 
 	@RequestMapping(value="/admin/board_cont.do", method=RequestMethod.GET)
-	public String board_cont(@RequestParam("bno") String bno,Model model,String page) {
+	public String board_cont(@RequestParam("bno") String bno,Model model,String page) throws Exception{
 		if(page == null || page.equals("")) {
 			page = "1";
 		}
@@ -301,19 +301,13 @@ public class AdminController {
 			return "ajax"; 
 		}
 		
-		/*else if(!file[1].trim().equals("jpg")||
-				!file[1].trim().equals("png")||
-				!file[1].trim().equals("gif")){
-			System.out.println("들어온 값:"+file[1]);
-				result = 2; 
-			model.addAttribute("ajax",result);
-			return "ajax";
-		}*/
 		if(size>0) {
 			mf.transferTo(new File(path+"/"+filename));
 		}
 		
 		board.setImage(filename);
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		board.setRegidate(ts);
 		int result2 = adminService.board_insert(board);
 		System.out.println("board_insert 결과:"+result2);
 		
@@ -364,7 +358,7 @@ public class AdminController {
 
 	// 클럽 삭제 페이지
 	@RequestMapping("/admin/delete_club.do")
-	public String deleteClubView(@RequestParam String ccode, Model model) {
+	public String deleteClubView(@RequestParam String ccode, Model model) throws Exception{
 
 		System.out.println("클럽 삭제 페이지");
 		model.addAttribute("ccode", ccode);
@@ -515,7 +509,7 @@ public class AdminController {
 						MultipartHttpServletRequest mhsr,
 						HttpServletResponse response,
 						@RequestParam("birthdate1") String birthdate1,
-						Model model) throws IOException{
+						Model model) throws Exception{
 		System.out.println("pinsert");
 		//date 를 timestamp로 형변환
 
@@ -623,7 +617,7 @@ public class AdminController {
 									MultipartHttpServletRequest mhsr,
 									HttpServletResponse response,
 									@RequestParam("birthdate1") String birthdate1,
-									Model model) throws IllegalStateException, IOException{
+									Model model) throws Exception{
 		System.out.println("pupdate1");
 		
 		//date->timestamp변환
@@ -672,7 +666,7 @@ public class AdminController {
 	public String pupdate2(String pcode, 
 			Player_season players,
 			HttpServletResponse response,
-			Model model) throws IOException {
+			Model model) throws Exception{
 			
 			//받은 시즌 정보 수정
 			System.out.println("pupdate2");
@@ -706,7 +700,7 @@ public class AdminController {
 	public String pupdate3(String pcode, 
 			Player_season players,
 			HttpServletResponse response,
-			Model model) throws IOException{
+			Model model) throws Exception{
 			
 			//players 정보 확인하고 정보추가
 			System.out.println("pupdate3");
@@ -739,7 +733,7 @@ public class AdminController {
 	@RequestMapping("/admin/pdelete.do")
 	public String pdelete(String pcode, 
 			HttpServletResponse response,
-			Model model) throws IOException{
+			Model model) throws Exception{
 		System.out.println("pdelete");
 		int result3 = adminService.pdeleted(pcode);
 		int result2 = adminService.pdeletes(pcode);

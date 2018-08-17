@@ -40,7 +40,8 @@ hr {
 </div>
 <div class="board-wrapper">
 	<div id="board-title">
-		<span style="font-size: 25pt;">${bcont.subject}</span><br/>
+		<span style="font-size: 25pt;">${bcont.subject}</span><br/><br/>
+		<span style="font-size:12pt; font-style: italic; position: absolute; left: 0px;"><fmt:formatDate value="${bcont.regidate}" pattern="yyyy.MM.dd HH:mm"/></span>
 		<span style="font-size:12pt; font-style: italic; position: absolute; right: 0px;">조회수: ${bcont.readcount}</span>
 	</div>
 	<hr>

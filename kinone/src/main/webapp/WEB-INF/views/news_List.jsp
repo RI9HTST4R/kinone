@@ -58,8 +58,8 @@
 				<fmt:formatDate var="rdate" value="${t.regidate}" pattern="MM/dd"/>
 				<!-- 첫번째 완료 시간 -->
 				<td align="center">
-					<c:if test="${today != rdate}"><fmt:formatDate value="${t.regidate}" pattern="MM.dd hh:mm"/></c:if>
-					<c:if test="${today == rdate}"><fmt:formatDate value="${t.regidate}" pattern="hh:mm"/></c:if>
+					<c:if test="${today != rdate}"><fmt:formatDate value="${t.regidate}" pattern="MM.dd HH:mm"/></c:if>
+					<c:if test="${today == rdate}"><fmt:formatDate value="${t.regidate}" pattern="HH:mm"/></c:if>
 				</td>
 				<td align="center">${t.readcount}</td>
 			</tr>

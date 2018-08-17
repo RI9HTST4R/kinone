@@ -80,36 +80,32 @@
 			<!-- 반복문 끝 -->			
 		</table>
 		
-		<div id="bbslist_paging">			
+		<div class="pbar-container" align="center" style="display: ">
+			<ul class="pagination" style="display: inline-flex;">			
 			<c:if test="${page <=1 }">
-				[이전]&nbsp;
+				<li class="page-item"><span class="page-link" style="color: lightgray; cursor: default;">&lt;</span></li>
 			</c:if>
-			
 			<c:if test="${page > 1 }">
-				<a href="boardList.do?page=${page-1}">[이전]</a>&nbsp;
+				<li class="page-item"><a class="page-link" href="kleagueNews.do?page=${page-1}">&lt;</a></li>
 			</c:if>			
-
 			<c:forEach var="a" begin="${startpage}" end="${endpage}">
 				<c:if test="${a == page }">
-					[${a}]
+					<li class="page-item"><span class="page-link" style="background-color: skyblue; color:white; cursor: default;">${a}</span></li>
 				</c:if>
 				<c:if test="${a != page }">
-					<a href="boardList.do?page=${a}">[${a}]</a>&nbsp;
+					<li class="page-item"><a class="page-link" href="kleagueNews.do?page=${a}">${a}</a></li>
 				</c:if>
 			</c:forEach>			
-			
 			<c:if test="${page >= maxpage }">
-				[다음] 
+				<li class="page-item"><span class="page-link" style="color: lightgray; cursor: default;">&gt;</span></li> 
 			</c:if>
 			<c:if test="${page < maxpage }">
-				<a href="boardList.do?page=${page+1}">[다음]</a>
+				<li class="page-item"><a class="page-link" href="kleagueNews.do?page=${page+1}">&gt;</a></li>
 			</c:if>			
-			
+			</ul>
 		</div>
 		<div id="bbslist_w">
 			<button type="button" onclick="location='boardwrite.do?page=${page}'" class="btn btn-info">글쓰기</button>
-			
-		
 		</div>
 	</div>
 </div>

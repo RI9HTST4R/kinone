@@ -305,7 +305,7 @@
     	<selectKey order="BEFORE" keyProperty="bno" resultType="int">
     		select NVL(MAX(bno),0)+1 from board
     	</selectKey>
-    	insert into board (BNO,SUBJECT,IMAGE,CONTENT,REGIDATE,READCOUNT) values(#{bno},#{subject},#{image},#{content},sysdate,0)
+    	insert into board (BNO,SUBJECT,IMAGE,CONTENT,REGIDATE,READCOUNT) values(#{bno},#{subject},#{image},#{content},#{regidate},0)
     </insert>
     <select id="getBoardList" parameterType="int" resultType="board">
 	    <![CDATA[
