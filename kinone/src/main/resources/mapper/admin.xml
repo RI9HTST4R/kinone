@@ -39,9 +39,11 @@
         </foreach>
 	</insert>
     
-    <insert id="changeMdate" parameterType="java.util.HashMap">
+    <update id="changeMdate" parameterType="java.util.HashMap">
     	update match set mdate = #{mdate} where mcode = #{mcode}
-    </insert>
+    </update>
+    
+    
     
     <delete id="deleteMatch" parameterType="java.lang.String">
     	delete from match where mcode = #{mcode}
@@ -297,8 +299,34 @@
 	</update>
     
     <!-- #################################################################################### -->
+    <!-- #####################################김현준 게시판################################### -->
     
-		
+    <insert id="board_insert" parameterType="board">
+    	<selectKey order="BEFORE" keyProperty="bno" resultType="int">
+    		select NVL(MAX(bno),0)+1 from board
+    	</selectKey>
+    	insert into board (BNO,SUBJECT,IMAGE,CONTENT,REGIDATE,READCOUNT) values(#{bno},#{subject},#{image},#{content},sysdate,0)
+    </insert>
+    <select id="getBoardList" parameterType="int" resultType="board">
+	    <![CDATA[
+		select * from 
+		 (select rownum rnum, a.* from  
+	  	 (select * from board order by regidate desc) a) 
+	   		 where rnum >= ((#{page}-1) * 10+1)  and rnum <= (#{page} * 10)
+		]]>
+	</select>
+    <select id="getBoardListCount" resultType="int">
+    select count(*) from board
+    </select>
+	<select id="getBoard" parameterType="int" resultType="board" >
+    select * from board where bno = #{bno}
+    </select>
+     <select id="getRecentNews" resultType="board">
+		select * from (select * from board order by bno desc) where rownum <![CDATA[ < ]]> 5	
+	</select>
+	<update id="addReadCount" parameterType="int">
+		update board set readcount = readcount+1 where bno = #{bno}
+	</update>
 </mapper>
 
 

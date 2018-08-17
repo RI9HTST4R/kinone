@@ -20,23 +20,8 @@
     <select id="getStadium" parameterType="String" resultType="stadium">
     	select * from stadium where ccode = #{ccode}
     </select>
-    <select id="checkReserv" parameterType="reservation" resultType="reservation">
-    	select * from reservation where seatcode = #{seatcode} and mcode = #{mcode}
-    </select>
-  	<select id="getSeatsList" parameterType="String" resultType="reservation">
-    	select * from reservation where mcode = #{mcode}
-    </select>
-    <select id="getTickets" parameterType="map" resultType="int">
-    	select count(*) from reservation where mno = #{mno} and mcode = #{mcode} 
-    </select>
     
-    <insert id="insertReserve" parameterType="list">
-        <foreach collection="list" index="index" item="item" open="INSERT ALL" separator=" " close="SELECT * FROM DUAL">	
-		 INTO reservation (rcode, mcode, seatcode, rdate,mno,ccode) VALUES 
-				(#{item.rcode},#{item.mcode},#{item.seatcode},sysdate,#{item.mno},#{item.ccode})
-        </foreach>
-	</insert>
-    
+  
 </mapper>
 
 

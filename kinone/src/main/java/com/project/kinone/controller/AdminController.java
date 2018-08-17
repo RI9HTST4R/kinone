@@ -10,7 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.project.kinone.model.Board;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Match_detail;
@@ -219,7 +222,36 @@ public class AdminController {
 
 	// 게시판 리스트 페이지
 	@RequestMapping(value="/admin/boardList.do", method=RequestMethod.GET)
-	public String boardList(Model model) {
+	public String boardList(Model model, String page) {
+		
+		
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+		List<Board> list = adminService.getBoardList(Integer.parseInt(page));
+		int listcount = adminService.getBoardListCount();
+		int limit = 10;
+		int maxpage = (int) ((double) listcount / limit + 0.95); // 0.95를 더해서 올림
+																	// 처리.
+		int startpage = (((int) ( Double.parseDouble(page) / 10 + 0.9)) - 1) * 10 + 1;
+		// 현재 페이지에 보여줄 마지막 페이지 수.(10, 20, 30 등...)
+		int endpage = maxpage;
+
+		if (endpage > startpage + 10 - 1)
+			endpage = startpage + 10 - 1;
+		
+		
+		model.addAttribute("page", page);
+		model.addAttribute("startpage", startpage);
+		model.addAttribute("endpage", endpage);
+		model.addAttribute("maxpage", maxpage);
+		model.addAttribute("list", list);
+		model.addAttribute("listcount", listcount);
+		
+		
+		
+		
 		return "admin/board_List";
 	}
 	
@@ -228,7 +260,65 @@ public class AdminController {
 	public String boardwrite() {
 		return "admin/board_write";
 	}
+	// 세부 목록 페이지 
+	@RequestMapping(value="/admin/board_cont.do", method=RequestMethod.GET)
+	public String board_cont(@RequestParam("bno") String bno,Model model,String page) {
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+		Board bcont = adminService.getBoard(Integer.parseInt(bno));
+		
+		model.addAttribute("bcont", bcont);
+		model.addAttribute("page", page);
+		
+		
+		
+		return "admin/board_cont";
+	}
 	
+	
+	
+	// 게시판 글 작성 insert
+	@RequestMapping(value="/admin/board_insert.do", method=RequestMethod.POST)
+	public String board_insert(@RequestParam("image1") MultipartFile mf, Model model, HttpServletRequest request,HttpSession session,Board board) throws Exception {
+		
+		String filename = mf.getOriginalFilename();
+		int size = (int) mf.getSize();
+		
+		
+		String path = request.getRealPath("/resources/board_upload");
+		System.out.println(mf);
+		System.out.println(filename);
+		System.out.println(path);
+		System.out.println(size);
+		int result= 0; 
+		String file[] = filename.split("\\.");
+		System.out.println(file[1]);
+		if(size>10000000) {
+			result= 1; 
+			model.addAttribute("ajax",result);
+			return "ajax"; 
+		}
+		
+		/*else if(!file[1].trim().equals("jpg")||
+				!file[1].trim().equals("png")||
+				!file[1].trim().equals("gif")){
+			System.out.println("들어온 값:"+file[1]);
+				result = 2; 
+			model.addAttribute("ajax",result);
+			return "ajax";
+		}*/
+		if(size>0) {
+			mf.transferTo(new File(path+"/"+filename));
+		}
+		
+		board.setImage(filename);
+		int result2 = adminService.board_insert(board);
+		System.out.println("board_insert 결과:"+result2);
+		
+		return "redirect:/admin/boardList.do";
+	}
 	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

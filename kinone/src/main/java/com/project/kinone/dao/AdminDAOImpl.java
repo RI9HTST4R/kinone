@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.kinone.model.Board;
 import com.project.kinone.model.Club;
 import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
@@ -228,5 +229,35 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int pdeletes(String pcode) {
 		return session.delete("adminmapper.pdeletes",pcode);
 	}
+	public int board_insert(Board board) {
+		// TODO Auto-generated method stub
+		return session.delete("adminmapper.board_insert",board);
+	}
+
+	public List<Board> getBoardList(int page) {
+		// TODO Auto-generated method stub
+		return session.selectList("adminmapper.getBoardList",page);
+	}
+
+	public int getBoardListCount() {
+		// TODO Auto-generated method stub
+		return session.selectOne("adminmapper.getBoardListCount");
+	}
+
+	public Board getBoard(int bno) {
+		// TODO Auto-generated method stub
+		return session.selectOne("adminmapper.getBoard",bno);
+	}
+
+	public List<Board> getRecentNews() {
+		// TODO Auto-generated method stub
+		return session.selectList("adminmapper.getRecentNews");
+	}
+
+	public int addReadCount(int bno) {
+		// TODO Auto-generated method stub
+		return session.update("adminmapper.addReadCount",bno);
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

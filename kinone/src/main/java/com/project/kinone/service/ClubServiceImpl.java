@@ -44,25 +44,13 @@ public class ClubServiceImpl implements ClubServiceInter {
 		return clubDao.getStadium(ccode);
 	}
 
-	public Reservation checkReserv(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return clubDao.checkReserv(reservation);
-	}
+	
 
-	public int insertReserve(List<Reservation> list) {
-		// TODO Auto-generated method stub
-		return clubDao.insertReserve(list);
-	}
+	
 
-	public List<Reservation> getSeatsList(String mcode) {
-		// TODO Auto-generated method stub
-		return clubDao.getSeatsList(mcode);
-	}
+	
 
-	public int getTickets(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return clubDao.getTickets(map);
-	}
+	
 
 	
 }
