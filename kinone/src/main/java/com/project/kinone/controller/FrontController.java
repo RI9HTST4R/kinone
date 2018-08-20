@@ -251,8 +251,21 @@ public class FrontController {
 	// 클럽 상세 정보 페이지
 	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
 	public String clubDetail(@RequestParam(required=false) String ccode, Model model) throws Exception {
+		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
+		String seasoncode = adminService.getTopSeason();
+		// 해당 클럽의 순위 정보
+		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		// 해당 클럽의 이전 경기 결과
+		Match prevMatch = matchService.getPrevMatchInfo(ccode, ts);
+		// 해당 클럽의 다음 경기 일정
+		Match nextMatch = matchService.getNextMatchInfo(ccode, ts);
+		
 		model.addAttribute("club", club);
+		model.addAttribute("csList", csList);
+		model.addAttribute("prevMatch", prevMatch);
+		model.addAttribute("nextMatch", nextMatch);
 		return "club_detail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

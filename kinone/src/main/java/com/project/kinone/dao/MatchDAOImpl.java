@@ -58,6 +58,16 @@ public class MatchDAOImpl implements MatchDAOInter {
 		return session.selectOne("matchmapper.get_the_match", mcode);
 	}
 
+	// 해당 클럽의 이전 경기 결과
+	public Match getPrevMatchInfo(HashMap<String, Object> map) {
+		return session.selectOne("matchmapper.prevMatchInfo", map);
+	}
+
+	// 해당 클럽의 다음 경기 일정
+	public Match getNextMatchInfo(HashMap<String, Object> map) {
+		return session.selectOne("matchmapper.nextMatchInfo", map);
+	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 }

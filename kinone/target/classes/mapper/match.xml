@@ -87,6 +87,28 @@
     	select * from match where mcode = #{mcode}
     </select>
     
+    <select id="prevMatchInfo" parameterType="java.util.HashMap" resultType="match">
+    	select M.*, C1.cname_short cname_short_h, C2.cname_short cname_short_a
+    	from (select *
+    		  from (select *
+    		  		from match
+    		  		where (ccode_home = #{ccode} or ccode_away = #{ccode}) and mstatus = 1
+    		  		order by mdate - #{sysdate} desc)
+			  where rownum = 1) M, club C1, club C2
+		where ccode_home = C1.ccode and ccode_away = C2.ccode
+    </select>
+    
+    <select id="nextMatchInfo" parameterType="java.util.HashMap" resultType="match">
+    	select M.*, C1.cname_short cname_short_h, C2.cname_short cname_short_a
+    	from (select *
+    		  from (select *
+    		  		from match
+    		  		where (ccode_home = #{ccode} or ccode_away = #{ccode}) and mstatus = 0
+    		  		order by mdate - #{sysdate})
+			  where rownum = 1) M, club C1, club C2
+		where ccode_home = C1.ccode and ccode_away = C2.ccode
+    </select>
+    
     <!-- ############################################################################################# -->   
     
 </mapper>

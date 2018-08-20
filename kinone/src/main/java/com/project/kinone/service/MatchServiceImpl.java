@@ -107,6 +107,21 @@ public class MatchServiceImpl implements MatchServiceInter {
 		return matchDao.get_the_match(mcode);
 	}
 
+	// 해당 클럽의 이전 경기 결과
+	public Match getPrevMatchInfo(String ccode, Timestamp ts) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("ccode", ccode);
+		map.put("sysdate", ts);
+		return matchDao.getPrevMatchInfo(map);
+	}
+
+	// 해당 클럽의 다음 경기 일정
+	public Match getNextMatchInfo(String ccode, Timestamp ts) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("ccode", ccode);
+		map.put("sysdate", ts);
+		return matchDao.getNextMatchInfo(map);
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 	
