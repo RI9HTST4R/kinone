@@ -35,7 +35,29 @@
 	</select>
     <!-- #################################################################################### -->
    	
-		
+	
+	<resultMap type="java.util.HashMap" id="playerMiniRank">
+		<result property="soonwe" column="soonwe" javaType="java.lang.String"/>
+		<result property="pcode" column="pcode" javaType="java.lang.String"/>
+		<result property="pname" column="pname" javaType="java.lang.String"/>
+		<result property="gamecount" column="gamecount" javaType="java.lang.String"/>
+		<result property="result" column="result" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="playerSeasonRankMini" parameterType="java.util.HashMap" resultMap="playerMiniRank">
+		select V.*
+		from (
+		select rank() over (order by 
+		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
+		<if test='sort != null and sort == "a"'>PS.p_assist</if> desc, gamecount) as soonwe, P.pcode, P.pname, PS.gamecount,
+		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
+		<if test='sort != null and sort == "a"'>PS.p_assist</if> result
+		from player P, player_season PS
+		where P.pcode = PS.pcode and PS.seasoncode = #{seasoncode} and P.ccode = #{ccode} and
+		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
+		<if test='sort != null and sort == "a"'>PS.p_assist</if> is not null) V
+		where rownum <![CDATA[<]]>= ${rownum}
+	</select>
 	        
 </mapper>
 

@@ -6,8 +6,8 @@ public class Club {
 	private String cname_short;
 	private String cmanager;
 	private String emblem;
-	private int isbeing;
 	private String intro;
+	private int isbeing;
 	// 경기장 생성
 	private String sname;
 	private String sphoto;
@@ -43,6 +43,12 @@ public class Club {
 	public void setEmblem(String emblem) {
 		this.emblem = emblem;
 	}
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
 	public int getIsbeing() {
 		return isbeing;
 	}
@@ -67,18 +73,11 @@ public class Club {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	public String getIntro() {
-		return intro;
-	}
-	public void setIntro(String intro) {
-		this.intro = intro;
-	}
-	
 	@Override
 	public String toString() {
 		return "Club [ccode=" + ccode + ", cname=" + cname + ", cname_short=" + cname_short + ", cmanager=" + cmanager
-				+ ", emblem=" + emblem + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto=" + sphoto
-				+ ", capacity=" + capacity + "]";
+				+ ", emblem=" + emblem + ", intro=" + intro + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto="
+				+ sphoto + ", capacity=" + capacity + "]";
 	}
 	
 	

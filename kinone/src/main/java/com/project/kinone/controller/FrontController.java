@@ -1,6 +1,5 @@
 package com.project.kinone.controller;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -255,6 +253,7 @@ public class FrontController {
 	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, Model model) throws Exception {
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
+		System.out.println(club.toString());
 		String seasoncode = adminService.getTopSeason();
 		// 해당 클럽의 순위 정보
 		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);
@@ -272,12 +271,19 @@ public class FrontController {
 //		if (file.exists()) {
 //			t=1;
 //		}
+		// 해당 클럽의 득점 순위
+		List<HashMap<String, Object>> psGList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "g", 5);
+		// 해당 클럽의 도움 순위
+		List<HashMap<String, Object>> psAList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "a", 5);
+		System.out.println(psGList.size());
+		System.out.println(psAList.size());
 		
 		model.addAttribute("club", club);
 		model.addAttribute("csList", csList);
 		model.addAttribute("prevMatch", prevMatch);
 		model.addAttribute("nextMatch", nextMatch);
-//		model.addAttribute("t",t);
+		model.addAttribute("psGList", psGList);
+		model.addAttribute("psAList", psAList);
 		return "club_detail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

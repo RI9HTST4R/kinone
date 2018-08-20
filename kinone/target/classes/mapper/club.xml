@@ -43,7 +43,6 @@
 		where rno <![CDATA[>]]>= #{start} and rno <![CDATA[<]]>= #{end}
 		order by rno
     </select>
-  
 </mapper>
 
 

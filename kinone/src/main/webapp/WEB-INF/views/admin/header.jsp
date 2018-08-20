@@ -47,6 +47,7 @@ body {
 	height: 100%;
 	padding-top: 30px;
 	width: 250px;
+	display: inline-block;
 }
 .sidemenu {
 	border-bottom: 1px solid navy;
@@ -86,6 +87,15 @@ h1#title {
 </style>
 
 </head>
+<script>
+	$(function(){
+		var cs9top = $(".col-sm-9").offset().top;
+		var wftop = $(".wrap_footer").offset().top;
+		alert(cs9top);
+		alert(wftop);
+		$(".col-sm-3").css("min-height",wftop-cs9top);
+	});
+</script>
 <body>
 	<div class="container-fluid">
 		<div class="row content">
