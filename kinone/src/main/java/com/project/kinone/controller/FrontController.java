@@ -262,10 +262,19 @@ public class FrontController {
 		// 해당 클럽의 다음 경기 일정
 		Match nextMatch = matchService.getNextMatchInfo(ccode, ts);
 		
+		// 해당 클럽의 득점 순위
+		List<HashMap<String, Object>> psGList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "g", 5);
+		// 해당 클럽의 도움 순위
+		List<HashMap<String, Object>> psAList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "a", 5);
+		System.out.println(psGList.size());
+		System.out.println(psAList.size());
+		
 		model.addAttribute("club", club);
 		model.addAttribute("csList", csList);
 		model.addAttribute("prevMatch", prevMatch);
 		model.addAttribute("nextMatch", nextMatch);
+		model.addAttribute("psGList", psGList);
+		model.addAttribute("psAList", psAList);
 		return "club_detail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

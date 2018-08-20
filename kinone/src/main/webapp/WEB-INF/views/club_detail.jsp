@@ -11,7 +11,7 @@
 	width: 100%;
 	font-size: 0;
 }
-.cont-emblem {
+.cont-emblem, .cont-player {
 	width: 35px;
 	height: 35px;
 	margin: 0 5px;
@@ -22,6 +22,7 @@
 	display: inline-block;
 	vertical-align: top;
 	margin-top: 30px;
+	padding-right: 30px;
 }
 #right-cont {
 	display: inline-block;
@@ -32,12 +33,13 @@
 }
 #stadium-map {
 	/* border: 1px solid blue; */
+	font-size: 20pt;
 }
 #right-cont {
 	width: 25%;
 	font-size: 15pt;
 }
-#pschedule, #nschedule, #club-minirank {
+#pschedule, #nschedule, #club-minirank, #club-pgrank, #club-parank {
 	border: 1px solid lightgray;
 	margin: 30px 0 30px 0;
 }
@@ -64,17 +66,22 @@
 	font-size: 10pt;
 	color: white;
 }
-#club-minirank {
-	background-color: maroon;
+#club-minirank, #club-pgrank, #club-parank {
 	padding-top: 10px;
 	border: none;
 }
-#club-minirank > .table {
+#club-minirank {
+	background-color: maroon;
+}
+#club-pgrank, #club-parank {
+	background-color: skyblue;
+}
+#club-minirank > .table, #club-parank > .table, #club-pgrank > .table {
 	margin: 0;
 	background-color: white;
 	border: 1px solid lightgray;
 }
-#club-minirank > .table td, .table th {
+#right-cont .table td, #right-cont .table th {
 	text-align: center;
 	vertical-align: middle;
 }
@@ -87,11 +94,12 @@
 	<div id="intro" align="justify">
 	<h2>클럽 소개</h2>
 	<br/>
-	<img src="${url}/resources/news/samplenews.jpg" width="90%"/>
-	<p>주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리</p>
+	<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="720px" height="400px"/>
+	<br/><br/>
+	<p style="font-size: 12pt;"></p>
 	</div>
 	<div id="stadium-map">
-	경기장 지도
+	${club.sname}
 	</div>
 </div>
 <div id="right-cont">
@@ -140,11 +148,88 @@
 			</tbody>
 		</table>
 	</div>
+	<div id="club-pgrank">
+		<h6 style="color: white; font-weight: bold; line-height: 2;">선수 득점 순위</h6>
+		<table class="table" style="font-size: 10pt;">
+			<thead>
+				<tr>
+					<th>순위</th>
+					<th>이름</th>
+					<th>경기</th>
+					<th>득점</th>
+				</tr>
+			</thead>
+			<tbody>
+			<c:forEach var="ps" items="${psGList}">
+				<tr>
+					<td>${ps.soonwe}</td>
+					<td><img class="cont-player" src="${url}/resources/player/${ps.pcode}.png"/><span>${ps.pname}</span></td>
+					<td>${ps.gamecount}</td>
+					<td>${ps.result}</td>
+				</tr>
+			</c:forEach>
+			</tbody>
+		</table>
+	</div>
+	<div id="club-parank">
+		<h6 style="color: white; font-weight: bold; line-height: 2;">선수 도움 순위</h6>
+		<table class="table" style="font-size: 10pt;">
+			<thead>
+				<tr>
+					<th>순위</th>
+					<th>이름</th>
+					<th>경기</th>
+					<th>득점</th>
+				</tr>
+			</thead>
+			<tbody>
+			<c:forEach var="ps" items="${psAList}">
+				<tr>
+					<td>${ps.soonwe}</td>
+					<td><img class="cont-player" src="${url}/resources/player/${ps.pcode}.png"/><span>${ps.pname}</span></td>
+					<td>${ps.gamecount}</td>
+					<td>${ps.result}</td>
+				</tr>
+			</c:forEach>
+			</tbody>
+		</table>
+	</div>
 </div>
 <div id="bottom-cont">
 선수순위
 </div>
 
 </div>
+
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEM3FEmY5ecJzAkXH9TDRAs1MaXpSWtME"></script>
+<script>
+var myCenter=new google.maps.LatLng(37.5682588, 126.89727740000001);
+
+function initialize()
+{
+var mapProp = {
+  center: myCenter,
+  zoom:18,
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+var map = new google.maps.Map(document.getElementById("stadium-map"),mapProp);
+
+var marker = new google.maps.Marker({
+  position: myCenter,
+  title:'Click to zoom'
+  });
+
+marker.setMap(map);
+
+// Zoom to 9 when clicking on marker
+google.maps.event.addListener(marker,'click',function() {
+  map.setZoom(9);
+  map.setCenter(marker.getPosition());
+  });
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 
 <%@include file="footer.jsp"%>

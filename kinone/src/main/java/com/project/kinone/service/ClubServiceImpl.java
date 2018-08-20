@@ -72,6 +72,5 @@ public class ClubServiceImpl implements ClubServiceInter {
 		
 		return clubDao.getClubSeasonRankMini(map);
 	}
-
 	
 }

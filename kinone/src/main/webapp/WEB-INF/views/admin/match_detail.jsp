@@ -73,6 +73,9 @@ color: white;
 .scoreform-container {
   margin-top: 10px;
 }
+#hscorer, #ascorer {
+	border: 1px solid red;
+}
 
 </style>
 
@@ -437,7 +440,8 @@ $(function(){
 			<br/>
 			<br/>
 			<form id="scorerForm">
-				
+				<div id="hscorer"></div>
+				<div id="ascorer"></div>
 			</form>
 			<c:if test="${match.mstatus == 0 and not empty lu.hStarting and not empty lu.hSubstitute and not empty lu.aStarting and not empty lu.aSubstitute}">
 				<a class="anchor-btn" id="scorebtn" onClick="saveScore('${match.mcode}')">저장</a>

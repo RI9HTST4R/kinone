@@ -31,6 +31,11 @@ public class PlayerDAOImpl implements PlayerDAOInter {
 	public List<Player> getPlayerListInClub(String ccode) {
 		return session.selectList("playermapper.playerListInClub", ccode);
 	}
+
+	// 구단 별 선수들의 개인 순위(sort가 goal인지 assist인지에 따른)
+	public List<HashMap<String, Object>> getPlayerSeasonRankMini(HashMap<String, Object> map) {
+		return session.selectList("playermapper.playerSeasonRankMini", map);
+	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

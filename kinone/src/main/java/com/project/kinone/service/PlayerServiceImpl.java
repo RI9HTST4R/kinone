@@ -35,6 +35,17 @@ public class PlayerServiceImpl implements PlayerServiceInter {
 		return playerDao.getPlayerListInClub(ccode);
 	}
 
+	// 구단 별 선수들의 개인 순위(sort가 goal인지 assist인지에 따른)
+	public List<HashMap<String, Object>> getPlayerSeasonRankMini(String seasoncode, String ccode, String sort, int rownum) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("seasoncode", seasoncode);
+		map.put("ccode", ccode);
+		map.put("sort", sort);
+		map.put("rownum", rownum);
+		
+		return playerDao.getPlayerSeasonRankMini(map);
+	}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 
