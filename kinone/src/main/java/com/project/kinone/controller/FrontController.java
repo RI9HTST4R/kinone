@@ -253,6 +253,7 @@ public class FrontController {
 	public String clubDetail(@RequestParam(required=false) String ccode, Model model) throws Exception {
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
+		System.out.println(club.toString());
 		String seasoncode = adminService.getTopSeason();
 		// 해당 클럽의 순위 정보
 		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);

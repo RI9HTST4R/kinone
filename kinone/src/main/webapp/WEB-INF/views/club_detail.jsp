@@ -92,14 +92,21 @@
 <div id="cont-container">
 <div id="left-cont">
 	<div id="intro" align="justify">
-	<h2>클럽 소개</h2>
-	<br/>
-	<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="720px" height="400px"/>
-	<br/><br/>
-	<p style="font-size: 12pt;"></p>
+		<h2>클럽 소개</h2>
+		<br/>
+		<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="720px" height="400px"/>
+		<br/><br/>
+		<div style="font-size: 12pt; width: 720px;">${club.intro}</div>
 	</div>
-	<div id="stadium-map">
-	${club.sname}
+	<br/>
+	<hr>
+	<div id="stadium-map" align="justify">
+		<br/>
+		<h2>${club.sname} 오시는 길</h2>
+		<br/>
+		<div id="map-container" style="border: 1px solid red;">
+		
+		</div>
 	</div>
 </div>
 <div id="right-cont">
@@ -214,7 +221,7 @@ var mapProp = {
   mapTypeId: google.maps.MapTypeId.ROADMAP
   };
 
-var map = new google.maps.Map(document.getElementById("stadium-map"),mapProp);
+var map = new google.maps.Map(document.getElementById("map-container"),mapProp);
 
 var marker = new google.maps.Marker({
   position: myCenter,

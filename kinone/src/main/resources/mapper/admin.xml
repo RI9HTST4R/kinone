@@ -158,7 +158,7 @@
 
 	<!-- 상세정보 -->
 	<select id="mngClubDetail" resultType="club" parameterType="String">
-		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, s.sname, s.sphoto, s.capacity
+		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, c.intro, s.sname, s.sphoto, s.capacity
 		from club c, stadium s 
 		where c.ccode = #{ccode} and c.ccode = s.ccode
 	</select>
