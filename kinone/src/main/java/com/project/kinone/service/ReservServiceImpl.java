@@ -35,4 +35,12 @@ public class ReservServiceImpl implements ReservServiceInter{
 		// TODO Auto-generated method stub
 		return reservDao.getAllTickets(mno);
 	}
+	public Reservation getTheTicket(String rcode) {
+		// TODO Auto-generated method stub
+		return reservDao.getTheTicket(rcode);
+	}
+	public int cancel_reservation(String rcode) {
+		// TODO Auto-generated method stub
+		return reservDao.cancel_reservation(rcode);
+	}
 }

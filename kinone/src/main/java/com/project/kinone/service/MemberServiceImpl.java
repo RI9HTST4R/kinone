@@ -49,5 +49,13 @@ public class MemberServiceImpl implements MemberServiceInter{
 		// TODO Auto-generated method stub
 		return memberDAO.getMember(email);
 	}
+	public int edit_member(Member member) {
+		// TODO Auto-generated method stub
+		return memberDAO.edit_member(member);
+	}
+	public int disable_member(int mno) {
+		// TODO Auto-generated method stub
+		return memberDAO.disable_member(mno);
+	}
 
 }

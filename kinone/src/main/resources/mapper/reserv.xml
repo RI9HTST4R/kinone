@@ -23,7 +23,13 @@
         </foreach>
 	</insert>
 	 <select id="getAllTickets" parameterType="int" resultType="reservation">
-    	select * from reservation where mno = #{mno}
+    	select * from reservation where mno = #{mno} order by rdate desc
     </select>
+     <select id="getTheTicket" parameterType="String" resultType="reservation">
+    	select * from reservation where rcode = #{rcode}
+    </select>
+    <update id="cancel_reservation" parameterType="String">
+    	delete from reservation where rcode = #{rcode}
+    </update>
     
 </mapper>

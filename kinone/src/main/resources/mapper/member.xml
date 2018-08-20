@@ -30,6 +30,13 @@
 		values (#{mno}, #{email}, #{passwd}, #{mname}, #{mbirthdate}, 1)    
     </insert>
     
+    <update id="edit_member" parameterType="member">
+		update member set passwd=#{passwd},mname=#{mname},mbirthdate=#{mbirthdate} where mno=#{mno}
+	</update>
+    
+    <update id="disable_member" parameterType="int">
+		update member set mstatus = 0 where mno=#{mno}
+	</update>
 </mapper>
 
 

@@ -65,23 +65,31 @@ button:hover, a:hover {
 </style>
 </head>
 <body>
+<div style="position:fixed;top:40%;left:4%;background:white;width:200px;height:180px;border:solid lightgray 1px;border-radius:10px">
+<br>
+회원 정보 관리<br>
+<hr>
+<a href="update_check.do?status=edit">회원 정보 수정</a>
+<hr>
+<a href="update_check.do?status=delete">회원 탈퇴</a>
+</div>
 
 <h2 style="text-align:center">${name}님의 마이페이지 </h2>
-
 <div class="card">
   <p class="title">나의 결제 내역</p>
+    <p>당일 환불은 불가하오니 이 점 유의하시기 바랍니다.</p>
   <div style="margin: 24px 0;">
   <div id="items" align="center">
   
   <c:forEach var="t" items="${basket}">
   <div align="justify" style="border:solid gray 1px; width:90%;height:200px;">
 	<img style="margin-left:20px; margin-top:30px;" src="${url}/resources/emblem/${t.home_code}.png" width="90px" height="90px"><font size=25px style="font-weight:bold;position:relative;top:30px;">vs</font>  <img src="${url}/resources/emblem/${t.away_code}.png"  style=" margin-top:30px;" width="90px" height="90px">
-  	  	<font size="5px" style="font-weight:bold; margin-left:40px;position:relative;top:27px;">${t.sname}<br></font>
+  	  	<font size="5px" style="font-weight:bold; margin-left:40px;position:relative;top:27px;">${t.sname} ${fn:substring(t.rcode, fn:length(t.rcode)-3, fn:length(t.rcode)-2)}열 ${fn:substring(t.rcode, fn:length(t.rcode)-2, fn:length(t.rcode))}좌석 <br></font>
   	<font size="5px" style="position:relative; top:18px; font-weight:bold; margin-left:15px;" >${t.home_name} vs ${t.away_name}</font><br>
   	<font style="position: absolute;right: 8%;margin-top: -150;">경기 일자: ${t.rdate}</font><br>
   	<font style="margin-left: 15px; position: relative; bottom:5px;">예약 번호: <a id="barcode" href=""> ${t.rcode}</a></font>
-  <button style="position: absolute;right: 8%;margin-top: -100;width:150px;" type="button" class="btn btn-info" onclick="location.href='boardList_edit.do?page=${page}&bno=${bcont.bno}'" >환불하기 </button><br>
-  <button style="position: absolute;right: 8%;margin-top: -80;width:150px;" type="button" class="btn btn-info" onclick="location.href='boardList.do?page=${page}'" >예매 페이지 이동</button>
+  <button style="position: absolute;right: 8%;margin-top: -100;width:150px;" type="button" class="btn btn-info" id="refund" onclick="location.href='refund.do?mcode=${t.mcode}&rcode=${t.rcode}'">환불하기 </button><br>
+  <button style="position: absolute;right: 8%;margin-top: -80;width:150px;" type="button" class="btn btn-info" onclick="location.href='reserve.do?mcode=${t.mcode}'">예매 페이지 이동</button>
   </div>
   <br>
   
@@ -95,17 +103,20 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-linkedin"></i></a>  
     <a href="#"><i class="fa fa-facebook"></i></a> 
  </div>
- <button id="qk">회원 정보 수정하기</button>
 </div>
 <script>
 $(function(){
+
+	
+	
+	
 	$("[id='barcode']").click(function(){
 		//alert($(this).text().trim());
 		var rcode=$(this).text().trim();
 		var ref="barcode.do?rcode="+rcode;
 		window.open(ref, "a", "width=470, height=30, left=100, top=50");
 	});
-})
+});
 
 </script>
 		

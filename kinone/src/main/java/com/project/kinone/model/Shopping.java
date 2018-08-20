@@ -11,6 +11,7 @@ public class Shopping {
 	private String sname;
 	private String home_code;
 	private String away_code;
+	private String mcode;
 	
 	
 	
@@ -55,6 +56,12 @@ public class Shopping {
 	}
 	public void setAway_code(String away_code) {
 		this.away_code = away_code;
+	}
+	public String getMcode() {
+		return mcode;
+	}
+	public void setMcode(String mcode) {
+		this.mcode = mcode;
 	}
 	
 	
