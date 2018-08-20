@@ -39,6 +39,10 @@
 	width: 25%;
 	font-size: 15pt;
 }
+#right-cont .table td, #right-cont .table th {
+	text-align: center;
+	vertical-align: middle;
+}
 #pschedule, #nschedule, #club-minirank, #club-pgrank, #club-parank {
 	border: 1px solid lightgray;
 	margin: 30px 0 30px 0;
@@ -81,12 +85,26 @@
 	background-color: white;
 	border: 1px solid lightgray;
 }
-#right-cont .table td, #right-cont .table th {
-	text-align: center;
-	vertical-align: middle;
+#map-container {
+	width: 90%;
 }
+
 </style>
 
+<script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyAO4YpxSmG1gH-Anhmz4hMLqaNQxPJZorw">
+</script>
+<script>
+function initialize() {
+  var mapProp = {
+    center:new google.maps.LatLng(37.5682588, 126.89727740000001),
+    zoom:16,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 <div class="pagetitle"><img src="${url}/resources/emblem/${club.ccode}.png" width="130px" height="130px"/> <span style="font-size: 30pt;">${club.cname}</span></div>
 
 <div id="cont-container">
@@ -94,9 +112,9 @@
 	<div id="intro" align="justify">
 		<h2>클럽 소개</h2>
 		<br/>
-		<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="720px" height="400px"/>
+		<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="90%"/>
 		<br/><br/>
-		<div style="font-size: 12pt; width: 720px;">${club.intro}</div>
+		<div style="font-size: 12pt; width: 90%;">${club.intro}</div>
 	</div>
 	<br/>
 	<hr>
@@ -104,7 +122,7 @@
 		<br/>
 		<h2>${club.sname} 오시는 길</h2>
 		<br/>
-		<div id="map-container" style="border: 1px solid red;">
+		<div id="googleMap" style="border: 1px solid red;">
 		
 		</div>
 	</div>
@@ -147,7 +165,7 @@
 			<c:forEach var="cs" items="${csList}">
 				<tr <c:if test="${cs.ccode == club.ccode}">style="outline: 2px solid orange;"</c:if>>
 					<td>${cs.rno}</td>
-					<td><img class="cont-emblem" src="${url}/resources/emblem/${cs.ccode}.png"/><span>${cs.cname_short}</span></td>
+					<td style="text-align: left;"><img class="cont-emblem" src="${url}/resources/emblem/${cs.ccode}.png"/><span>${cs.cname_short}</span></td>
 					<td>${cs.win+cs.draw+cs.lose}</td>
 					<td>${cs.win*3+cs.draw}</td>
 				</tr>
@@ -170,7 +188,7 @@
 			<c:forEach var="ps" items="${psGList}">
 				<tr>
 					<td>${ps.soonwe}</td>
-					<td><img class="cont-player" src="${url}/resources/player/${ps.pcode}.png"/><span>${ps.pname}</span></td>
+					<td style="text-align: left;"><img class="cont-player" src="${url}/resources/player/${club.ccode}/${ps.pcode}.png"/><span>${ps.pname}</span></td>
 					<td>${ps.gamecount}</td>
 					<td>${ps.result}</td>
 				</tr>
@@ -186,14 +204,14 @@
 					<th>순위</th>
 					<th>이름</th>
 					<th>경기</th>
-					<th>득점</th>
+					<th>도움</th>
 				</tr>
 			</thead>
 			<tbody>
 			<c:forEach var="ps" items="${psAList}">
 				<tr>
 					<td>${ps.soonwe}</td>
-					<td><img class="cont-player" src="${url}/resources/player/${ps.pcode}.png"/><span>${ps.pname}</span></td>
+					<td style="text-align: left;"><img class="cont-player" src="${url}/resources/player/${club.ccode}/${ps.pcode}.png"/><span>${ps.pname}</span></td>
 					<td>${ps.gamecount}</td>
 					<td>${ps.result}</td>
 				</tr>
@@ -202,41 +220,7 @@
 		</table>
 	</div>
 </div>
-<div id="bottom-cont">
-선수순위
-</div>
 
 </div>
-
-<script src="http://maps.googleapis.com/maps/api/js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEM3FEmY5ecJzAkXH9TDRAs1MaXpSWtME"></script>
-<script>
-var myCenter=new google.maps.LatLng(37.5682588, 126.89727740000001);
-
-function initialize()
-{
-var mapProp = {
-  center: myCenter,
-  zoom:18,
-  mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-
-var map = new google.maps.Map(document.getElementById("map-container"),mapProp);
-
-var marker = new google.maps.Marker({
-  position: myCenter,
-  title:'Click to zoom'
-  });
-
-marker.setMap(map);
-
-// Zoom to 9 when clicking on marker
-google.maps.event.addListener(marker,'click',function() {
-  map.setZoom(9);
-  map.setCenter(marker.getPosition());
-  });
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-</script>
 
 <%@include file="footer.jsp"%>

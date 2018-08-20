@@ -10,7 +10,7 @@ public class Player {
 	/*	여기까지 기본 player 테이블 컬럼*/
 	
 	/* 메인페이지에 선수 순위 노출 위한 데이터 */
-	private int rownum;
+	private int rno;
 	private String cname_short;
 	private String emblem;
 	private int gamecount;
@@ -62,11 +62,11 @@ public class Player {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-	public int getRownum() {
-		return rownum;
+	public int getRno() {
+		return rno;
 	}
-	public void setRownum(int rownum) {
-		this.rownum = rownum;
+	public void setRno(int rno) {
+		this.rno = rno;
 	}
 	public String getCname_short() {
 		return cname_short;
@@ -131,7 +131,7 @@ public class Player {
 	@Override
 	public String toString() {
 		return "Player [pcode=" + pcode + ", ccode=" + ccode + ", pno=" + pno + ", pname=" + pname + ", position="
-				+ position + ", photo=" + photo + ", rownum=" + rownum + ", cname_short=" + cname_short + ", emblem="
+				+ position + ", photo=" + photo + ", rno=" + rno + ", cname_short=" + cname_short + ", emblem="
 				+ emblem + ", gamecount=" + gamecount + ", p_ggoal=" + p_ggoal + ", p_assist=" + p_assist
 				+ ", startRow=" + startRow + ", endRow=" + endRow + ", teamcode=" + teamcode + ", sposition="
 				+ sposition + ", keyword=" + keyword + "]";

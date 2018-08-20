@@ -122,7 +122,7 @@
 		<tbody id="playerbodyg">
 		<c:forEach var="player" items="${playerSeasonGRankList}" varStatus="s2">
 		<tr>
-			<td>${s2.count}</td>
+			<td>${player.rno}</td>
 			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/FW말컹.png" width="35px" height="35px"/></td>
 			<td style="padding-left: 0;">${player.pname}</td>
 			<td>${player.cname_short}</td>
@@ -150,7 +150,7 @@
 		<tbody id="playerbodya">
 		<c:forEach var="player" items="${playerSeasonARankList}" varStatus="s3">
 		<tr>
-			<td>${s3.count}</td>
+			<td>${player.rno}</td>
 			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/FW말컹.png" width="35px" height="35px"/></td>
 			<td style="padding-left: 0;">${player.pname}</td>
 			<td>${player.cname_short}</td>
@@ -216,7 +216,7 @@
 		$.each(arr, function(idx, player){
 			var html = "";
 			html += "<tr>";
-			html += "<td>"+(idx+1)+"</td>";
+			html += "<td>"+(player.rno)+"</td>";
 			html += "<td width='11%' style='padding-right: 0;'><img src='/kinone/resources/player/FW말컹.png' width='35px' height='35px'/></td>";
 			html += "<td style='padding-left: 0;'>"+player.pname+"</td>"
 			html += "<td>"+player.cname_short+"</td>";

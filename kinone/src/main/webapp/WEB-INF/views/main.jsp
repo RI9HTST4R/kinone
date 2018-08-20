@@ -34,7 +34,7 @@
 										<c:forEach var="k1clubseason" items="${k1ClubSeasonRankList}"
 											varStatus="status">
 											<tr>
-												<td>${status.count}</td>
+												<td>${k1clubseason.rno}</td>
 												<td><img src="${url}/resources/emblem/${k1clubseason.ccode}.png" title="${k1clubseason.cname_short}"/></td>
 												<td>${k1clubseason.win + k1clubseason.draw + k1clubseason.lose}</td>
 												<td>${k1clubseason.win * 3 + k1clubseason.draw}</td>
@@ -59,7 +59,7 @@
 										<c:forEach var="k2clubseason" items="${k2ClubSeasonRankList}"
 											varStatus="status">
 											<tr>
-												<td>${status.count}</td>
+												<td>${k2clubseason.rno}</td>
 												<td><img src="${url}/resources/emblem/${k2clubseason.ccode}.png" title="${k2clubseason.cname_short}"/></td>
 												<td>${k2clubseason.win + k2clubseason.draw + k2clubseason.lose}</td>
 												<td>${k2clubseason.win * 3 + k2clubseason.draw}</td>
@@ -92,45 +92,7 @@
 										<a href="${url}/news_cont.do?bno=${news.bno}" title="">${news.subject}</a>
 									</div>
 								</div>
-								
-								
-								
 								</c:forEach>
-								
-								
-								<%-- <div class="news">
-									<div class="news-image">
-										<a href=""><img src="${url}/resources/news/samplenews.jpg" title="[전북] 전북, 국민연금공단과 MOU 체결"></a>
-									</div>
-									<div class="news-title" align="justify">
-										<a href="" title="">[전북] 전북, 국민연금공단과 MOU 체결</a>
-									</div>
-								</div>
-								<div class="news">
-									<div class="news-image">
-										<a href=""><img src="${url}/resources/news/samplenews.jpg" title="[부천] 분위기 반전 이룬 부천FC1995, 홈 승리 통해 상승세 이어간다"></a>
-									</div>
-									<div class="news-title" align="justify">
-										<a href="" title="">[부천] 분위기 반전 이룬 부천FC1995, 홈 승리 통해 상승세
-											이어간다</a>
-									</div>
-								</div>
-								<div class="news">
-									<div class="news-image">
-										<a href=""><img src="${url}/resources/news/samplenews.jpg" title="ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ"></a>
-									</div>
-									<div class="news-title" align="justify">
-										<a href="" title="">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</a>
-									</div>
-								</div>
-								<div class="news">
-									<div class="news-image">
-										<a href=""><img src="${url}/resources/news/samplenews.jpg" title="뉴스제목"></a>
-									</div>
-									<div class="news-title" align="justify">
-										<a href="" title="">뉴스제목</a>
-									</div>
-								</div> --%>
 							</div>
 						</div>
 						<!-- 뉴스 끝 -->
@@ -154,11 +116,11 @@
 												items="${k1PlayerSeasonGRankList}" varStatus="status">
 												<li class="rank-detail">
 													<div class="rank font-weight-bold">
-														<h3>${status.count}</h3>
+														<h3>${k1playerseason.rno}</h3>
 													</div>
 													<div class="pimage">
 														<img
-															src="${url}/resources/player/${k1playerseason.position}${k1playerseason.pname}.png"
+															src="${url}/resources/player/${k1playerseason.ccode}/${k1playerseason.pcode}.png"
 															title="${k1playerseason.pname}">
 													</div>
 													<div class="pinfo" align="justify">
@@ -183,11 +145,11 @@
 												items="${k1PlayerSeasonARankList}" varStatus="status">
 												<li class="rank-detail">
 													<div class="rank font-weight-bold">
-														<h3>${status.count}</h3>
+														<h3>${k1playerseason.rno}</h3>
 													</div>
 													<div class="pimage">
 														<img
-															src="${url}/resources/player/${k1playerseason.position}${k1playerseason.pname}.png"
+															src="${url}/resources/player/${k1playerseason.ccode}/${k1playerseason.pcode}.png"
 															title="${k1playerseason.pname}">
 													</div>
 													<div class="pinfo" align="justify">
@@ -223,11 +185,11 @@
 												items="${k2PlayerSeasonGRankList}" varStatus="status">
 												<li class="rank-detail">
 													<div class="rank font-weight-bold">
-														<h3>${status.count}</h3>
+														<h3>${k2playerseason.rno}</h3>
 													</div>
 													<div class="pimage">
 														<img
-															src="${url}/resources/player/${k2playerseason.position}${k2playerseason.pname}.png"
+															src="${url}/resources/player/${k2playerseason.ccode}/${k2playerseason.pcode}.png"
 															title="${k2playerseason.pname}">
 													</div>
 													<div class="pinfo" align="justify">
@@ -252,11 +214,11 @@
 												items="${k2PlayerSeasonARankList}" varStatus="status">
 												<li class="rank-detail">
 													<div class="rank font-weight-bold">
-														<h3>${status.count}</h3>
+														<h3>${k2playerseason.rno}</h3>
 													</div>
 													<div class="pimage">
 														<img
-															src="${url}/resources/player/${k2playerseason.position}${k2playerseason.pname}.png"
+															src="${url}/resources/player/${k2playerseason.ccode}/${k2playerseason.pcode}.png"
 															title="${k2playerseason.pname}">
 													</div>
 													<div class="pinfo" align="justify">

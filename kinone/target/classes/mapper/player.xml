@@ -4,22 +4,22 @@
 <mapper namespace="playermapper">
    <!-- #####################################한동준############################################### -->    
     <select id="playerSeasonRankList" parameterType="java.util.HashMap" resultType="player">
-    	select rownum, T.* from
+    	select T.* from
 		(
-		select V.pno, V.pname, V.position, V.photo, V.cname_short, V.emblem, PS.gamecount,
+		select rank() over (order by 
+		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
+		<if test='sort != null and sort == "a"'>PS.p_assist</if> desc, PS.gamecount asc) rno,
+			   V.pcode, V.pno, V.pname, V.position, V.photo, V.ccode, V.cname_short, V.emblem, PS.gamecount,
 		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
 		<if test='sort != null and sort == "a"'>PS.p_assist</if> 
 		from player_season PS, 
-		(select P.pcode, P.pno, P.pname, P.position, P.photo, C2.cname_short, C2.emblem 
+		(select P.pcode, P.pno, P.pname, P.position, P.photo, C2.ccode, C2.cname_short, C2.emblem 
 		 from player P, (select C1.ccode, C1.cname_short, C1.emblem 
 		                 from club C1, club_season CS 
 		                 where C1.ccode = CS.ccode and CS.lcode = #{lcode} and CS.seasoncode = #{seasoncode}) C2 
 		 where P.ccode = C2.ccode) V
-		where PS.pcode = V.pcode and PS.seasoncode = #{seasoncode} and V.position != 'GK'
-		order by 
-		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
-		<if test='sort != null and sort == "a"'>PS.p_assist</if> desc, PS.gamecount asc) T
-		where rownum <![CDATA[<]]>= ${rownum}
+		where PS.pcode = V.pcode and PS.seasoncode = #{seasoncode} and V.position != 'GK') T
+		where rno <![CDATA[<]]>= ${rno}
 	</select>
 	
 	<select id="playerList" parameterType="java.lang.String" resultType="player">
