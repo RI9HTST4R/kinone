@@ -101,3 +101,5 @@ span.price {
 </style>
 
 <div class="pagetitle"><span>결제가 완료되었습니다!!</span></div>
+    <%@ include file="footer.jsp"%>
+

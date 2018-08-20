@@ -32,6 +32,21 @@ public class ReservDAOImpl implements ReservDAOInter{
 		// TODO Auto-generated method stub
 		return session.insert("reservmapper.insertReserve", list);
 	}
+
+	public List<Reservation> getAllTickets(int mno) {
+		// TODO Auto-generated method stub
+		return session.selectList("reservmapper.getAllTickets", mno);
+	}
+
+	public Reservation getTheTicket(String rcode) {
+		// TODO Auto-generated method stub
+		return session.selectOne("reservmapper.getTheTicket", rcode);
+	}
+
+	public int cancel_reservation(String rcode) {
+		// TODO Auto-generated method stub
+		return session.update("reservmapper.cancel_reservation", rcode);
+	}
 	
 	
 	
