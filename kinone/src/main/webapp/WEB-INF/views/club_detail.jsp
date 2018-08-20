@@ -96,12 +96,12 @@
 			<h2>클럽 소개</h2>
 		<br/>
 		<c:if test="${club.intro!=null}">
-		<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="720px" height="400px"/>
+		<img src="${url}/resources/clubimage/${club.ccode}.jpg" width="90%"/>
 		<br/><br/>
-		<div style="font-size: 12pt; width: 720px;">${club.intro}</div>
+		<div style="font-size: 12pt; width: 90%;">${club.intro}</div>
 		</c:if>
 		<c:if test="${club.intro==null}">
-		<img src="${url}/resources/intro/non.png" width="90%"/>
+		<img src="${url}/resources/intro/non.png" width="95%"/>
 		</c:if>
 	</div>
 	<br/>

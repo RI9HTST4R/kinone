@@ -30,7 +30,15 @@
 			</select>
 	</td>
 	<td><input type="text" name="pno"></td>
-	<td><input type="text" name="position"></td>
+	<td>
+			<select name="position">
+				<option value="">포지션</option>
+				<option value="GK">GK</option>
+				<option value="DF">DF</option>
+				<option value="MF">MF</option>
+				<option value="FW">FW</option>
+			</select>
+	</td>
 	<td><input type="file" name="file"></td>
 	
 </tr>
