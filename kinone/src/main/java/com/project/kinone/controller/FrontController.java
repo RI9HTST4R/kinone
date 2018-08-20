@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -39,7 +40,6 @@ import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.service.ReservServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
-import com.project.kinone.util.StringToTimestamp;
 
 @Controller
 public class FrontController {
@@ -263,7 +263,7 @@ public class FrontController {
 	
 	// 클럽 상세 정보 페이지
 	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
-	public String clubDetail(@RequestParam(required=false) String ccode, Model model) throws Exception {
+	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, Model model) throws Exception {
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
 	//	System.out.println(club.toString());
@@ -276,6 +276,14 @@ public class FrontController {
 		// 해당 클럽의 다음 경기 일정
 		Match nextMatch = matchService.getNextMatchInfo(ccode, ts);
 		
+//		//파일
+////		set path =request.getSession().getServletContext().getResourcePaths("/"); 
+//		
+//		File file =new File("../kinone/src/main/webapp/resources/intro/"+ccode+".jpg");
+//		int t=0;
+//		if (file.exists()) {
+//			t=1;
+//		}
 		// 해당 클럽의 득점 순위
 		List<HashMap<String, Object>> psGList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "g", 5);
 		// 해당 클럽의 도움 순위

@@ -8,7 +8,6 @@ public class Club {
 	private String emblem;
 	private String intro;
 	private int isbeing;
-	
 	// 경기장 생성
 	private String sname;
 	private String sphoto;
@@ -80,4 +79,6 @@ public class Club {
 				+ ", emblem=" + emblem + ", intro=" + intro + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto="
 				+ sphoto + ", capacity=" + capacity + "]";
 	}
+	
+	
 }

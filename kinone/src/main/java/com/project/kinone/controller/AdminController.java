@@ -554,7 +554,6 @@ public class AdminController{
 		PagingPgm pp = new PagingPgm(total, rowPerPage, currentPage);
 		player.setStartRow(startRow);
 		player.setEndRow(endRow);
-		
 		List<Player> list=adminService.plist(player);
 		List<Club> clist=adminService.getMngClubList();
 		
@@ -628,9 +627,17 @@ public class AdminController{
 		
 		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player");
 		
-		
-		//service호출해서 sql처리
-		int result1 = adminService.pinsert(player, file, path);
+		//업로드 파일명을 위한 새 pcode 꺼내오기
+		String pcode;
+		if ((int)(Math.log10(Integer.parseInt(adminService.getnewpcode().substring(1))+1)+1)>3) {
+			pcode = "P"+(Integer.parseInt(adminService.getnewpcode().substring(1))+1);
+		}else {
+			pcode = "P0"+(Integer.parseInt(adminService.getnewpcode().substring(1))+1);
+		}
+		System.out.println("꺼내온 pcode="+adminService.getnewpcode());
+		System.out.println("새로 입력하는 pcode="+pcode);
+		//service호출해서 업로드
+		int result1 = adminService.pinsert(player, file, path, pcode);
 		System.out.println("insert1="+result1);
 
 		int result2 = adminService.pinsertd(playerd);
@@ -640,14 +647,13 @@ public class AdminController{
 
 		System.out.println("insert3="+result3);
 		
-		//리다이렉트를 위한 pcode호출
-		String pc = player.getPcode();
-				 
+		//리다이렉트를 위한 pcode->pcode 사용
+				
 		
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		if(result1==1 && result2==1) {
-			model.addAttribute("pcode",pc);
+			model.addAttribute("pcode",pcode);
 			
 			return "redirect:/admin/pview.do";
 		}

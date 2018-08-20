@@ -199,6 +199,10 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public int pinserts(Player_season players) {
 		return session.insert("adminmapper.pinserts", players);
 	}
+	//선수 정보 입력시 pcode꺼내오기
+	public String getnewpcode() {
+		return session.selectOne("adminmapper.getnewpcode");
+	}
 
 	// 선수 기본 정보 업데이트
 	public int pupdate(Player player) {

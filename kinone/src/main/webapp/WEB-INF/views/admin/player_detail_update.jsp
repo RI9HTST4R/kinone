@@ -29,7 +29,15 @@
 				</c:forEach>
 			</select></td>
 	<td><input type="text" name="pno" value="${player.pno }"></td>
-	<td><input type="text" name="position" value="${player.position }"></td>
+	<td>
+			<select name="position">
+				<option value="">포지션</option>
+				<option value="GK" <c:if test="${player.position=='GK'}">selected="selected"</c:if>>GK</option>
+				<option value="DF" <c:if test="${player.position=='DF'}">selected="selected"</c:if>>DF</option>
+				<option value="MF" <c:if test="${player.position=='MF'}">selected="selected"</c:if>>MF</option>
+				<option value="FW" <c:if test="${player.position=='FW'}">selected="selected"</c:if>>FW</option>
+			</select>
+	</td>
 	<td><input type="file" name="file"></td>
 	
 </tr>
@@ -58,7 +66,13 @@
 <input type="button" value="목록으로" onclick="location.href='/kinone/admin/plist.do'">
 
 </form>
+<script>
+$(function(){
+	
+	
+})
 
+</script>
 
 
 </div>

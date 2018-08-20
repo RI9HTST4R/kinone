@@ -8,22 +8,29 @@ body {
 .pagetitle {
 	background-color: blue;
 }
+.registerbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
 
 </style>
 <div class="pagetitle"><span>K In One 아이디/비밀번호 찾기</span></div>
 <br><br>
-<div>
-		<table>
-			<tr>
-				<td>	아이디를 잊어버리셨나요?
-				<br><input type="button" id="findid" value="아이디찾기" onclick="emailfind();">
-				</td>
-				<td> 비밀번호를 잊어버리셨나요?
-				<br><input type="button" id="findid" value="비밀번호 재설정" onclick="passwdfind();">
-			</tr>
-			
+<h3>아이디/비밀번호 찾기</h3>
+	<div style="float: left; width: 45%;">
+			<h5>아이디를 잊어버리셨나요?</h5>
+		<br><input type="button" id="findid" value="아이디찾기" class="registerbtn" onclick="emailfind();">
+	</div>
+	<div style=" float: right; width: 45%;">
+		<h5> 비밀번호를 잊어버리셨나요?</h5>
+		<br><input type="button" id="findid" value="비밀번호 재설정" class="registerbtn" onclick="passwdfind();">
 		
-		</table>
 	</div>
 		
 <script type="text/javascript">

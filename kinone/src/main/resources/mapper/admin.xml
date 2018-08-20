@@ -264,6 +264,11 @@
 		#{position},#{photo, jdbcType=VARCHAR} )
 	</insert>
 	
+	<!-- 관리자 선수 삽입시 코드 하나 가져오기 -->
+	<select id="getnewpcode" resultType="String">
+		select pcode from (select pcode from player order by pcode desc) where rownum<![CDATA[<]]> 2 
+	</select>
+	
 	<!-- 관리자 선수 삽입 디테일 -->
 	<insert id="pinsertd" parameterType="player_detail">
 		<selectKey resultType="String" keyProperty="pcode" order="BEFORE">
