@@ -1,5 +1,6 @@
 package com.project.kinone.controller;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -8,7 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -38,7 +41,6 @@ import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.service.ReservServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
-import com.project.kinone.util.StringToTimestamp;
 
 @Controller
 public class FrontController {
@@ -250,7 +252,7 @@ public class FrontController {
 	
 	// 클럽 상세 정보 페이지
 	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
-	public String clubDetail(@RequestParam(required=false) String ccode, Model model) throws Exception {
+	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, Model model) throws Exception {
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
 		String seasoncode = adminService.getTopSeason();
@@ -262,10 +264,20 @@ public class FrontController {
 		// 해당 클럽의 다음 경기 일정
 		Match nextMatch = matchService.getNextMatchInfo(ccode, ts);
 		
+//		//파일
+////		set path =request.getSession().getServletContext().getResourcePaths("/"); 
+//		
+//		File file =new File("../kinone/src/main/webapp/resources/intro/"+ccode+".jpg");
+//		int t=0;
+//		if (file.exists()) {
+//			t=1;
+//		}
+		
 		model.addAttribute("club", club);
 		model.addAttribute("csList", csList);
 		model.addAttribute("prevMatch", prevMatch);
 		model.addAttribute("nextMatch", nextMatch);
+//		model.addAttribute("t",t);
 		return "club_detail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

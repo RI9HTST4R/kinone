@@ -7,7 +7,7 @@ public class Club {
 	private String cmanager;
 	private String emblem;
 	private int isbeing;
-	
+	private String intro;
 	// 경기장 생성
 	private String sname;
 	private String sphoto;
@@ -67,6 +67,12 @@ public class Club {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
 	
 	@Override
 	public String toString() {
@@ -74,5 +80,6 @@ public class Club {
 				+ ", emblem=" + emblem + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto=" + sphoto
 				+ ", capacity=" + capacity + "]";
 	}
+	
 	
 }

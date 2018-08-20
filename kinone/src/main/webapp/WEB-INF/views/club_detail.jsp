@@ -28,7 +28,8 @@
 }
 #intro {
 	/* border: 1px solid red; */
-	width: 100%;
+	width: 95%;
+	margine : auto;
 }
 #stadium-map {
 	/* border: 1px solid blue; */
@@ -87,8 +88,13 @@
 	<div id="intro" align="justify">
 	<h2>클럽 소개</h2>
 	<br/>
-	<img src="${url}/resources/news/samplenews.jpg" width="90%"/>
-	<p>주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리주저리</p>
+	<c:if test="${club.intro!=''}">
+	<img src="${url}/resources/intro/${club.ccode}.jpg" width="90%"/>
+	<p>${club.intro}</p>
+	</c:if>
+	<c:if test="${club.intro==''}">
+	<img src="${url}/resources/intro/non.png" width="90%"/>
+	</c:if>
 	</div>
 	<div id="stadium-map">
 	경기장 지도
