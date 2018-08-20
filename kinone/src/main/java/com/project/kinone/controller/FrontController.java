@@ -29,6 +29,7 @@ import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Reservation;
 import com.project.kinone.model.Seats;
+import com.project.kinone.model.Shopping;
 import com.project.kinone.model.Stadium;
 import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.ClubServiceImpl;
@@ -627,6 +628,12 @@ public class FrontController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("mno", member.getMno());
 		map.put("mcode", mcode);
+		Match match = matchService.get_the_match(mcode);
+		long time = match.getMdate().getTime() - System.currentTimeMillis();
+		int result= 0;
+		if(time>0) {
+			result=1;
+		}
 		int bought = reservService.getTickets(map);
 		Seats seats;
 		List<Seats> list2 = new ArrayList<Seats>();
@@ -645,12 +652,12 @@ public class FrontController {
 		
 		System.out.println("예약 페이지로 이동 mcode:"+mcode);
 		model.addAttribute("mcode", mcode);
-		Match match = matchService.get_the_match(mcode);
 		System.out.println("mcode"+match.getAwayscore()+match.getCcode_away());
 		Club home = clubService.getClub(match.getCcode_home());
 		Club away = clubService.getClub(match.getCcode_away());
 		
 		Stadium sta = clubService.getStadium(home.getCcode());
+		model.addAttribute("result",result);
 		model.addAttribute("sold", list2);
 		model.addAttribute("sta_name",sta.getSname());
 		model.addAttribute("mno",member.getMno());
@@ -670,17 +677,131 @@ public class FrontController {
 
 		return "payment";
 	}
-//	@RequestMapping(value = "/payment2.do")
-//	public String payment2(Model model, @RequestParam("stadium")String stadium,@RequestParam("tempa")String tempa
-//			,@RequestParam("rcode")String rcode,@RequestParam("mcode")String mcode,@RequestParam("ccode")String ccode,@RequestParam("seatcode")String seatcode
-//			) {
-//		
-//		System.out.println("stadium"+stadium);
-//		System.out.println("tempa"+tempa);
-//		int ajax =1;
-//		model.addAttribute("ajax", ajax);
-//		return "ajax";
-//	}
+	@RequestMapping(value = "/barcode.do")
+	public String barcode(@RequestParam("rcode") String rcode, Model model) throws Exception{
+
+		System.out.println("rcode="+rcode);
+		String rcode1 = Sha256.encrypt(rcode).substring(0, 35);
+		System.out.println("rcode1:"+rcode1);
+		System.out.println("회원 가입");
+		model.addAttribute("rcode", rcode1);
+		
+		return "barcode";
+	}
+	// refund.do
+	@RequestMapping(value = "/refund.do")
+	public String barcode(@RequestParam("mcode") String mcode,@RequestParam("rcode") String rcode, Model model,HttpSession session) throws Exception{
+		
+		String email = (String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		System.out.println("mno="+member.getMno());
+		System.out.println("rcode="+rcode);
+		model.addAttribute("mcode=", mcode);
+		Match match = matchService.get_the_match(mcode);
+		Timestamp mdate = match.getMdate();
+		Timestamp cur = new Timestamp(System.currentTimeMillis());
+		int result =0;
+		String md = String.valueOf(mdate.getYear())+String.valueOf((mdate.getMonth()+1))+String.valueOf(mdate.getDate());
+		String cd = String.valueOf(cur.getYear())+String.valueOf((cur.getMonth()+1))+String.valueOf(cur.getDate());
+		if(Integer.parseInt(md)>Integer.parseInt(cd)) {
+			result=1;
+		}
+		
+		System.out.println("result="+result);
+		//Reservation reservation = reservService.getTheTicket(rcode);
+		Shopping shopping = new Shopping();
+		shopping.setAway_code(match.getCcode_away());
+		shopping.setHome_code(match.getCcode_home());
+		Club home = clubService.getClub(match.getCcode_home());
+		Club away = clubService.getClub(match.getCcode_away());
+		
+		shopping.setAway_name(away.getCname());
+		shopping.setHome_name(home.getCname());
+		shopping.setMcode(mcode);
+		shopping.setRcode(rcode);
+		shopping.setRdate(match.getMdate());
+		shopping.setSname(clubService.getStadium(match.getCcode_home()).getSname());
+		model.addAttribute("shopping",shopping);
+		model.addAttribute("member", member);
+		model.addAttribute("result", result);
+		return "refund";
+	}
+	
+	@RequestMapping(value = "/cancel_reservation.do")
+	public String cancel_reservation(Model model, @RequestParam("rcode")String rcode) {
+		
+		System.out.println("rcode"+rcode);
+		int ajax = reservService.cancel_reservation(rcode);
+		model.addAttribute("ajax", ajax);
+		return "ajax";
+	}
+	@RequestMapping(value = "/edit_my_info.do")
+	public String edit_my_info(Model model,HttpSession session) {
+		String email = (String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		model.addAttribute("member", member);
+		
+		return "edit_my_info";
+	}
+	// update_check.do
+	@RequestMapping(value = "/update_check.do")
+	public String update_check(String status, Model model,HttpSession session) {
+		model.addAttribute("status", status);
+		
+		return "update_check";
+	}
+	//checking_psswd.do
+	@RequestMapping(value ="/checking_psswd.do")
+	public String checking_psswd(String status,String passwd, Model model,HttpSession session) {
+		model.addAttribute("status", status);
+		String email = (String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		String passwd1 = Sha256.encrypt(passwd);
+		System.out.println("status:"+status);
+		if(member.getPasswd().equals(passwd1)) {
+			if(status.equals("edit")) {
+				return "redirect:/edit_my_info.do";
+			}else {
+				return "redirect:/delete_member.do";
+			}
+		}else {
+			return "check_failure";
+		}
+		
+		
+	
+	}
+
+	///edit_member.do
+	@RequestMapping(value = "/edit_member.do")
+	public String edit_member(Model model,HttpSession session,Member member, String mbirthdate1) {
+		String birthdate1 = mbirthdate1 + " 00:00:00";
+		System.out.println(birthdate1);
+		member.setMbirthdate(Timestamp.valueOf(birthdate1));
+		String email = (String) session.getAttribute("email");
+		Member old = memberService.getMember(email);
+		member.setMno(old.getMno());
+		String passwd = member.getPasswd();
+		String passwd1 = Sha256.encrypt(passwd);
+		member.setPasswd(passwd1);
+		int result = memberService.edit_member(member);
+		model.addAttribute("result", result);
+		
+		return "edit_my_info_result";
+	}
+	//delete_member.do
+	@RequestMapping(value = "/delete_member.do")
+	public String delete_member(HttpSession session,Model model) {
+		String email = (String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		int result = memberService.disable_member(member.getMno());
+		model.addAttribute("result", result);
+		return "delete_member_result";
+	}
+	
+	
+	
+	
 	
 	//pay_complete.do
 	@RequestMapping(value = "/pay_complete.do")
@@ -779,8 +900,46 @@ public class FrontController {
 		
 		return "news_cont";
 	}
-	
-	
+	// 마이페이지 콘트롤러 
+	@RequestMapping(value = "/mypage.do")
+	public String payment(HttpSession session, Model model) throws Exception{
+		
+		String email =(String) session.getAttribute("email");
+		Member member = memberService.getMember(email);
+		System.out.println("마이페이지:"+member.getMno());
+		List<Reservation> shopping_list = reservService.getAllTickets(member.getMno());
+		System.out.println("shopping_list의 크기:"+shopping_list.size());
+		String name = member.getMname();
+		List<Match> match_list = new ArrayList<Match>();
+		List<Shopping> basket = new ArrayList<Shopping>();
+		Match match;
+		Shopping shopping;
+		for(int i=0;i<shopping_list.size();i++) {
+		match = matchService.get_the_match(shopping_list.get(i).getMcode());
+		match_list.add(match);
+		}
+		for(int i=0;i<match_list.size();i++) {
+			Club home = clubService.getClub(match_list.get(i).getCcode_home());
+			Club away = clubService.getClub(match_list.get(i).getCcode_away());
+			Stadium stadium = clubService.getStadium(home.getCcode());
+			shopping = new Shopping();
+			shopping.setRdate(match_list.get(i).getMdate());
+			shopping.setSname(stadium.getSname());
+			shopping.setHome_name(home.getCname());
+			shopping.setAway_name(away.getCname());
+			shopping.setRcode(shopping_list.get(i).getRcode());
+			shopping.setAway_code(home.getCcode());
+			shopping.setHome_code(away.getCcode());
+			shopping.setMcode(match_list.get(i).getMcode());
+			basket.add(shopping);
+		}
+		
+		model.addAttribute("basket", basket);
+		model.addAttribute("name", name);
+		
+		
+		return "mypage";
+	}
 	
 	
 	

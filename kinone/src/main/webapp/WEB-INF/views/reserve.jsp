@@ -16,7 +16,15 @@
 <%-- <img width=80% height =80% src="${url}/resources/images/cowboys_seating_chart.jpg"></img>
  --%>
 
+<c:if test="${ result==0 }">
+<script>
+alert("이미 지난 경기는 예약이 불가합니다.")
+history.go(-1);
 
+</script>
+
+</c:if>
+<c:if test="${result!=0}">
 <div class="content">
 
 
@@ -332,5 +340,6 @@
 				
 			</script>
 	</div>
+	</c:if>
 
 <%@ include file="footer.jsp"%>	

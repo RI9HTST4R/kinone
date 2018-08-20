@@ -44,5 +44,13 @@ public class MemberDAOImpl implements MemberDAOInter{
 		// TODO Auto-generated method stub
 		return session.selectOne("membermapper.getMember", email);
 	}
+	public int edit_member(Member member) {
+		// TODO Auto-generated method stub
+		return session.update("membermapper.edit_member", member);
+	}
+	public int disable_member(int mno) {
+		// TODO Auto-generated method stub
+		return session.update("membermapper.disable_member", mno);
+	}
 
 }

@@ -90,9 +90,7 @@
 }
 
 </style>
-
-<script type="text/javascript"
-        src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyAO4YpxSmG1gH-Anhmz4hMLqaNQxPJZorw">
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAO4YpxSmG1gH-Anhmz4hMLqaNQxPJZorw">
 </script>
 <script>
 function initialize() {
@@ -120,9 +118,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 	<hr>
 	<div id="stadium-map" align="justify">
 		<br/>
-		<h2>${club.sname} 오시는 길</h2>
+		<h2>경기장(${club.sname}) 오시는 길</h2>
 		<br/>
-		<div id="googleMap" style="border: 1px solid red;">
+		<div id="googleMap" style="border: 1px solid lightgray; width: 90%; height: 500px;">
 		
 		</div>
 	</div>
