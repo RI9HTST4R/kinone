@@ -6,6 +6,7 @@ public class Club {
 	private String cname_short;
 	private String cmanager;
 	private String emblem;
+	private String intro;
 	private int isbeing;
 	
 	// 경기장 생성
@@ -43,6 +44,12 @@ public class Club {
 	public void setEmblem(String emblem) {
 		this.emblem = emblem;
 	}
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
 	public int getIsbeing() {
 		return isbeing;
 	}
@@ -67,12 +74,10 @@ public class Club {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
-	
 	@Override
 	public String toString() {
 		return "Club [ccode=" + ccode + ", cname=" + cname + ", cname_short=" + cname_short + ", cmanager=" + cmanager
-				+ ", emblem=" + emblem + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto=" + sphoto
-				+ ", capacity=" + capacity + "]";
+				+ ", emblem=" + emblem + ", intro=" + intro + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto="
+				+ sphoto + ", capacity=" + capacity + "]";
 	}
-	
 }

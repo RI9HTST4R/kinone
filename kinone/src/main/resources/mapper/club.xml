@@ -21,7 +21,28 @@
     	select * from stadium where ccode = #{ccode}
     </select>
     
-  
+    <select id="clubSeasonInfo" parameterType="java.util.HashMap" resultType="club_season">
+    	select * from club_season where ccode = #{ccode} and seasoncode = #{seasoncode}
+    </select>
+    
+    <select id="clubSeasonRank" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    	select rno 
+    	from (select rownum rno, ccode from club_season where seasoncode = #{seasoncode} and lcode = #{lcode}
+		order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc)
+		where ccode = #{ccode}
+    </select>
+    
+    <select id="clubSeasonRankMini" parameterType="java.util.HashMap" resultType="club_season">
+    	select *
+    	from (select CS.*, C.cname_short, C.emblem
+    		  from (select rownum rno,ccode,lcode,win,draw,lose
+    		  		from club_season
+    		  		where seasoncode = #{seasoncode} and lcode = #{lcode}
+					order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc) CS, club C
+			  where C.ccode = CS.ccode)
+		where rno <![CDATA[>]]>= #{start} and rno <![CDATA[<]]>= #{end}
+		order by rno
+    </select>
 </mapper>
 
 

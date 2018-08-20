@@ -13,6 +13,8 @@ public class Club_season {
 	private String cname_short;
 	private String emblem;
 	
+	private int rno; // 순위
+	
 	public String getCcode() {
 		return ccode;
 	}
@@ -73,11 +75,17 @@ public class Club_season {
 	public void setEmblem(String emblem) {
 		this.emblem = emblem;
 	}
-	
+	public int getRno() {
+		return rno;
+	}
+	public void setRno(int rno) {
+		this.rno = rno;
+	}
 	@Override
 	public String toString() {
 		return "Club_season [ccode=" + ccode + ", seasoncode=" + seasoncode + ", lcode=" + lcode + ", win=" + win
 				+ ", draw=" + draw + ", lose=" + lose + ", c_ggoal=" + c_ggoal + ", c_lgoal=" + c_lgoal
-				+ ", cname_short=" + cname_short + ", emblem=" + emblem + "]";
+				+ ", cname_short=" + cname_short + ", emblem=" + emblem + ", rno=" + rno + "]";
 	}
+	
 }

@@ -31,6 +31,9 @@ public class MemberDAOImpl implements MemberDAOInter{
 	public String find_email(String register_email) {
 		return session.selectOne("membermapper.find_email", register_email);
 	}
+	public String emailfind(Member memberl) {
+		return session.selectOne("membermapper.emailfind", memberl);
+	}
 	
 	public int chagepasswd(Member member) {
 		return session.update("membermapper.change_passwd",member);

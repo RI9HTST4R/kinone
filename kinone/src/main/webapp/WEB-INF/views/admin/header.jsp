@@ -47,6 +47,7 @@ body {
 	height: 100%;
 	padding-top: 30px;
 	width: 250px;
+	display: inline-block;
 }
 .sidemenu {
 	border-bottom: 1px solid navy;
@@ -86,6 +87,15 @@ h1#title {
 </style>
 
 </head>
+<script>
+	$(function(){
+		var cs9top = $(".col-sm-9").offset().top;
+		var wftop = $(".wrap_footer").offset().top;
+		alert(cs9top);
+		alert(wftop);
+		$(".col-sm-3").css("min-height",wftop-cs9top);
+	});
+</script>
 <body>
 	<div class="container-fluid">
 		<div class="row content">
@@ -108,8 +118,8 @@ h1#title {
 					<li <c:if test='${fn:contains(cpage, "match_List")}'>class="active"</c:if>><a href="/kinone/admin/matchList.do">매치 리스트</a></li>
 					<li <c:if test='${fn:contains(cpage, "match_Form")}'>class="active"</c:if>><a href="/kinone/admin/matchForm.do">매치 등록</a></li>
 					<li><h4 class="sidemenu">게시판</h4></li>
-					<li><a href="/kinone/admin/boardList.do">글 목록</a></li>
-					<li><a href="/kinone/admin/boardwrite.do">글 작성</a></li>
+					<li <c:if test='${fn:contains(cpage, "board_List")}'>class="active"</c:if>><a href="/kinone/admin/boardList.do">글 목록</a></li>
+					<li <c:if test='${fn:contains(cpage, "board_write")}'>class="active"</c:if>><a href="/kinone/admin/boardwrite.do">글 작성</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-9">

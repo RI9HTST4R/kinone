@@ -37,6 +37,9 @@
 	text-align: center;
 	border: 1px solid lightgray;
 }
+.player-table-a td, .player-table-g td {
+	vertical-align: middle;
+}
 #mask {
   position:absolute;  
   z-index:9000; 
@@ -87,7 +90,7 @@
 		<c:forEach var="clubseason" items="${clubSeasonRankList}" varStatus="s">
 			<tr>
 				<td>${s.count}</td>
-				<td>${clubseason.cname_short}</td>
+				<td><img src="${url}/resources/emblem/${clubseason.ccode}.png" width="35px" height="35px"/> ${clubseason.cname_short}</td>
 				<td>${clubseason.win + clubseason.draw + clubseason.lose}</td>
 				<td>${clubseason.win * 3 + clubseason.draw}</td>
 				<td>${clubseason.win}</td>
@@ -109,7 +112,7 @@
 		<thead>
 		<tr>
 			<th width="15%">순위</th>
-			<th width="25%">선수명</th>
+			<th width="25%" colspan="2">선수명</th>
 			<th width="15%">클럽</th>
 			<th width="12%">득점</th>
 			<th width="13%">경기수</th>
@@ -120,7 +123,8 @@
 		<c:forEach var="player" items="${playerSeasonGRankList}" varStatus="s2">
 		<tr>
 			<td>${s2.count}</td>
-			<td>${player.pname}</td>
+			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/FW말컹.png" width="35px" height="35px"/></td>
+			<td style="padding-left: 0;">${player.pname}</td>
 			<td>${player.cname_short}</td>
 			<td>${player.p_ggoal}</td>
 			<td>${player.gamecount}</td>
@@ -136,7 +140,7 @@
 		<thead>
 		<tr>
 			<th width="15%">순위</th>
-			<th width="25%">선수명</th>
+			<th width="25%" colspan="2">선수명</th>
 			<th width="15%">클럽</th>
 			<th width="12%">도움</th>
 			<th width="13%">경기수</th>
@@ -147,7 +151,8 @@
 		<c:forEach var="player" items="${playerSeasonARankList}" varStatus="s3">
 		<tr>
 			<td>${s3.count}</td>
-			<td>${player.pname}</td>
+			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/FW말컹.png" width="35px" height="35px"/></td>
+			<td style="padding-left: 0;">${player.pname}</td>
 			<td>${player.cname_short}</td>
 			<td>${player.p_assist}</td>
 			<td>${player.gamecount}</td>
@@ -190,7 +195,7 @@
 			var html = "";
 			html += "<tr>";
 			html += "<td>"+(idx+1)+"</td>";
-			html += "<td>"+club.cname_short+"</td>";
+			html += "<td><img src='/kinone/resources/emblem/"+club.ccode+".png' width='35px' height='35px'/> "+club.cname_short+"</td>";
 			html += "<td>"+(club.win + club.draw + club.lose)+"</td>";
 			html += "<td>"+(club.win * 3 + club.draw)+"</td>";
 			html += "<td>"+club.win+"</td>";
@@ -212,7 +217,8 @@
 			var html = "";
 			html += "<tr>";
 			html += "<td>"+(idx+1)+"</td>";
-			html += "<td>"+player.pname+"</td>";
+			html += "<td width='11%' style='padding-right: 0;'><img src='/kinone/resources/player/FW말컹.png' width='35px' height='35px'/></td>";
+			html += "<td style='padding-left: 0;'>"+player.pname+"</td>"
 			html += "<td>"+player.cname_short+"</td>";
 			if(sort == "g"){
 				html += "<td>"+player.p_ggoal+"</td>";
