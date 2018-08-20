@@ -37,6 +37,11 @@
 	 <interceptors>
 		<interceptor>
 			<mapping path="/reserve.do"/>
+			<mapping path="/mypage.do"/>
+			<mapping path="/edit_my_info.do"/>
+			<mapping path="/update_check.do"/>
+			<mapping path="/edit_member.do"/>
+			<mapping path="/delete_member.do"/>
 			<beans:ref bean="sessionChk"/>
 		</interceptor>
 	</interceptors>
