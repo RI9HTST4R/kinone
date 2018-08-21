@@ -71,7 +71,14 @@ a {
  
 </head>
 <body>
-
+<div style="position:fixed;top:55%;left:4%;background:white;width:200px;height:200px;border:solid lightgray 1px;border-radius:10px">
+<br>
+<a href="mypage.do">결제 내역</a><br>
+<hr>
+회원 정보 수정
+<hr>
+<a href="update_check.do?status=delete">회원 탈퇴</a>
+</div>
 <form action="/kinone/edit_member.do">
   <div class="container" align="justify">
     <div align="center">

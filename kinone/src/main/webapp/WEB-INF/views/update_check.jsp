@@ -67,11 +67,26 @@ a {
  
 </head>
 <body>
-
+<div style="position:fixed;top:55%;left:4%;background:white;width:200px;height:200px;border:solid lightgray 1px;border-radius:10px">
+<br>
+<a href="mypage.do">결제 내역</a><br>
+<hr>
+<c:if test="${status=='edit'}">
+회원 정보 수정
+<hr>
+<a href="update_check.do?status=delete">회원 탈퇴</a>
+</c:if>
+<c:if test="${status=='delete'}">
+<a href="update_check.do?status=edit">회원 정보 수정</a>
+<hr>
+회원 탈퇴
+</c:if>
+</div>
 <form action="/kinone/checking_psswd.do">
   <div class="container" style="padding: 16px; background-color: white;" align="justify">
     <div align="center">
-    <h1>수정/탈퇴 전에 비밀번호를 체크하셔야 합니다.</h1>
+    <h1>
+ <c:if test="${status=='edit'}">수정 </c:if><c:if test="${status=='delete'}">회원 탈퇴 </c:if> 전에 비밀번호를 체크하셔야 합니다.</h1>
     </div>
     <hr>
 

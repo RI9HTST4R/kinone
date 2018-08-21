@@ -65,9 +65,9 @@ button:hover, a:hover {
 </style>
 </head>
 <body>
-<div style="position:fixed;top:40%;left:4%;background:white;width:200px;height:180px;border:solid lightgray 1px;border-radius:10px">
+<div style="position:fixed;top:55%;left:4%;background:white;width:200px;height:180px;border:solid lightgray 1px;border-radius:10px">
 <br>
-회원 정보 관리<br>
+결제 내역<br>
 <hr>
 <a href="update_check.do?status=edit">회원 정보 수정</a>
 <hr>
@@ -94,6 +94,30 @@ button:hover, a:hover {
   <br>
   
   </c:forEach>
+  <div class="pbar-container">
+			<ul class="pagination" style="display: inline-flex;">			
+			<c:if test="${page <=1 }">
+				<li class="page-item"><span class="page-link" style="color: lightgray; cursor: default;">&lt;</span></li>
+			</c:if>
+			<c:if test="${page > 1 }">
+				<li class="page-item"><a class="page-link" href="mypage.do?page=${page-1}">&lt;</a></li>
+			</c:if>			
+			<c:forEach var="a" begin="${startpage}" end="${endpage}">
+				<c:if test="${a == page }">
+					<li class="page-item"><span class="page-link" style="background-color: skyblue; color:white; cursor: default;">${a}</span></li>
+				</c:if>
+				<c:if test="${a != page }">
+					<li class="page-item"><a class="page-link" href="mypage.do?page=${a}">${a}</a></li>
+				</c:if>
+			</c:forEach>			
+			<c:if test="${page >= maxpage }">
+				<li class="page-item"><span class="page-link" style="color: lightgray; cursor: default;">&gt;</span></li> 
+			</c:if>
+			<c:if test="${page < maxpage }">
+				<li class="page-item"><a class="page-link" href="mypage.do?page=${page+1}">&gt;</a></li>
+			</c:if>			
+			</ul>
+		</div>
    </div>
   
   
@@ -106,10 +130,6 @@ button:hover, a:hover {
 </div>
 <script>
 $(function(){
-
-	
-	
-	
 	$("[id='barcode']").click(function(){
 		//alert($(this).text().trim());
 		var rcode=$(this).text().trim();
