@@ -898,12 +898,65 @@ public class FrontController {
 	}
 	// 마이페이지 콘트롤러 
 	@RequestMapping(value = "/mypage.do")
-	public String payment(HttpSession session, Model model) throws Exception{
+	public String payment(HttpSession session, Model model,String page) throws Exception{
+		
+		if(page == null || page.equals("")) {
+			page = "1";
+		}
+		
+//		@RequestMapping(value = "/kleagueNews.do")
+//		public String kleagueNews(Model model, String page) throws Exception{
+//
+//			
+//			List<Board> list = adminService.getBoardList(Integer.parseInt(page));
+//			int listcount = adminService.getBoardListCount();
+//			int limit = 10;
+//			int maxpage = (int) ((double) listcount / limit + 0.95); // 0.95를 더해서 올림
+//																		// 처리.
+//			int startpage = (((int) ( Double.parseDouble(page) / 10 + 0.9)) - 1) * 10 + 1;
+//			// 현재 페이지에 보여줄 마지막 페이지 수.(10, 20, 30 등...)
+//			int endpage = maxpage;
+//
+//			if (endpage > startpage + 10 - 1)
+//				endpage = startpage + 10 - 1;
+//			
+//			
+//			model.addAttribute("page", page);
+//			model.addAttribute("startpage", startpage);
+//			model.addAttribute("endpage", endpage);
+//			model.addAttribute("maxpage", maxpage);
+//			model.addAttribute("list", list);
+//			model.addAttribute("listcount", listcount);
+//			
+//			
+//			
+//			
+//			return "news_List";
+//		}
+		
+		
+		
+		
+		
+		
+		
 		
 		String email =(String) session.getAttribute("email");
 		Member member = memberService.getMember(email);
+		int listcount = reservService.getTicketsCount(member.getMno());
+		System.out.println("listcount"+listcount);
+		int limit = 5;
+		int maxpage = (int) ((double) listcount / limit + 0.8);
+		int startpage = (((int) ( Double.parseDouble(page) / 5 + 0.8)) - 1) * 5 + 1;
+		int endpage = maxpage;
+		if (endpage > startpage + 5 - 1)
+		endpage = startpage + 5 - 1;
+		
 		System.out.println("마이페이지:"+member.getMno());
-		List<Reservation> shopping_list = reservService.getAllTickets(member.getMno());
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		map.put("mno", member.getMno());
+		map.put("page", Integer.parseInt(page));
+		List<Reservation> shopping_list = reservService.getAllTickets(map);
 		System.out.println("shopping_list의 크기:"+shopping_list.size());
 		String name = member.getMname();
 		List<Match> match_list = new ArrayList<Match>();
@@ -930,6 +983,10 @@ public class FrontController {
 			basket.add(shopping);
 		}
 		
+		model.addAttribute("page", page);
+		model.addAttribute("startpage", startpage);
+		model.addAttribute("endpage", endpage);
+		model.addAttribute("maxpage", maxpage);
 		model.addAttribute("basket", basket);
 		model.addAttribute("name", name);
 		

@@ -22,14 +22,34 @@
 				(#{item.rcode},#{item.mcode},#{item.seatcode},sysdate,#{item.mno},#{item.ccode})
         </foreach>
 	</insert>
-	 <select id="getAllTickets" parameterType="int" resultType="reservation">
+	<!-- <select id="getAllTickets" parameterType="map" resultType="reservation">
     	select * from reservation where mno = #{mno} order by rdate desc
-    </select>
+    </select> -->
+    <!--사용자의 5개의 예약 정보 가져오기.-->
+    <select id="getAllTickets" parameterType="map" resultType="reservation">
+	    <![CDATA[
+		select * from 
+		 (select rownum rnum, a.* from  
+	  	 (select * from reservation where mno = #{mno} order by rdate desc) a) 
+	   		 where rnum >= ((#{page}-1) * 5+1)  and rnum <= (#{page} * 5)
+		]]>
+	</select>
+    
+    
+    
      <select id="getTheTicket" parameterType="String" resultType="reservation">
     	select * from reservation where rcode = #{rcode}
     </select>
     <update id="cancel_reservation" parameterType="String">
     	delete from reservation where rcode = #{rcode}
     </update>
+     <select id="getTicketsCount" parameterType="int" resultType="int">
+    	select count(*) from reservation where mno = #{mno}
+    </select>
+    
+    
+    
+    
+    
     
 </mapper>

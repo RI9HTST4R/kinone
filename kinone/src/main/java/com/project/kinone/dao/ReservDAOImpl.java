@@ -33,9 +33,9 @@ public class ReservDAOImpl implements ReservDAOInter{
 		return session.insert("reservmapper.insertReserve", list);
 	}
 
-	public List<Reservation> getAllTickets(int mno) {
+	public List<Reservation> getAllTickets(Map<String, Integer> map) {
 		// TODO Auto-generated method stub
-		return session.selectList("reservmapper.getAllTickets", mno);
+		return session.selectList("reservmapper.getAllTickets", map);
 	}
 
 	public Reservation getTheTicket(String rcode) {
@@ -46,6 +46,11 @@ public class ReservDAOImpl implements ReservDAOInter{
 	public int cancel_reservation(String rcode) {
 		// TODO Auto-generated method stub
 		return session.update("reservmapper.cancel_reservation", rcode);
+	}
+
+	public int getTicketsCount(int mno) {
+		// TODO Auto-generated method stub
+		return session.selectOne("reservmapper.getTicketsCount",mno);
 	}
 	
 	
