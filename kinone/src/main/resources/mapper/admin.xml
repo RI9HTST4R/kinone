@@ -116,6 +116,26 @@
     						   c_ggoal = c_ggoal + #{c_ggoal}, c_lgoal = c_lgoal + #{c_lgoal}
     	where ccode = #{ccode} and seasoncode = #{seasoncode} and lcode = #{lcode}
     </update>
+    
+    <insert id="insertScore" parameterType="score">
+    	<selectKey order="BEFORE" keyProperty="scoreno" resultType="java.lang.Integer">
+    		select nvl(max(scoreno),0)+1 from score
+    	</selectKey>
+    	insert into score values (#{scoreno}, #{mcode}, #{ccode}, #{pcode}, #{pname}, #{goaltime}, #{isas, jdbcType=VARCHAR}, #{asname, jdbcType=VARCHAR})
+    </insert>
+    
+    <update id="updateStat" parameterType="java.util.HashMap">
+    	update player_season set
+    	<if test='sort =="g"'> p_ggoal = p_ggoal + 1 </if>
+    	<if test='sort =="a"'> p_assist = p_assist + 1 </if>
+    	<if test='sort =="l"'> p_lgoal = p_lgoal + 1 </if>
+    	<if test='sort =="count"'> gamecount = gamecount + 1 </if>
+		where pcode = #{pcode} and seasoncode = #{seasoncode} and ccode = #{ccode}
+    </update>
+    
+    <select id="matchScoreInfo" parameterType="java.lang.String" resultType="score">
+    	select * from score where mcode = #{mcode} order by goaltime
+    </select>
 <!-- ############################################################################################# -->    
 
 

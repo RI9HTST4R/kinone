@@ -25,6 +25,7 @@ import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
+import com.project.kinone.model.Score;
 import com.project.kinone.util.FileUpload;
 import com.project.kinone.util.FileUpload2;
 import com.project.kinone.util.Lineup;
@@ -211,18 +212,53 @@ public class AdminServiceImpl implements AdminServiceInter {
 	// 매치 상태 수정 및 스코어 수정
 	@Transactional
 	public int matchEnd(Match match) {
+		String mcode = match.getMcode();
+		String seasoncode = mcode.substring(6, 10);
+		String lcode = mcode.substring(0, 2);
+		String ccode_home = "K"+mcode.substring(2,4);
+		String ccode_away = "K"+mcode.substring(4,6);
+//		System.out.println("ccode_home:"+ccode_home);
+//		System.out.println("ccode_away:"+ccode_away);
+		
+		// 선발로 나간 선수 모두 경기수 + 1
+		Match_detail md = matchDao.getMatchDetail(mcode);
+		Lineup lu = new Lineup(playerDao, md);
+		List<Player> hS = lu.gethStarting();
+		List<Player> aS = lu.getaStarting();
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		// 공통정보
+		map.put("sort", "count");
+		map.put("seasoncode", seasoncode);
+		
+		// 홈팀
+		map.put("ccode", ccode_home);
+		for(Player p : hS) {
+			String pcode = p.getPcode();
+			map.put("pcode", pcode);
+			adminDao.updateStat(map);
+		}
+		System.out.println("홈팀 선수 경기수 증가 완료");
+		// 어웨이팀
+		map.put("ccode", ccode_away);
+		for(Player p : aS) {
+			String pcode = p.getPcode();
+			map.put("pcode", pcode);
+			adminDao.updateStat(map);
+		}
+		System.out.println("어웨이팀 선수 경기수 증가 완료");
 		// 스코어를 통해 득점 실점, 승,무,패의 정보를 시즌 테이블에 기록
 		Club_season cs_h = new Club_season();
 		Club_season cs_a = new Club_season();
 		
-		cs_h.setLcode(match.getMcode().substring(0, 2));
-		cs_a.setLcode(match.getMcode().substring(0, 2));
+		cs_h.setLcode(lcode);
+		cs_a.setLcode(lcode);
 		
-		cs_h.setSeasoncode(match.getMcode().substring(6, 10));
-		cs_a.setSeasoncode(match.getMcode().substring(6, 10));
+		cs_h.setSeasoncode(seasoncode);
+		cs_a.setSeasoncode(seasoncode);
 		
-		cs_h.setCcode(match.getCcode_home());
-		cs_a.setCcode(match.getCcode_away());
+		cs_h.setCcode(ccode_home);
+		cs_a.setCcode(ccode_away);
 		int ggoal = match.getHomescore();
 		int lgoal = match.getAwayscore();
 		cs_h.setC_ggoal(ggoal);
@@ -242,11 +278,75 @@ public class AdminServiceImpl implements AdminServiceInter {
 		}
 		adminDao.updateSeasonGrade(cs_h);
 		adminDao.updateSeasonGrade(cs_a);
-		
+
 		// 매치 상태 변경 0 -> 1, 스코어 입력
 		int result = adminDao.updateMatchStatScore(match);
+		if(result == 1) System.out.println("매치상태 변경 및 스코어 입력 완료");
 		
 		return result;
+	}
+	
+	// 득점 및 도움 스탯 올리기
+	@Transactional
+	public boolean insertScore(Score score) {
+		String mcode = score.getMcode();
+		String seasoncode = mcode.substring(6, 10);
+		String pcode = score.getPcode();
+		String ccode = score.getCcode();
+		String isas = score.getIsas();
+//		System.out.println("mcode:"+mcode);
+//		System.out.println("seasoncode:"+seasoncode);
+//		System.out.println("pcode:"+pcode);
+//		System.out.println("ccode:"+ccode);
+		
+		// 득점 정보 입력
+		Player player = adminDao.pselect(pcode);
+		score.setPname(player.getPname());
+		if(isas != null) {
+			Player asplayer = adminDao.pselect(isas);
+			score.setAsname(asplayer.getPname());
+		}
+		System.out.println(score.toString());
+		
+		adminDao.insertScore(score);
+		System.out.println("스코어 정보 입력 완료");
+		
+		// 기본적인 조건 정보 입력
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("seasoncode", seasoncode);
+		map.put("ccode", ccode);
+		
+		// 득점한 선수 득점 수 올림
+		map.put("pcode", pcode);
+		map.put("sort", "g");
+		adminDao.updateStat(map);
+		System.out.println("득점 선수 득점수 입력완료");
+		
+		// 도움한 선수 도움 수 올림(도움이 있다면)
+		if(isas != null) {
+			map.put("pcode", isas);
+			map.put("sort", "a");
+			adminDao.updateStat(map);
+			System.out.println("도움 선수 도움수 입력완료");
+		}
+		
+		// 실점한 골키퍼 실점 수 올림
+		String gkcode = score.getGkcode();
+		Player gk = adminDao.pselect(gkcode);
+		System.out.println("골키퍼:"+gkcode);
+		map.put("pcode", gkcode);
+		map.put("ccode", gk.getCcode());
+		map.put("sort", "l");
+		int result = adminDao.updateStat(map);
+		System.out.println("골키퍼 실점 늘렸어?"+result);
+		System.out.println("실점 선수 실점수 입력완료");
+		
+		return true;
+	}
+	
+	// 해당 매치에 대한 득점 정보 가져오기
+	public List<Score> getMatchScoreInfo(String mcode) {
+		return adminDao.getMatchScoreInfo(mcode);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -504,5 +604,9 @@ public class AdminServiceImpl implements AdminServiceInter {
 		// TODO Auto-generated method stub
 		return adminDao.club_intro_insert(map);
 	}
+
+	
+
+	
 
 }

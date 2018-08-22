@@ -350,7 +350,7 @@ span.example {
 					</c:if>
 					<c:if test="${match.mstatus == 1}">
 						<td><a class="after-m" data-toggle="tooltip" data-placement="bottom" title="${match.homescore}:${match.awayscore}">경기종료</a></td>
-						<td class="last-td"><a class="tbl-btn" onClick="matchEdit('${match.mcode}')">편집</a></td>
+						<td class="last-td"><a class="tbl-btn" onClick="matchEdit('${match.mcode}')">상세보기</a></td>
 					</c:if>
 					</tr>
 				</c:forEach>

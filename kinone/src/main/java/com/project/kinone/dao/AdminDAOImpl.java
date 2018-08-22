@@ -16,6 +16,7 @@ import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
+import com.project.kinone.model.Score;
 
 @Repository
 public class AdminDAOImpl implements AdminDAOInter {
@@ -108,6 +109,22 @@ public class AdminDAOImpl implements AdminDAOInter {
 	public void updateSeasonGrade(Club_season cs) {
 		int result = session.update("adminmapper.updateSeasonGrade", cs);
 		if(result == 1) System.out.println("시즌기록 수정 성공");
+	}
+	
+	// 스코어 테이블에 데이터 입력
+	public void insertScore(Score score) {
+		session.insert("adminmapper.insertScore", score);
+	}
+	
+	// 득점 정보를 통해 스텟 업데이트
+	public int updateStat(HashMap<String, Object> map) {
+		return session.update("adminmapper.updateStat", map);
+		
+	}
+	
+	// 해당 매치에 대한 득점 정보 가져오기
+	public List<Score> getMatchScoreInfo(String mcode) {
+		return session.selectList("adminmapper.matchScoreInfo", mcode);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,6 +295,12 @@ public class AdminDAOImpl implements AdminDAOInter {
 		// TODO Auto-generated method stub
 		return session.update("adminmapper.club_intro_insert",map);
 	}
+
+	
+
+	
+
+	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

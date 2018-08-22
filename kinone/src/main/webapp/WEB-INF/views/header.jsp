@@ -269,7 +269,7 @@ a#totalmatch {
 }
 
 .news-content>.news>.news-image {
-	/* border: 1px solid blue; */
+	border: 1px solid lightgray;
 	width: 95%;
 	height: 75%;
 	display: block;
@@ -307,6 +307,7 @@ a#totalmatch {
 
 .news-title>a {
 	color: #3e3e3e;
+	font-weight: bold;
 }
 
 .remain_right>.team-emblem {
@@ -677,7 +678,7 @@ a#totalmatch {
 				id="navbar">
 				<div class="nav-wrapper" align="center">
 					<div class="nav-container">
-						<a class="navbar-brand nav-logo" href="main.do">K In One</a>
+						<a class="navbar-brand nav-logo" href="/kinone/main.do">K In One</a>
 						<ul class="navbar-nav nav-menu">
 							<li class="nav-item"><a class="nav-link" href="kleagueNews.do">K리그 소식</a></li>
 							<li class="nav-item"><a class="nav-link" href="matchList.do">경기일정/결과</a></li>
@@ -697,7 +698,15 @@ a#totalmatch {
 									<a class="nav-link nav-text" href="join_form.do">회원가입</a>
 								</c:if>
 								<c:if test="${not empty sessionScope.email}">
+									<c:choose>
+									<c:when test='${sessionScope.email == "admin"}'>
+									<a class="nav-link nav-text" href="admin/main.do">관리자페이지</a>
+									</c:when>
+									<c:otherwise>
 									<a class="nav-link nav-text" href="mypage.do">마이페이지</a>
+									</c:otherwise>
+									</c:choose>
+									
 								</c:if>
 								</li>
 								<li class="nav-item">

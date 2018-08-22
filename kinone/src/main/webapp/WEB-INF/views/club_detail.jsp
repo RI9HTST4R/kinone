@@ -37,6 +37,7 @@
 	/* border: 1px solid red; */
 	width: 95%;
 	margine: auto;
+	width: 100%;
 }
 
 #stadium-map {
@@ -47,6 +48,11 @@
 #right-cont {
 	width: 25%;
 	font-size: 15pt;
+}
+
+#right-cont .table td, #right-cont .table th {
+	text-align: center;
+	vertical-align: middle;
 }
 
 #pschedule, #nschedule, #club-minirank, #club-pgrank, #club-parank {
@@ -106,6 +112,10 @@
 	vertical-align: middle;
 }
 
+#map-container {
+	width: 90%;
+}
+
 .pimage {
 	width: 100px;
 	height: 125px;
@@ -133,20 +143,22 @@
 	background-color: #fff;
 	padding-left: 20px;
 }
+
 .card-header::before {
-    position: absolute;
-    content: "";
-    width: 6px;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: #1892ed;
+	position: absolute;
+	content: "";
+	width: 6px;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: #1892ed;
 }
+
 .card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    background-color: rgb(237, 239, 244);
-    border-bottom: 1px solid rgba(0,0,0,.125);
+	padding: .75rem 1.25rem;
+	margin-bottom: 0;
+	background-color: rgb(237, 239, 244);
+	border-bottom: 1px solid rgba(0, 0, 0, .125);
 }
 </style>
 <script type="text/javascript">
@@ -157,6 +169,19 @@
 	});
 </script>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAO4YpxSmG1gH-Anhmz4hMLqaNQxPJZorw">
+</script>
+<script>
+function initialize() {
+  var mapProp = {
+    center:new google.maps.LatLng(37.5682588, 126.89727740000001),
+    zoom:16,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 <div class="pagetitle">
 	<img src="${url}/resources/emblem/${club.ccode}.png" width="130px"
 		height="130px" /> <span style="font-size: 30pt; hegiht: 25px">${club.cname}</span><br />
@@ -183,14 +208,20 @@
 			</c:if>
 		</div>
 		<br />
-		<hr>
-		<div id="stadium-map" align="justify">
-			<br />
-			<h2>${club.sname}오시는 길</h2>
-			<br />
-			<div id="map-container" style="border: 1px solid red;"></div>
+	<br/>
+	<hr>
+	<div id="stadium-map" align="justify">
+		<br/>
+		<h2>경기장(${club.sname}) 오시는 길</h2>
+		<br/>
+		<div id="googleMap" style="border: 1px solid lightgray; width: 90%; height: 500px;">
+		
 		</div>
 	</div>
+	
+
+	
+</div>
 	<div id="left-cont" class="tab2">
 		<c:forEach var="player" items="${playerList}" varStatus="cs">
 			<div class="club-wrapper" align="center"
@@ -323,8 +354,6 @@
 			</table>
 		</div>
 	</div>
-	<div id="bottom-cont">선수순위</div>
-
 </div>
 
 <script src="http://maps.googleapis.com/maps/api/js"></script>
@@ -378,9 +407,6 @@
 		}
 	}
 	
-	function playerdetail(){
-		
-	}
 </script>
 
 <%@include file="footer.jsp"%>

@@ -31,6 +31,7 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.model.Reservation;
+import com.project.kinone.model.Score;
 import com.project.kinone.model.Seats;
 import com.project.kinone.model.Shopping;
 import com.project.kinone.model.Stadium;
@@ -112,10 +113,22 @@ public class FrontController {
 		// 리그 별 선수 순위 리스트
 		// 득점랭크
 		List<Player> k1PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g", 2);
+	//	for(Player p : k1PlayerSeasonGRankList) {
+	//		System.out.println(p.toString());
+	//	}
 		List<Player> k2PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "g", 2);
+	//	for(Player p : k2PlayerSeasonGRankList) {
+	//		System.out.println(p.toString());
+	//	}
 		// 도움랭크
 		List<Player> k1PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 2);
+	//	for(Player p : k1PlayerSeasonARankList) {
+	//		System.out.println(p.toString());
+	//	}
 		List<Player> k2PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "a", 2);
+	//	for(Player p : k2PlayerSeasonARankList) {
+	//		System.out.println(p.toString());
+	//	}
 		
 		model.addAttribute("news_list", news_list);
 		model.addAttribute("clubList", clubList);
@@ -184,9 +197,9 @@ public class FrontController {
 		List<Player> playerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g", 10);
 		List<Player> playerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 10);
 		
-		System.out.println("클럽갯수:" +clubSeasonRankList.size());
-		System.out.println("골 선수 명수:" +playerSeasonGRankList.size());
-		System.out.println("도움 선수 명수:" +playerSeasonARankList.size());
+	//	System.out.println("클럽갯수:" +clubSeasonRankList.size());
+	//	System.out.println("골 선수 명수:" +playerSeasonGRankList.size());
+	//	System.out.println("도움 선수 명수:" +playerSeasonARankList.size());
 		
 		model.addAttribute("clubSeasonRankList", clubSeasonRankList);
 		model.addAttribute("playerSeasonGRankList", playerSeasonGRankList);
@@ -237,10 +250,12 @@ public class FrontController {
 		Stadium stadium = clubService.getStadium(ccode);
 		
 		Lineup lineup = adminService.getMatchDetail(mcode);
+		List<Score> scoreInfo = adminService.getMatchScoreInfo(mcode);
 		
 		model.addAttribute("match", match);
 		model.addAttribute("stadium", stadium.getSname());
 		model.addAttribute("lineup", lineup);
+		model.addAttribute("scoreInfo", scoreInfo);
 		return "match_detail";
 	}
 	
@@ -257,7 +272,7 @@ public class FrontController {
 	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, Model model) throws Exception {
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
-		System.out.println(club.toString());
+	//	System.out.println(club.toString());
 		String seasoncode = adminService.getTopSeason();
 		// 해당 클럽의 순위 정보
 		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);
@@ -282,8 +297,8 @@ public class FrontController {
 		List<HashMap<String, Object>> psGList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "g", 5);
 		// 해당 클럽의 도움 순위
 		List<HashMap<String, Object>> psAList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "a", 5);
-		System.out.println(psGList.size());
-		System.out.println(psAList.size());
+	//	System.out.println(psGList.size());
+	//	System.out.println(psAList.size());
 		
 		model.addAttribute("playerList",playerList);
 		model.addAttribute("club", club);
