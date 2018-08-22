@@ -26,7 +26,8 @@
     
     <select id="clubSeasonRank" parameterType="java.util.HashMap" resultType="java.lang.Integer">
     	select rno 
-    	from (select rownum rno, ccode from club_season where seasoncode = #{seasoncode} and lcode = #{lcode}
+    	from (select rank() over(order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc) rno,ccode
+    		  from club_season where seasoncode = #{seasoncode} and lcode = #{lcode}
 		order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc)
 		where ccode = #{ccode}
     </select>

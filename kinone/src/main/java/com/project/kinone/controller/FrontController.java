@@ -273,6 +273,7 @@ public class FrontController {
 		String seasoncode = adminService.getTopSeason();
 		// 해당 클럽의 순위 정보
 		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);
+		System.out.println("리스트 몇개?"+csList.size());
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		// 해당 클럽의 이전 경기 결과
 		Match prevMatch = matchService.getPrevMatchInfo(ccode, ts);
