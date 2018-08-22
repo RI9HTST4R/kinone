@@ -117,8 +117,8 @@ public class AdminDAOImpl implements AdminDAOInter {
 	}
 	
 	// 득점 정보를 통해 스텟 업데이트
-	public void updateStat(HashMap<String, Object> map) {
-		session.update("adminmapper.updateStat", map);
+	public int updateStat(HashMap<String, Object> map) {
+		return session.update("adminmapper.updateStat", map);
 		
 	}
 	

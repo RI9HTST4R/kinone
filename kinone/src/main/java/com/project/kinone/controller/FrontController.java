@@ -29,6 +29,7 @@ import com.project.kinone.model.Match;
 import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Reservation;
+import com.project.kinone.model.Score;
 import com.project.kinone.model.Seats;
 import com.project.kinone.model.Shopping;
 import com.project.kinone.model.Stadium;
@@ -246,10 +247,12 @@ public class FrontController {
 		Stadium stadium = clubService.getStadium(ccode);
 		
 		Lineup lineup = adminService.getMatchDetail(mcode);
+		List<Score> scoreInfo = adminService.getMatchScoreInfo(mcode);
 		
 		model.addAttribute("match", match);
 		model.addAttribute("stadium", stadium.getSname());
 		model.addAttribute("lineup", lineup);
+		model.addAttribute("scoreInfo", scoreInfo);
 		return "match_detail";
 	}
 	

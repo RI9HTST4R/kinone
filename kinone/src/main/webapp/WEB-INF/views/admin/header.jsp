@@ -97,6 +97,7 @@ h1#title {
 	});
 </script>
 <body>
+	<div id="mask"></div>
 	<div class="container-fluid">
 		<div class="row content">
 			<div class="top" align="center">

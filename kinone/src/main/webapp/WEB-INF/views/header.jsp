@@ -698,7 +698,15 @@ a#totalmatch {
 									<a class="nav-link nav-text" href="join_form.do">회원가입</a>
 								</c:if>
 								<c:if test="${not empty sessionScope.email}">
+									<c:choose>
+									<c:when test='${sessionScope.email == "admin"}'>
+									<a class="nav-link nav-text" href="admin/main.do">관리자페이지</a>
+									</c:when>
+									<c:otherwise>
 									<a class="nav-link nav-text" href="mypage.do">마이페이지</a>
+									</c:otherwise>
+									</c:choose>
+									
 								</c:if>
 								</li>
 								<li class="nav-item">

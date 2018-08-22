@@ -332,9 +332,13 @@ public class AdminServiceImpl implements AdminServiceInter {
 		
 		// 실점한 골키퍼 실점 수 올림
 		String gkcode = score.getGkcode();
+		Player gk = adminDao.pselect(gkcode);
+		System.out.println("골키퍼:"+gkcode);
 		map.put("pcode", gkcode);
+		map.put("ccode", gk.getCcode());
 		map.put("sort", "l");
-		adminDao.updateStat(map);
+		int result = adminDao.updateStat(map);
+		System.out.println("골키퍼 실점 늘렸어?"+result);
 		System.out.println("실점 선수 실점수 입력완료");
 		
 		return true;

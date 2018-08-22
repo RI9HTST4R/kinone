@@ -103,6 +103,16 @@ color: white;
 	width: 80px;
 	padding: 5px 10px 5px 10px;
 }
+#mask {
+  position:fixed;  
+  z-index:9000; 
+  background-color:#000;
+  opacity: 0.5;  
+  display: none;  
+  background-image: url("/kinone/resources/images/loading2.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+}
 </style>
 
 <div class="container">
@@ -391,7 +401,7 @@ color: white;
 			<c:if test="${match.mstatus == 0 and not empty lu.hStarting and not empty lu.hSubstitute and not empty lu.aStarting and not empty lu.aSubstitute}">
 				<a class="anchor-btn" id="scorebtn" onClick="saveScore('${match.mcode}')">저장</a>
 			</c:if>
-				<a class="anchor-btn" onClick="javascript:history.go(-1)">뒤로</a>
+				<a class="anchor-btn" onClick="location.href='/kinone/admin/matchList.do'">목록</a>
 		</div>
 	</div>
 </div>
@@ -533,6 +543,7 @@ function saveScore(mcode){
 				return false;
 			}
 			if(idx == (scorearr.length-1)){
+				wrapMask();
 			//	alert("마지막!");
 				var hscorecnt = $("#hscorer").find(".score").length;
 				var ascorecnt = $("#ascorer").find(".score").length;
@@ -624,31 +635,33 @@ function delScorer(obj){
 // 스코어 업데이트
 function updateScore(mcode){
 	var homescore = $("#hscore").val();
-    var awayscore = $("#ascore").val();
-    
-    $.ajax({
-       url: "/kinone/admin/matchEnd.do",
-       data: {"mcode":mcode, "homescore":homescore, "awayscore":awayscore},
-       dataType: "text",
-       type: "post",
-       success: function(data){
-          alert(data);
-          var result = parseInt($.trim(data));
-          if(result === 1){
-        	  var arr = $(".scoreinfolist");
-        	 serialForm(arr, 0);
-             alert("스코어가 수정되었습니다.");
-          }else {
-             alert("실패..");
-          }
-       }
-    });
+	var awayscore = $("#ascore").val();
+	   
+	$.ajax({
+		url: "/kinone/admin/matchEnd.do",
+		data: {"mcode":mcode, "homescore":homescore, "awayscore":awayscore},
+		dataType: "text",
+		type: "post",
+		success: function(data){
+		//	alert(data);
+			var result = parseInt($.trim(data));
+			if(result === 1){
+				var arr = $(".scoreinfolist");
+				serialForm(arr, 0);
+				alert("스코어가 수정되었습니다.");
+			}else {
+				alert("실패..");
+			}
+		}
+	});
 }
 
 // 득점 및 도움 입력
 function serialForm(arr, idx){
 	if(arr.length == 0){
 	//	alert("득점자가 없네?!");
+		location.reload();
+		unwrapMask();
 		return;
 	}else {
 		var e = arr[idx];
@@ -661,8 +674,10 @@ function serialForm(arr, idx){
 			dataType: "text",
 			type: "post",
 			success: function(data){
-				alert(data);
+			//	alert(data);
 				if(idx == (arr.length-1)){
+					location.reload();
+					unwrapMask();
 					alert("편집 완료");
 					return false;
 				}else {
@@ -677,6 +692,19 @@ function serialForm(arr, idx){
 		});
 	}
 	
+}
+
+function wrapMask(){
+	// 화면의 높이와 너비를 구한다.
+	var maskWidth  = document.body.scrollWidth;
+	var maskHeight = document.body.scrollHeight;
+	
+	// 마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	$('#mask').css({'width':maskWidth,'height':maskHeight, 'display':'block', 'left':'0', 'top': '0'});
+}
+
+function unwrapMask(){
+	$('#mask').css("display","none");
 }
 /////////////////////////////////////////////////////////////////////////////////////
 
