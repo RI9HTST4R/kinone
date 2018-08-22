@@ -84,6 +84,9 @@ footer {
 h1#title {
 	margin-top: 0px;
 }
+#logout, #logout:hover{
+	font-weight: bold;
+}
 </style>
 
 </head>
@@ -104,6 +107,9 @@ h1#title {
 				<h1 id="pagetitle">관리자 페이지</h1>
 			</div>
 			<div class="col-sm-3 sidenav">
+				<c:if test='${sessionScope.email == "admin"}'>
+					<a id="logout" href="/kinone/logout.do"><i class="fas fa-sign-out-alt"></i> 관리자 로그아웃</a>
+				</c:if>
 				<ul class="nav nav-pills nav-stacked">
 					<li><h4 class="sidemenu">메인</h4></li>
 					<li <c:if test='${fn:contains(cpage, "main")}'>class="active"</c:if>><a href="/kinone/admin/main.do">시즌</a></li>
