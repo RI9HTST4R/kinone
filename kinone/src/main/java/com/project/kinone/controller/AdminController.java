@@ -4,6 +4,7 @@ package com.project.kinone.controller;
 import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +32,7 @@ import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
+import com.project.kinone.model.Score;
 import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.util.Lineup;
@@ -188,6 +191,13 @@ public class AdminController{
 		// 라인업이 등록되었다면 그 등록된 라인업 선수 정보
 		Lineup lu = adminService.getMatchDetail(mcode);
 		
+		// 종료된 매치는 득점 정보도 같이 불러온다.
+		int mstatus = match.getMstatus();
+		if(mstatus == 1) {
+			List<Score> scoreInfo = adminService.getMatchScoreInfo(mcode);
+			model.addAttribute("scoreInfo", scoreInfo);
+		}
+		
 		model.addAttribute("match", match);
 		model.addAttribute("pList_home", pList_home);
 		model.addAttribute("pList_away", pList_away);
@@ -210,12 +220,27 @@ public class AdminController{
 	// 매치 종료 상태로 업데이트 및 스코어 입력
 	@RequestMapping(value="/admin/matchEnd.do", method=RequestMethod.POST)
 	public String matchEnd(Match match, Model model) throws Exception{
+		System.out.println(match.toString());
 		System.out.println("mcode : "+match.getMcode());
 		System.out.println("homescore : "+match.getHomescore());
 		System.out.println("awayscore : "+match.getAwayscore());
+		
 		int result = adminService.matchEnd(match);
+		
 		model.addAttribute("ajax", result);
 		
+		return "ajax";
+	}
+	
+	// 매치 종료 상태로 득점 및 도움, 실점 스탯 올리기
+	@RequestMapping(value="/admin/scoreInsert.do", method=RequestMethod.POST)
+	public String scoreInsert(Score score, Model model) throws Exception{
+		
+	//	System.out.println(score.toString());
+		
+		boolean result = adminService.insertScore(score);
+		
+		model.addAttribute("ajax", result);
 		return "ajax";
 	}
 

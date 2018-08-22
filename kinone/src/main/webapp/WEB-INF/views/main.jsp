@@ -89,7 +89,7 @@
 										<a href="${url}/news_cont.do?bno=${news.bno}"><img src="${url}/resources/board_upload/${news.image}" title="${news.subject}"></a>
 									</div>
 									<div class="news-title" align="justify">
-										<a href="${url}/news_cont.do?bno=${news.bno}" title="">${news.subject}</a>
+										<a href="${url}/news_cont.do?bno=${news.bno}" title="${news.subject}">${news.subject}</a>
 									</div>
 								</div>
 								</c:forEach>

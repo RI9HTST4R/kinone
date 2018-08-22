@@ -269,7 +269,7 @@ a#totalmatch {
 }
 
 .news-content>.news>.news-image {
-	/* border: 1px solid blue; */
+	border: 1px solid lightgray;
 	width: 95%;
 	height: 75%;
 	display: block;
@@ -307,6 +307,7 @@ a#totalmatch {
 
 .news-title>a {
 	color: #3e3e3e;
+	font-weight: bold;
 }
 
 .remain_right>.team-emblem {

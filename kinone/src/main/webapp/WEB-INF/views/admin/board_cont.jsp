@@ -74,7 +74,7 @@ a {
 	<font size="6px">제목 : ${bcont.subject}</font>  <font size="4px" style="float:right;font-style: italic;padding-top:20px;" > readcount: ${bcont.readcount}  </font>
 	
 	<hr>
-  	<div id="content" align="center">
+  	<div id="content" align="justify">
   	
   	
   	
