@@ -31,9 +31,9 @@ public class ReservServiceImpl implements ReservServiceInter{
 		// TODO Auto-generated method stub
 		return reservDao.insertReserve(list);
 	}
-	public List<Reservation> getAllTickets(int mno) {
+	public List<Reservation> getAllTickets(Map<String, Integer> map) {
 		// TODO Auto-generated method stub
-		return reservDao.getAllTickets(mno);
+		return reservDao.getAllTickets(map);
 	}
 	public Reservation getTheTicket(String rcode) {
 		// TODO Auto-generated method stub
@@ -42,5 +42,9 @@ public class ReservServiceImpl implements ReservServiceInter{
 	public int cancel_reservation(String rcode) {
 		// TODO Auto-generated method stub
 		return reservDao.cancel_reservation(rcode);
+	}
+	public int getTicketsCount(int mno) {
+		// TODO Auto-generated method stub
+		return reservDao.getTicketsCount(mno);
 	}
 }
