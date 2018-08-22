@@ -28,6 +28,8 @@ import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
+import com.project.kinone.model.Player_detail;
+import com.project.kinone.model.Player_season;
 import com.project.kinone.model.Reservation;
 import com.project.kinone.model.Seats;
 import com.project.kinone.model.Shopping;
@@ -40,6 +42,7 @@ import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.service.ReservServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
+import com.project.kinone.util.clubname;
 
 @Controller
 public class FrontController {
@@ -272,6 +275,9 @@ public class FrontController {
 //		if (file.exists()) {
 //			t=1;
 //		}
+		//선수단 목록
+		List<Player> playerList=playerService.getPlayerListInClub(ccode);
+		
 		// 해당 클럽의 득점 순위
 		List<HashMap<String, Object>> psGList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "g", 5);
 		// 해당 클럽의 도움 순위
@@ -279,6 +285,7 @@ public class FrontController {
 		System.out.println(psGList.size());
 		System.out.println(psAList.size());
 		
+		model.addAttribute("playerList",playerList);
 		model.addAttribute("club", club);
 		model.addAttribute("csList", csList);
 		model.addAttribute("prevMatch", prevMatch);
@@ -286,6 +293,26 @@ public class FrontController {
 		model.addAttribute("psGList", psGList);
 		model.addAttribute("psAList", psAList);
 		return "club_detail";
+	}
+	
+	//선수 상세 페이지
+	@RequestMapping(value="player_detail.do")
+	public String playerdetail(Model model,@RequestParam("pcode") String pcode) throws Exception{
+		
+		System.out.println("프론트 playerdetail");
+		Player player = adminService.pselect(pcode);
+		Player_detail playerd = adminService.pselectd(pcode);
+		List<Player_season> players = adminService.pselects(pcode);
+		List<Club> clist=adminService.getMngClubList();
+		
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		model.addAttribute("cn", cn);
+		model.addAttribute("player", player);
+		model.addAttribute("playerd", playerd);
+		model.addAttribute("players", players);
+		
+		
+		return"playerdetail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
