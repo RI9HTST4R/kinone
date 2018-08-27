@@ -12,6 +12,7 @@
 	/* border: 1px solid red; */
 	width: 100%;
 	font-size: 0;
+	margin-bottom: 30px;
 }
 
 .cont-emblem, .cont-player {
