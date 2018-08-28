@@ -265,7 +265,7 @@
 			<br/><br/>
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "DF"}'>
-			<div class="player-card">
+			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
 			<c:if test="${not empty player.photo}">
 				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			</c:if>
@@ -283,7 +283,7 @@
 			<br/><br/>
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "MF"}'>
-			<div class="player-card">
+			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
 			<c:if test="${not empty player.photo}">
 				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			</c:if>
@@ -301,7 +301,7 @@
 			<br/><br/>
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "FW"}'>
-			<div class="player-card">
+			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
 			<c:if test="${not empty player.photo}">
 				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			</c:if>
