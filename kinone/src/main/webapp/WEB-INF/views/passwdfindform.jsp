@@ -323,6 +323,7 @@ $(function(){
 					console.log(data);
 					if(data!=null){
 						alert("비밀번호 재설정에 성공했습니다");
+						window.close();
 					}
 				}
 			})
