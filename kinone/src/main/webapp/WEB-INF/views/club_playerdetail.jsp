@@ -291,15 +291,15 @@ button {
 <div class="card-body2">
 <div class="cb22">
 <table class="career">
+			<c:if test="${player.position !='GK' }">
                 <thead class="thead-light">
+                
                     <tr>
                         <th>년도</th>
-                        <th>리그</th>
                         <th>소속</th>
                         <th>출장</th>
                         <th>득점</th>
                         <th>도움</th>
-                        <th>실점</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -314,11 +314,38 @@ button {
 											value="${cn[key]}" /></td>
 									<td>${players.gamecount}</td>
 									<td>${players.p_ggoal}</td>
-									<td>${players.p_lgoal}</td>
 									<td>${players.p_assist}</td>
 								</tr>
 							</c:if>
 						</c:forEach>
+				</c:if>
+			<c:if test="${player.position =='GK' }">			
+						<thead class="thead-light">
+                
+                    <tr>
+                        <th>년도</th>
+                        <th>소속</th>
+                        <th>출장</th>
+                        <th>실점</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <c:set var="key" value="${0 }" />
+                          <c:forEach var="players" items="${players}">
+							<c:if test="${empty players.seasoncode}">
+							</c:if>
+							<c:if test="${not empty players.seasoncode}">
+								<tr>
+									<td>${players.seasoncode}</td>
+									<td><c:set var="key" value="${players.ccode}" /> <c:out
+											value="${cn[key]}" /></td>
+									<td>${players.gamecount}</td>
+									<td>${players.p_lgoal}</td>
+								</tr>
+							</c:if>
+						</c:forEach>
+			
+			</c:if>	
             </table>
             <br>
             
@@ -326,7 +353,9 @@ button {
             </div>
             
 			</div>
+			
 <div align=right>
+<br>
 <button type="button" style="font-size : 14px;"	onclick="location.href='/kinone/clubDetail.do?ccode=${player.ccode}&T=1'">돌아가기</button>
 </div>
 
