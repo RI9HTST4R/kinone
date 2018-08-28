@@ -14,8 +14,8 @@
 		update member set passwd=#{passwd} where email=#{email}
 	</update>
 	<!-- 이름과 생년월일로 이메일찾기 -->
-	<select id="emailfind" parameterType="member" resultType="String">
-		select email from member where mname=#{mname} and mbirthdate=#{mbirthdate}
+	<select id="emailfind" parameterType="Member" resultType="Member">
+		select * from member where mname=#{mname} and mbirthdate=#{mbirthdate}
 	</select>
 	
     <!-- ############################################################################################# -->

@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+</script>
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js">
+</script>
+<!DOCTYPE>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -98,7 +102,7 @@ hr {
 <div class="pagetitle"><span>K In One 이메일 찾기</span></div>
 <br>
 
-<form action="/kinone/emailfind.do" method="post">
+<form action="/kinone/emailfind.do" method="post" id="myform">
 	<div class="tab2">
 		<h3>가입 정보 입력</h3>
 		<p>
@@ -106,14 +110,39 @@ hr {
 				 name="mname">
 		</p>
 		<p>
-			<input type=date	 name="mbirthdate1" >
+			<input type=date	 name="mbirthdate1" id="register_date" value="1900-01-01">
 		</p>
 	</div>
 
-<input type="submit" id="prevBtn3" value="확인">
-<input type="button" id="nextBtn3" value="취소" onclick="close()">
+<input type="submit" " value="확인">
+<input type="button" id="next" value="취소" onclick="close()">
 </form>
 
+<script>
+
+$("#myform").submit(function() {
+  if( $("#register_email").val()=="") {
+    alert("이름을 입력해주세요.");
+    $('#register_email').val("");
+    $('#register_email').focus();
+    
+    return false;
+  }else if($("#register_date").val()=="1900-01-01"){
+	  alert("생년월일을 선택해주세요.");
+	  return false;
+  }
+  return true;
+});
+
+$("#next").click(function(){
+	window.close();
+});
+
+</script>
 </body>
+
+
+
+
 </html>
 

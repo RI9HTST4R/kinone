@@ -340,7 +340,7 @@ public class FrontController {
 		model.addAttribute("players", players);
 		
 		
-		return"playerdetail";
+		return"club_playerdetail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -442,7 +442,7 @@ public class FrontController {
 		System.out.println(mbirthdate2);
 		member.setMbirthdate(Timestamp.valueOf(mbirthdate2));
 		
-		String em = memberService.emailfind(member);
+		Member em = memberService.emailfind(member);
 		
 		if (em==null) {
 			System.out.println("해당 성명/생년월일에 아이디 없음");
@@ -451,11 +451,17 @@ public class FrontController {
 			out.println("history.go(-1)");
 			out.println("</script>");
 			
+		}else if(em.getMstatus()==0){
+			out.println("<script>");
+			out.println("alert('탈퇴한 회원입니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+			
 		}else {
-			int t=em.length()-4;
+			int t=em.getMname().length()-4;
 			String p = "*";
 			String rp =new String(new char[t]).replace("\0", p);
-			String ttm=em.substring(0, 4);
+			String ttm=em.getMname().substring(0, 4);
 			String fem=ttm+rp;
 			System.out.println(fem);
 			
@@ -477,10 +483,20 @@ public class FrontController {
 	
 	//비번 찾기 이메일 맞나 확인
 	@RequestMapping(value = "/findemailchk.do")
-	public String findemailchk(@RequestParam("email") String email, Model model) {
+	public String findemailchk(@RequestParam("email") String email, Model model,HttpServletResponse response)throws  Exception {
 		System.out.println("findemailchk");
-		String em = memberService.find_email(email);
+		Member em = memberService.logincheck(email);
 		System.out.println("체크한 이메일 값="+em);
+		//출력객체
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		if (em.getMstatus()==0) {
+			out.println("<script>");
+			out.println("alert('탈퇴한 회원입니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+		}
+		
 		model.addAttribute("ajax", em);
 		return "ajax";
 	}
@@ -492,8 +508,10 @@ public class FrontController {
 		
 		System.out.println(email1+email_number);
 		
+		
 		//이름 꺼내기용
 		Member om = memberService.logincheck(email1);
+		
 		
 		// Mail Server 설정
 		String charSet = "utf-8";
@@ -503,7 +521,7 @@ public class FrontController {
 
 		// 보내는 사람 EMail, 제목, 내용
 		String fromEmail = "babamandu@nate.com";
-		String fromName = om.getMname()+"씨에게";
+		String fromName = om.getMname();
 		String subject = "K In One 인증메일입니다.";
 
 		// 받는 사람 E-Mail 주소
