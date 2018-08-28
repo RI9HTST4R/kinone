@@ -6,7 +6,7 @@
 		<h1 id="title">클럽 리스트</h1>
 		<hr>
 		<form>
-			<table border=1px class="table table-sm">
+			<table class="table table-sm">
 				<thead>
 					<th>목록</th>
 					<th>클럽명</th>

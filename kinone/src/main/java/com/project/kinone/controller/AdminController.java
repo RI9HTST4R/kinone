@@ -680,7 +680,7 @@ public class AdminController{
 		//file upload처리
 		MultipartFile file = mhsr.getFile("file");
 		
-		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player");
+		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player/"+player.getCcode());
 		
 		//업로드 파일명을 위한 새 pcode 꺼내오기
 		String pcode;
@@ -793,7 +793,7 @@ public class AdminController{
 		
 		//file upload처리
 		MultipartFile file=mhsr.getFile("file");
-		String path= mhsr.getSession().getServletContext().getRealPath("resources/player");
+		String path= mhsr.getSession().getServletContext().getRealPath("resources/player/"+player.getCcode());
 		System.out.println("path="+path);
 		
 		

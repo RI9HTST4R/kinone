@@ -103,7 +103,7 @@
 							<div class="rank_wrap">
 								<div class="top rank-top" align="left">
 									<span class="subject">2018 K리그 1 선수 기록</span><a class="more"
-										href="${url}/playerRank.do?seasoncode='2018'&lcode='K1'">더보기 &gt;</a>
+										href="${url}/rank.do">더보기 &gt;</a>
 								</div>
 								<hr>
 								<div class="rank-content" align="center">
@@ -172,7 +172,7 @@
 							<div class="rank_wrap">
 								<div class="top rank-top" align="left">
 									<span class="subject">2018 K리그 2 선수 기록</span><a class="more"
-										href="${url}/playerRank.do?seasoncode='2018'&lcode='K2'">더보기 &gt;</a>
+										href="${url}/rank.do">더보기 &gt;</a>
 								</div>
 								<hr>
 								<div class="rank-content" align="center">

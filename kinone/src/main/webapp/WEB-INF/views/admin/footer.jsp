@@ -4,8 +4,8 @@
 </div>
 </div>
 </div>
-<footer class="container-fluid">
-	<p>Footer Text</p>
+<footer class="container-fluid" style="text-align: center;">
+	<p style="line-height: 50px;">Copyright 2018 ⓒ K In One. All right reserved.</p>
 </footer>
 </body>
 </html>
