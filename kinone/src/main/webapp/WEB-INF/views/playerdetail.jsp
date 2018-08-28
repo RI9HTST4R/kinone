@@ -233,13 +233,7 @@ button {
 
 	<div class="cb1">
 		<div class="playerph">
-			<c:if test="${player.photo!=null}">
-				<img class="pimage"
-					src="${url}/resources/player/${player.pcode}.png">
-			</c:if>
-			<c:if test="${player.photo==null}">
-				<img class="pimage" src="${url}/resources/player/nop.png">
-			</c:if>
+			<img class="pimage" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 		</div>
 	</div>
 	<div class="cb2">

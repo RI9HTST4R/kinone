@@ -248,12 +248,7 @@
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "GK"}'>
 			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
-			<c:if test="${not empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
-			</c:if>
-			<c:if test="${empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
-			</c:if>
+			<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			<span class="pname" style="font-weight: bold;">${player.pname}</span>
 			</div>
 			</c:if>
@@ -266,12 +261,7 @@
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "DF"}'>
 			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
-			<c:if test="${not empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
-			</c:if>
-			<c:if test="${empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
-			</c:if>
+			<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			<span class="pname" style="font-weight: bold;">${player.pname}</span>
 			</div>
 			</c:if>
@@ -284,12 +274,7 @@
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "MF"}'>
 			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
-			<c:if test="${not empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
-			</c:if>
-			<c:if test="${empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
-			</c:if>
+			<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			<span class="pname" style="font-weight: bold;">${player.pname}</span>
 			</div>
 			</c:if>
@@ -302,12 +287,7 @@
 			<c:forEach var="player" items="${playerList}">
 			<c:if test='${player.position == "FW"}'>
 			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
-			<c:if test="${not empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
-			</c:if>
-			<c:if test="${empty player.photo}">
-				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
-			</c:if>
+			<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
 			<span class="pname" style="font-weight: bold;">${player.pname}</span>
 			</div>
 			</c:if>
@@ -389,7 +369,7 @@
 						<tr>
 							<td>${ps.soonwe}</td>
 							<td><img class="cont-player"
-								src="${url}/resources/player/${ps.pcode}.png" /><span>${ps.pname}</span></td>
+								src="${url}/resources/player/${ps.ccode}/${ps.pcode}.png" /><span>${ps.pname}</span></td>
 							<td>${ps.gamecount}</td>
 							<td>${ps.result}</td>
 						</tr>
@@ -414,7 +394,7 @@
 						<tr>
 							<td>${ps.soonwe}</td>
 							<td><img class="cont-player"
-								src="${url}/resources/player/${ps.pcode}.png" /><span>${ps.pname}</span></td>
+								src="${url}/resources/player/${ps.ccode}/${ps.pcode}.png" /><span>${ps.pname}</span></td>
 							<td>${ps.gamecount}</td>
 							<td>${ps.result}</td>
 						</tr>
