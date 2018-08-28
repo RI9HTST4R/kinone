@@ -12,6 +12,7 @@
 	/* border: 1px solid red; */
 	width: 100%;
 	font-size: 0;
+	margin-bottom: 30px;
 }
 
 .cont-emblem, .cont-player {
@@ -115,12 +116,53 @@
 #map-container {
 	width: 90%;
 }
-
+.tab2 {
+	text-align: justify;
+}
+#manager {
+	font-style: italic;
+	font-size: 20pt;
+	font-weight: bold;
+	font-family: Jua;
+}
 .pimage {
 	width: 100px;
 	height: 125px;
 }
-
+.p-position {
+	/* border: 1px solid red; */
+	text-align: left;
+	font-size: 0;
+	letter-spacing: 0px;
+  	word-spacing: 0px;
+}
+.position-name {
+	font-size: 25pt;
+	font-weight: bold;
+	font-family: Righteous;
+}
+.player-card {
+	text-align: center;
+	display: inline-block;
+	border: 1px solid lightgray;
+	margin-right: 15px;
+	margin-bottom: 15px;
+	padding: 8px;
+	width: auto;
+}
+.player-card:hover {
+	border: 1px solid orange;
+	cursor: pointer;
+}
+.player-card > .pimage, .player-card > .pname {
+	display: block;
+}
+.player-card > .pimage {
+	margin-bottom: 10px;
+}
+.player-card > .pname {
+	font-size: 15pt;
+}
 .club-wrapper {
 	padding: 5px;
 	color: white;
@@ -137,29 +179,6 @@
 	cursor: pointer;
 }
 
-.card-header {
-	position: relative;
-	font-size: 16px;
-	background-color: #fff;
-	padding-left: 20px;
-}
-
-.card-header::before {
-	position: absolute;
-	content: "";
-	width: 6px;
-	height: 100%;
-	left: 0;
-	top: 0;
-	background-color: #1892ed;
-}
-
-.card-header {
-	padding: .75rem 1.25rem;
-	margin-bottom: 0;
-	background-color: rgb(237, 239, 244);
-	border-bottom: 1px solid rgba(0, 0, 0, .125);
-}
 </style>
 <script type="text/javascript">
 
@@ -180,19 +199,6 @@
 	});
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAO4YpxSmG1gH-Anhmz4hMLqaNQxPJZorw">
-</script>
-<script>
-function initialize() {
-  var mapProp = {
-    center:new google.maps.LatLng(37.5682588, 126.89727740000001),
-    zoom:16,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-</script>
 <div class="pagetitle">
 	<img src="${url}/resources/emblem/${club.ccode}.png" width="130px"
 		height="130px" /> <span style="font-size: 30pt; hegiht: 25px">${club.cname}</span><br />
@@ -219,48 +225,100 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			</c:if>
 		</div>
 		<br />
-	<br/>
-	<hr>
-	<div id="stadium-map" align="justify">
 		<br/>
-		<h2>경기장(${club.sname}) 오시는 길</h2>
-		<br/>
-		<div id="googleMap" style="border: 1px solid lightgray; width: 90%; height: 500px;">
-		
+		<hr>
+		<div id="stadium-map" align="justify">
+			<input type="hidden" id="lat" value="${club.lat}"/>
+			<input type="hidden" id="lon" value="${club.lon}"/>
+			<br/>
+			<h2>경기장(${club.sname}) 오시는 길</h2>
+			<br/>
+			<div id="googleMap" style="border: 1px solid lightgray; width: 90%; height: 500px;">
+			
+			</div>
 		</div>
 	</div>
-	
-
-	
-</div>
 	<div id="left-cont" class="tab2">
-		<c:forEach var="player" items="${playerList}" varStatus="cs">
-			<div class="club-wrapper" align="center"
-				onClick="location.href='${url}/player_detail.do?pcode=${player.pcode}'"
-				<%-- "clubintro(this, '${player.pcode}')" --%>	>
-
-				<c:if test="${player.photo!=null}">
-					<img class="pimage"
-						src="${url}/resources/player/${player.pcode}.png">
-				</c:if>
-				<c:if test="${player.photo==null}">
-					<img class="pimage" src="${url}/resources/player/nop.png">
-				</c:if>
-
-				<br />
-				<span style="font-weight: bold;"> ${player.pname}</span>
+		<span id="manager">감독 ${club.cmanager}</span>
+		<hr>
+		
+		<div class="p-position" id="goalkeeper" align="left">
+			<span class="position-name">GK</span>
+			<br/><br/>
+			<c:forEach var="player" items="${playerList}">
+			<c:if test='${player.position == "GK"}'>
+			<div class="player-card" onClick="location.href='player_detail.do?pcode=${player.pcode}'">
+			<c:if test="${not empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
+			</c:if>
+			<c:if test="${empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
+			</c:if>
+			<span class="pname" style="font-weight: bold;">${player.pname}</span>
 			</div>
-		</c:forEach>
-
-	</div>
-	<div id="left-cont" class="tab3">
-		<div class="card-header">선수 정보</div>
-
-
+			</c:if>
+			</c:forEach>
+		</div>
+		<hr>
+		<div class="p-position" id="defender" align="left">
+			<span class="position-name" style="color: green;">DF</span>
+			<br/><br/>
+			<c:forEach var="player" items="${playerList}">
+			<c:if test='${player.position == "DF"}'>
+			<div class="player-card">
+			<c:if test="${not empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
+			</c:if>
+			<c:if test="${empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
+			</c:if>
+			<span class="pname" style="font-weight: bold;">${player.pname}</span>
+			</div>
+			</c:if>
+			</c:forEach>
+		</div>
+		<hr>
+		<div class="p-position" id="midfielder" align="left">
+			<span class="position-name" style="color: blue;">MF</span>
+			<br/><br/>
+			<c:forEach var="player" items="${playerList}">
+			<c:if test='${player.position == "MF"}'>
+			<div class="player-card">
+			<c:if test="${not empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
+			</c:if>
+			<c:if test="${empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
+			</c:if>
+			<span class="pname" style="font-weight: bold;">${player.pname}</span>
+			</div>
+			</c:if>
+			</c:forEach>
+		</div>
+		<hr>
+		<div class="p-position" id="foward" align="left">
+			<span class="position-name" style="color: red;">FW</span>
+			<br/><br/>
+			<c:forEach var="player" items="${playerList}">
+			<c:if test='${player.position == "FW"}'>
+			<div class="player-card">
+			<c:if test="${not empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/${player.ccode}/${player.pcode}.png">
+			</c:if>
+			<c:if test="${empty player.photo}">
+				<img class="pimage" width="110px" height="125px" src="${url}/resources/player/default.png">
+			</c:if>
+			<span class="pname" style="font-weight: bold;">${player.pname}</span>
+			</div>
+			</c:if>
+			</c:forEach>
+		</div>
+		<hr>
 	</div>
 
 	<div id="right-cont">
 		<div id="pschedule">
+		
 			<div id="ptop">
 				<h6 style="margin: 0;">최근 경기 결과</h6>
 				<fmt:formatDate value="${prevMatch.mdate}" pattern="MM.dd E" />
@@ -367,37 +425,36 @@ google.maps.event.addDomListener(window, 'load', initialize);
 	</div>
 </div>
 
-<script src="http://maps.googleapis.com/maps/api/js"></script>
-<script
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEM3FEmY5ecJzAkXH9TDRAs1MaXpSWtME"></script>
-<script>
-	var myCenter = new google.maps.LatLng(37.5682588, 126.89727740000001);
+<script	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEM3FEmY5ecJzAkXH9TDRAs1MaXpSWtME"></script>
+<script type="text/javascript">
 
 	function initialize() {
+		var lat = $("#lat").val();
+		var lon = $("#lon").val();
+		var myCenter = new google.maps.LatLng(lat, lon);
 		var mapProp = {
 			center : myCenter,
-			zoom : 18,
+			zoom : 16,
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		};
-
-		var map = new google.maps.Map(document.getElementById("map-container"),
+	
+		var map = new google.maps.Map(document.getElementById("googleMap"),
 				mapProp);
-
+	
 		var marker = new google.maps.Marker({
 			position : myCenter,
 			title : 'Click to zoom'
 		});
-
+	
 		marker.setMap(map);
-
+	
 		// Zoom to 9 when clicking on marker
 		google.maps.event.addListener(marker, 'click', function() {
 			map.setZoom(9);
 			map.setCenter(marker.getPosition());
 		});
 	}
-	google.maps.event.addDomListener(window, 'load', initialize);
-
+	
 	function clubintro(obj, p) {
 		$(obj).addClass("menuselected");
 		if (p == 'c') {
@@ -417,7 +474,12 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			$(".tab3").show();
 		}
 	}
-	
-</script>
+	$(function() {
+		$(".tab1").show();
+		$(".tab2").hide();
+		$(".tab3").hide();
 
+		google.maps.event.addDomListener(window, 'load', initialize);
+	});
+</script>
 <%@include file="footer.jsp"%>

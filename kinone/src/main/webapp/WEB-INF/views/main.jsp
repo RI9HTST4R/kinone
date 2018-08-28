@@ -249,7 +249,7 @@
 							<div class="emblem" align="left">
 								<hr>
 								<c:forEach var="club" items="${clubList}">
-									<a href="${url}/clubMain.do?ccode=${club.ccode}"><img
+									<a href="clubDetail.do?ccode=${club.ccode}"><img
 										src="${url}/resources/emblem/${club.ccode}.png"
 										title="${club.cname_short}"></a>
 								</c:forEach>

@@ -750,7 +750,7 @@ a#totalmatch {
 					<div id="K1match" class="tab-pane active">
 						<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡK리그1 일정ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
 
-
+						<!-- 날짜부분 -->
 						<div class="match-container" id="K1league" align="center">
 							<!-- Nav tabs -->
 							<ul class="nav match-date" role="tablist">
@@ -762,7 +762,7 @@ a#totalmatch {
 							</c:forEach>
 							</ul>
 
-							<!-- Tab panes -->
+							<!-- 슬라이드 내용 부분 -->
 							<div class="tab-content match-detail" id="K1matchday">
 								<c:forEach var="matchday" items="${k1MatchDays}" varStatus="s1">
 									<fmt:formatDate var="key" value="${matchday}" pattern="yyyy-MM-dd"/>
@@ -775,13 +775,14 @@ a#totalmatch {
 								<div id="K1${matchday}" class="tab-pane <c:if test="${s1.count == 4}">active</c:if> each-match">
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#">&lt;</a></c:when>
+										<c:when test="${totalPage > 1}"><a onClick="slidearrow('left', this)" style="cursor: pointer;">&lt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&lt;</span></c:when>
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
 									</div>
 									<c:forEach var="amatch" items="${inDayMap['list']}" begin="${begin}" end="${end}" varStatus="s2">
-									<div class="match <c:if test="${s2.count == 2}">match-center</c:if>">
+									<div class="match <c:if test="${s2.count == 2 or s2.count == 5}">match-center</c:if> amatch${s2.count}"
+									<c:if test="${s2.count >3}">style="display:none;"</c:if>>
 										<table class="match-table">
 											<tr class="match-top">
 												<td rowspan="2" class="match-team"><img src="${url}/resources/emblem/${amatch.ccode_home}.png" title="${amatch.cname_short_h}">
@@ -818,10 +819,12 @@ a#totalmatch {
 									</div>
 									</c:forEach>
 									
-									<c:if test="${fn:length(inDayMap['list']) < 3}">
-										<c:set var="idx" value="${3- fn:length(inDayMap['list'])}"/>
-										<c:if test="${idx == 1}">
-											<div class="match">
+									<c:if test="${fn:length(inDayMap['list'])%3 != 0}">
+					<%-- 					<c:set var="idx" value="${3- fn:length(inDayMap['list'])}"/> --%>
+										<%-- <c:if test="${idx == 1}"> --%>
+										<c:if test="${fn:length(inDayMap['list'])%3 == 2}">
+											<div class="match"
+											<c:if test="${fn:length(inDayMap['list']) > 3}">style="display:none;"</c:if>>
 												<table class="match-table">
 													<tr>
 														<td colspan="4" rowspan="4" style="color: lightgray;">
@@ -832,8 +835,10 @@ a#totalmatch {
 												</table>
 											</div>
 										</c:if>
-										<c:if test="${idx == 2}">
-											<div class="match match-center">
+										<%-- <c:if test="${idx == 2}"> --%>
+										<c:if test="${fn:length(inDayMap['list'])%3 == 1}">
+											<div class="match match-center"
+											<c:if test="${fn:length(inDayMap['list']) > 3}">style="display:none;"</c:if>>
 												<table class="match-table">
 													<tr>
 														<td colspan="4" rowspan="4" style="color: lightgray;">
@@ -843,7 +848,8 @@ a#totalmatch {
 													</tr>
 												</table>
 											</div>
-											<div class="match">
+											<div class="match"
+											<c:if test="${fn:length(inDayMap['list']) > 3}">style="display:none;"</c:if>>
 												<table class="match-table">
 													<tr>
 														<td colspan="4" rowspan="4" style="color: lightgray;">
@@ -858,7 +864,7 @@ a#totalmatch {
 									
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#">&gt;</a></c:when>
+										<c:when test="${totalPage > 1}"><a onClick="slidearrow('right', this)" style="cursor: pointer;">&gt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&gt;</span></c:when>
 										<c:otherwise><span>&gt;</span></c:otherwise>
 										</c:choose>
@@ -897,7 +903,7 @@ a#totalmatch {
 								<div id="K2${matchday}" class="tab-pane <c:if test="${s1.count == 4}">active</c:if> each-match">
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#">&lt;</a></c:when>
+										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#" onClick="slidearrow('left', this)">&lt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&lt;</span></c:when>
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
@@ -981,7 +987,7 @@ a#totalmatch {
 									
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#">&gt;</a></c:when>
+										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#" onClick="slidearrow('right', this)">&gt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&gt;</span></c:when>
 										<c:otherwise><span>&gt;</span></c:otherwise>
 										</c:choose>
@@ -998,6 +1004,30 @@ a#totalmatch {
 			</div>
 		</div>
 		<!-- 매치 일정 슬라이드 끝 -->
+		
+		<script>
+			function slidearrow(direction, obj){
+				var mdaydiv = $(obj).parents().eq(1);
+				var idval = mdaydiv.attr("id");
+			//	alert("어느쪽?"+direction);
+			//	alert("아이디는?"+idval);
+				mdaydiv.find(".match").each(function(idx){
+					if(direction == 'right'){
+						if((idx+1) <= 3){
+							$(this).css("display", "none");
+						}else {
+							$(this).css("display", "inline-block");
+						}
+					}else {
+						if((idx+1) <= 3){
+							$(this).css("display", "inline-block");
+						}else {
+							$(this).css("display", "none");
+						}
+					}
+				});
+			}
+		</script>
 		
 		<!-- 페이지 내용 들어가는 부분 -->
 		<div class="wrap_page">

@@ -149,29 +149,23 @@ span.FW {
 				<c:if test="${match.mstatus == 1}">
 					<span style="font-size: 40pt; font-weight: bold;">${match.homescore} : ${match.awayscore}</span><br/>
 					<c:if test="${not empty scoreInfo}">
-						<div class="score-info">
+						<div class="score-info" align="left">
 							<ul class="score-list" style="text-align: left; <c:if test="${match.homescore >= match.awayscore}">border-right: 1px solid lightgray;</c:if>">
 								<c:forEach var="score" items="${scoreInfo}">
 								<c:if test='${score.ccode == match.ccode_home}'>
 								<li>
 									<span style="color: red; font-weight: bold;">${score.goaltime}'</span> ${score.pname}
-									<c:if test="${not empty score.isas}">
-									(<span style="color: red; font-weight: bold;">as</span>.${score.asname})
-									</c:if>
 								</li>
 								</c:if>
 								</c:forEach>
 							</ul>
 						</div>
-						<div class="score-info">
+						<div class="score-info" align="right">
 							<ul class="score-list" style="text-align: right; <c:if test="${match.homescore < match.awayscore}">border-left: 1px solid lightgray;</c:if>">
 								<c:forEach var="score" items="${scoreInfo}">
 								<c:if test='${score.ccode == match.ccode_away}'>
 								<li>
 									<span style="color: red; font-weight: bold;">${score.goaltime}'</span> ${score.pname}
-									<c:if test="${not empty score.isas}">
-									(<span style="color: red; font-weight: bold;">as</span>.${score.asname})
-									</c:if>
 								</li>
 								</c:if>
 								</c:forEach>

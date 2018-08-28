@@ -287,6 +287,7 @@ public class FrontController {
 		String seasoncode = adminService.getTopSeason();
 		// 해당 클럽의 순위 정보
 		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);
+		System.out.println("리스트 몇개?"+csList.size());
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		// 해당 클럽의 이전 경기 결과
 		Match prevMatch = matchService.getPrevMatchInfo(ccode, ts);
@@ -323,7 +324,7 @@ public class FrontController {
 	}
 	
 	//선수 상세 페이지
-	@RequestMapping(value="player_detail.do")
+	@RequestMapping(value="/player_detail.do", method=RequestMethod.GET)
 	public String playerdetail(Model model,@RequestParam("pcode") String pcode) throws Exception{
 		
 		System.out.println("프론트 playerdetail");
@@ -393,15 +394,8 @@ public class FrontController {
 				session.setAttribute("name", om.getMname());
 				System.out.println("email="+om.getEmail());
 				
-				//admin이면 admin페이지로
-				if(om.getEmail().equals("admin")) {
-				System.out.println("admin");
-				return"redirect:/admin/main.do";
-				//일반 사용자는 일반 사용자 페이지로
-				}else {
 				System.out.println("not admin");
 				return "redirect:/main.do";
-				}
 			}
 		}
 		return null;
