@@ -39,6 +39,7 @@
 	<resultMap type="java.util.HashMap" id="playerMiniRank">
 		<result property="soonwe" column="soonwe" javaType="java.lang.String"/>
 		<result property="pcode" column="pcode" javaType="java.lang.String"/>
+		<result property="ccode" column="ccode" javaType="java.lang.String"/>
 		<result property="pname" column="pname" javaType="java.lang.String"/>
 		<result property="gamecount" column="gamecount" javaType="java.lang.String"/>
 		<result property="result" column="result" javaType="java.lang.String"/>
@@ -49,7 +50,7 @@
 		from (
 		select rank() over (order by 
 		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
-		<if test='sort != null and sort == "a"'>PS.p_assist</if> desc, gamecount) as soonwe, P.pcode, P.pname, PS.gamecount,
+		<if test='sort != null and sort == "a"'>PS.p_assist</if> desc, gamecount) as soonwe, P.pcode, P.ccode, P.pname, PS.gamecount,
 		<if test='sort != null and sort == "g"'>PS.p_ggoal</if>
 		<if test='sort != null and sort == "a"'>PS.p_assist</if> result
 		from player P, player_season PS

@@ -25,7 +25,7 @@
 }
 </style>
 
-<div class="pagetitle"><span>K리그 소식</span></div>
+<div class="pagetitle"><span><i class="fas fa-newspaper"></i> K리그 소식</span></div>
 		
 		<table class="table table-hover">
 			<thead>

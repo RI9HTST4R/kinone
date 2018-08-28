@@ -9,6 +9,14 @@
 		insert into season values(#{seasoncode})
 	</insert>
 	
+	<select id="checkSeason" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*) from match where to_char(mdate, 'yyyy') = #{seasoncode}
+	</select>
+	
+	<delete id="delSeason" parameterType="java.lang.String">
+		delete from season where seasoncode = #{seasoncode}
+	</delete>
+	
     <select id="allLeague" resultType="java.lang.String">
     	select * from league order by lcode
     </select>

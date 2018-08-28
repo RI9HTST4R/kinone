@@ -52,6 +52,22 @@ public class AdminServiceImpl implements AdminServiceInter {
 		return adminDao.addSeason(seasoncode);
 	}
 	
+	// 시즌 삭제 시 체크하는 메소드
+	public boolean checkSeason(String seasoncode) {
+		// 이미 등록된 경기가 있으면 삭제 불가
+		int count = adminDao.checkSeason(seasoncode);
+		if(count > 0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
+	// 시즌 삭제
+	public int delSeason(String seasoncode) {
+		return adminDao.delSeason(seasoncode);
+	}
+	
 	// 등록된 모든 리그
 	public List<String> getAllLeague() {
 		return adminDao.getAllLeague();
@@ -604,6 +620,10 @@ public class AdminServiceImpl implements AdminServiceInter {
 		// TODO Auto-generated method stub
 		return adminDao.club_intro_insert(map);
 	}
+
+	
+
+	
 
 	
 

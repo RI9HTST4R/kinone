@@ -94,20 +94,25 @@ table {
 	top: 0;
 	background-color: #1892ed;
 }
-.cb1{
+
+.cb1 {
 	position: relative;
 	float: left;
 	display: inline-block;
 }
-.cb2{
-position: relative;
+
+.cb2 {
+	position: relative;
 	float: left;
 	display: inline-block;
 }
-.cb3{position: relative;
+
+.cb3 {
+	position: relative;
 	float: left;
 	display: inline-block;
 }
+
 .card-header {
 	padding: .75rem 1.25rem;
 	margin-top: 15;
@@ -124,7 +129,8 @@ position: relative;
 	border: 0.1px solid rgb(237, 239, 244);
 	height: 320px;
 }
-.card-body2{
+
+.card-body2 {
 	-ms-flex: 1 1 auto;
 	flex: 1 1 auto;
 	padding: 1.25rem;
@@ -190,8 +196,8 @@ position: relative;
 
 .playertable {
 	position: relative;
-	margin-left:250;
-	margin-top:30;
+	margin-left: 250;
+	margin-top: 30;
 	float: right;
 	display: inline-block;
 }
@@ -199,24 +205,30 @@ position: relative;
 .player-profile {
 	width: 400px;
 }
-.cb22{
-width:100%;
+
+.cb22 {
+	width: 100%;
 }
-.career{
-	width:100%;
+
+.career {
+	width: 100%;
 	height:
 }
-th{
-    background-color: #edeff4;
+
+th {
+	background-color: #edeff4;
 }
+
 thead {
-    display: table-header-group;
-    vertical-align: middle;
-    border-color: inherit;
+	display: table-header-group;
+	vertical-align: middle;
+	border-color: inherit;
 }
-.table left-th player-profile{
-	width:100%;
+
+.table left-th player-profile {
+	width: 100%;
 }
+
 button {
 	background-color: #00477e;
 	color: #ffffff;
@@ -270,8 +282,8 @@ button {
 					<tr>
 						<th>생년월일</th>
 						<td><fmt:parseDate value="${playerd.birthdate}" var="bd1"
-									pattern="yyyy-MM-dd HH:mm:ss" /> <fmt:formatDate
-									value="${bd1}" var="bd2" pattern="yyyy-MM-dd" /> ${bd2}</td>
+								pattern="yyyy-MM-dd HH:mm:ss" /> <fmt:formatDate value="${bd1}"
+								var="bd2" pattern="yyyy-MM-dd" /> ${bd2}</td>
 					</tr>
 					<tr>
 						<th>신장</th>
@@ -289,74 +301,74 @@ button {
 <div class="card-header">시즌 기록</div>
 
 <div class="card-body2">
-<div class="cb22">
-<table class="career">
+	<div class="cb22">
+		<table class="career">
 			<c:if test="${player.position !='GK' }">
-                <thead class="thead-light">
-                
-                    <tr>
-                        <th>년도</th>
-                        <th>소속</th>
-                        <th>출장</th>
-                        <th>득점</th>
-                        <th>도움</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <c:set var="key" value="${0 }" />
-                          <c:forEach var="players" items="${players}">
-							<c:if test="${empty players.seasoncode}">
-							</c:if>
-							<c:if test="${not empty players.seasoncode}">
-								<tr>
-									<td>${players.seasoncode}</td>
-									<td><c:set var="key" value="${players.ccode}" /> <c:out
-											value="${cn[key]}" /></td>
-									<td>${players.gamecount}</td>
-									<td>${players.p_ggoal}</td>
-									<td>${players.p_assist}</td>
-								</tr>
-							</c:if>
-						</c:forEach>
-				</c:if>
-			<c:if test="${player.position =='GK' }">			
-						<thead class="thead-light">
-                
-                    <tr>
-                        <th>년도</th>
-                        <th>소속</th>
-                        <th>출장</th>
-                        <th>실점</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <c:set var="key" value="${0 }" />
-                          <c:forEach var="players" items="${players}">
-							<c:if test="${empty players.seasoncode}">
-							</c:if>
-							<c:if test="${not empty players.seasoncode}">
-								<tr>
-									<td>${players.seasoncode}</td>
-									<td><c:set var="key" value="${players.ccode}" /> <c:out
-											value="${cn[key]}" /></td>
-									<td>${players.gamecount}</td>
-									<td>${players.p_lgoal}</td>
-								</tr>
-							</c:if>
-						</c:forEach>
-			
-			</c:if>	
-            </table>
-            <br>
-            
-            
-            </div>
-            
-			</div>
-			
+				<thead class="thead-light">
+
+					<tr>
+						<th>년도</th>
+						<th>소속</th>
+						<th>출장</th>
+						<th>득점</th>
+						<th>도움</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:set var="key" value="${0 }" />
+					<c:forEach var="players" items="${players}">
+						<c:if test="${empty players.seasoncode}">
+						</c:if>
+						<c:if test="${not empty players.seasoncode}">
+							<tr>
+								<td>${players.seasoncode}</td>
+								<td><c:set var="key" value="${players.ccode}" /> <c:out
+										value="${cn[key]}" /></td>
+								<td>${players.gamecount}</td>
+								<td>${players.p_ggoal}</td>
+								<td>${players.p_assist}</td>
+							</tr>
+						</c:if>
+					</c:forEach>
+			</c:if>
+			<c:if test="${player.position =='GK' }">
+				<thead class="thead-light">
+
+					<tr>
+						<th>년도</th>
+						<th>소속</th>
+						<th>출장</th>
+						<th>실점</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:set var="key" value="${0 }" />
+					<c:forEach var="players" items="${players}">
+						<c:if test="${empty players.seasoncode}">
+						</c:if>
+						<c:if test="${not empty players.seasoncode}">
+							<tr>
+								<td>${players.seasoncode}</td>
+								<td><c:set var="key" value="${players.ccode}" /> <c:out
+										value="${cn[key]}" /></td>
+								<td>${players.gamecount}</td>
+								<td>${players.p_lgoal}</td>
+							</tr>
+						</c:if>
+					</c:forEach>
+			</c:if>
+		</table>
+		<br>
+
+
+	</div>
+
+</div>
+
 <div align=right>
-<br>
-<button type="button" style="font-size : 14px;"	onclick="location.href='/kinone/clubDetail.do?ccode=${player.ccode}&T=1'">돌아가기</button>
+	<br>
+	<button type="button" style="font-size: 14px;"
+		onclick="location.href='/kinone/clubDetail.do?ccode=${player.ccode}&T=1'">돌아가기</button>
 </div>
 
 

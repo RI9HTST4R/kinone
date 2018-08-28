@@ -52,7 +52,7 @@
 }
 </style>
 <div id="mask"></div>
-<div class="pagetitle"><span>클럽 순위 / 개인 기록 순위</span></div>
+<div class="pagetitle"><span><i class="fas fa-th-list"></i> 클럽 순위 / 개인 기록 순위</span></div>
 
 <div class="form-container" align="left">
 	<form id="rankform" action="rankListAjax.do" method="post">
@@ -123,7 +123,7 @@
 		<c:forEach var="player" items="${playerSeasonGRankList}" varStatus="s2">
 		<tr>
 			<td>${player.rno}</td>
-			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/FW말컹.png" width="35px" height="35px"/></td>
+			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/${player.ccode}/${player.pcode}.png" width="35px" height="35px"/></td>
 			<td style="padding-left: 0;">${player.pname}</td>
 			<td>${player.cname_short}</td>
 			<td>${player.p_ggoal}</td>
@@ -151,7 +151,7 @@
 		<c:forEach var="player" items="${playerSeasonARankList}" varStatus="s3">
 		<tr>
 			<td>${player.rno}</td>
-			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/FW말컹.png" width="35px" height="35px"/></td>
+			<td width="11%" style="padding-right: 0;"><img src="${url}/resources/player/${player.ccode}/${player.pcode}.png" width="35px" height="35px"/></td>
 			<td style="padding-left: 0;">${player.pname}</td>
 			<td>${player.cname_short}</td>
 			<td>${player.p_assist}</td>
@@ -217,7 +217,7 @@
 			var html = "";
 			html += "<tr>";
 			html += "<td>"+(player.rno)+"</td>";
-			html += "<td width='11%' style='padding-right: 0;'><img src='/kinone/resources/player/FW말컹.png' width='35px' height='35px'/></td>";
+			html += "<td width='11%' style='padding-right: 0;'><img src='/kinone/resources/player/"+player.ccode+"/"+player.pcode+".png' width='35px' height='35px'/></td>";
 			html += "<td style='padding-left: 0;'>"+player.pname+"</td>"
 			html += "<td>"+player.cname_short+"</td>";
 			if(sort == "g"){

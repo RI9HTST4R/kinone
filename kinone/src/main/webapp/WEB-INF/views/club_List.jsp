@@ -31,7 +31,7 @@
 	}
 </style>
 
-<div class="pagetitle"><span>클럽 정보</span></div>
+<div class="pagetitle"><span><i class="fas fa-futbol"></i> 클럽 정보</span></div>
 <c:forEach var="club" items="${clubList}" varStatus="cs">
 <div class="club-wrapper" align="center" onClick="location.href='${url}/clubDetail.do?ccode=${club.ccode}'">
 	<img class="cimage" src="${url}/resources/emblem/${club.ccode}.png"><br/><span style="font-weight: bold;">${club.cname_short}</span>

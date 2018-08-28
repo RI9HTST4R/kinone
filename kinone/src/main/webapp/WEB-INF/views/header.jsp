@@ -314,6 +314,7 @@ a#totalmatch {
 .remain_right>.team-emblem {
 	/* border: 1px solid black; */
 	height: 20%;
+	margin-bottom: 40px;
 	box-sizing: border-box;
 }
 
@@ -457,8 +458,8 @@ a#totalmatch {
 }
 
 .nav-menu>li {
-	margin-left: 1.5em;
-	margin-right: 1.5em;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 .subject {
@@ -681,30 +682,32 @@ a#totalmatch {
 					<div class="nav-container">
 						<a class="navbar-brand nav-logo" href="/kinone/main.do">K In One</a>
 						<ul class="navbar-nav nav-menu">
-							<li class="nav-item"><a class="nav-link" href="kleagueNews.do">K리그 소식</a></li>
-							<li class="nav-item"><a class="nav-link" href="matchList.do">경기일정/결과</a></li>
-							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
-							<li class="nav-item"><a class="nav-link" href="reservation.do">티켓예매</a></li>
-							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
+							<li class="nav-item"><a class="nav-link" href="kleagueNews.do"><i class="fas fa-newspaper"></i> K리그 소식</a></li>
+							<li class="nav-item"><a class="nav-link" href="matchList.do"><i class="fas fa-calendar-alt"></i> 경기일정/결과</a></li>
+							<li class="nav-item"><a class="nav-link" href="clubList.do"><i class="fas fa-futbol"></i> 클럽정보</a></li>
+							<li class="nav-item"><a class="nav-link" href="reservation.do"><i class="fas fa-ticket-alt"></i> 티켓예매</a></li>
+							<li class="nav-item"><a class="nav-link" href="rank.do"><i class="fas fa-th-list"></i> 리그순위</a></li>
 						</ul>
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
 							<c:if test="${not empty sessionScope.email}">
 								<li class="nav-item">
-									<span id="welcome" class="nav-link">${sessionScope.name}님, 환영합니다</span>
+									<span id="welcome" class="nav-link">
+									<c:if test='${sessionScope.email != "admin"}'>${sessionScope.name}님</c:if>
+									</span>
 								</li>
 							</c:if>
-								<li class="nav-item">
+								<li class="nav-item" style="margin-right: 10px;">
 								<c:if test="${empty sessionScope.email}">
-									<a class="nav-link nav-text" href="join_form.do">회원가입</a>
+									<a class="nav-link nav-text" href="join_form.do"><i class="fas fa-hand-point-right"></i> 회원가입</a>
 								</c:if>
 								<c:if test="${not empty sessionScope.email}">
 									<c:choose>
 									<c:when test='${sessionScope.email == "admin"}'>
-									<a class="nav-link nav-text" href="admin/main.do">관리자페이지</a>
+									<a class="nav-link nav-text" href="admin/main.do"><i class="fas fa-user-cog"></i> 관리자페이지</a>
 									</c:when>
 									<c:otherwise>
-									<a class="nav-link nav-text" href="mypage.do">마이페이지</a>
+									<a class="nav-link nav-text" href="mypage.do"><i class="fas fa-user"></i> 마이페이지</a>
 									</c:otherwise>
 									</c:choose>
 									
