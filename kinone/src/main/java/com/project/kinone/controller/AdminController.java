@@ -55,9 +55,11 @@ public class AdminController{
 	@RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
 	public String main(Model model) throws Exception{
 		String seasoncode = adminService.getTopSeason();
+		List<String> seasonlist = adminService.getAllSeason();
 		Date sysdate = new Date();
 		
 		model.addAttribute("seasoncode", seasoncode);
+		model.addAttribute("seasonlist", seasonlist);
 		model.addAttribute("sysdate", sysdate);
 		return "admin/main";
 	}
@@ -75,6 +77,34 @@ public class AdminController{
 		}
 		model.addAttribute("loc", "/kinone/admin/main.do");
 		return "msg";
+	}
+	
+	// 시즌 삭제 시 체크하는 메소드
+	@RequestMapping(value="/admin/checkSeason.do", method=RequestMethod.POST)
+	public String checkSeason(@RequestParam String seasoncode, Model model) throws Exception{
+	//	System.out.println("season : "+ seasoncode);
+		boolean bool = adminService.checkSeason(seasoncode);
+		
+		if(bool) {
+			// 삭제 가능
+			model.addAttribute("ajax", "1");
+		}else {
+			// 삭제 불가능
+			model.addAttribute("ajax", "0");
+		}
+		
+		return "ajax";
+	}
+	
+	// 시즌 삭제
+	@RequestMapping(value="/admin/delSeason.do", method=RequestMethod.POST)
+	public String delSeason(@RequestParam String seasoncode, Model model) throws Exception{
+	//	System.out.println("season : "+ seasoncode);
+		int result = adminService.delSeason(seasoncode);
+		
+		model.addAttribute("ajax", result);
+		
+		return "ajax";
 	}
 
 	// 어드민 매치 등록 폼 페이지

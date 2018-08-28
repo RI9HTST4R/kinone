@@ -52,7 +52,7 @@
 }
 </style>
 <div id="mask"></div>
-<div class="pagetitle"><span>클럽 순위 / 개인 기록 순위</span></div>
+<div class="pagetitle"><span><i class="fas fa-th-list"></i> 클럽 순위 / 개인 기록 순위</span></div>
 
 <div class="form-container" align="left">
 	<form id="rankform" action="rankListAjax.do" method="post">

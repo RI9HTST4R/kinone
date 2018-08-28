@@ -32,6 +32,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 		return session.insert("adminmapper.addSeason", seasoncode);
 	}
 	
+	// 시즌 삭제 시 체크 메소드
+	public int checkSeason(String seasoncode) {
+		return session.selectOne("adminmapper.checkSeason", seasoncode);
+	}
+	
+	// 시즌 삭제 
+	public int delSeason(String seasoncode) {
+		return session.delete("adminmapper.delSeason", seasoncode);
+	}
+	
 	// 등록된 모든 리그 리스트 가져옴
 	public List<String> getAllLeague() {
 		return session.selectList("adminmapper.allLeague");
@@ -295,6 +305,10 @@ public class AdminDAOImpl implements AdminDAOInter {
 		// TODO Auto-generated method stub
 		return session.update("adminmapper.club_intro_insert",map);
 	}
+
+	
+
+	
 
 	
 
