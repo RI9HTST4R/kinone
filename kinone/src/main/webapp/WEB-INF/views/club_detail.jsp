@@ -180,16 +180,34 @@
 }
 
 </style>
+<script type="text/javascript">
+
+	 var T='${T}';
+	$(function() {
+		 if(T=="0"){ 
+		$(".tab1").show();
+		$(".tab2").hide();
+		$(".tab3").hide();
+	 }else if(T=="1"){
+		 $('#pp').addClass("menuselected");
+		 $('#cc').removeClass("menuselected");
+		$(".tab1").hide();
+		$(".tab2").show();
+		$(".tab3").hide();
+	} 
+	
+	});
+</script>
 
 <div class="pagetitle">
 	<img src="${url}/resources/emblem/${club.ccode}.png" width="130px"
 		height="130px" /> <span style="font-size: 30pt; hegiht: 25px">${club.cname}</span><br />
 	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-	&nbsp; &nbsp; &nbsp; <a class="smenu menuselected"
+	&nbsp; &nbsp; &nbsp; <a class="smenu menuselected" id="cc"
 		onClick="clubintro(this,'c')"
 		style="color: white; cursor: pointer; font-size: 18pt">About
 		${club.cname}</a> <a class="smenu" onClick="clubintro(this,'p')"
-		style="color: white; cursor: pointer; font-size: 18pt">선수단</a>
+		style="color: white; cursor: pointer; font-size: 18pt" id=pp>선수단</a>
 </div>
 <div id="cont-container">
 	<div id="left-cont" class="tab1">

@@ -17,6 +17,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -261,15 +262,25 @@ public class FrontController {
 	
 	// 클럽 리스트 페이지
 	@RequestMapping(value="/clubList.do", method=RequestMethod.GET)
-	public String clubList(Model model) throws Exception {
+	public String clubList( Model model) throws Exception {
 		List<Club> clubList = adminService.getMngClubList();
+		
+		
 		model.addAttribute("clubList", clubList);
 		return "club_List";
+		
 	}
 	
 	// 클럽 상세 정보 페이지
 	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
-	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, Model model) throws Exception {
+	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, 
+			String T, Model model) throws Exception {
+		
+		if (T == null || T.equals("")) {
+			T="0";
+		}
+		
+		
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
 	//	System.out.println(club.toString());
@@ -301,6 +312,7 @@ public class FrontController {
 	//	System.out.println(psGList.size());
 	//	System.out.println(psAList.size());
 		
+		model.addAttribute("T",T);
 		model.addAttribute("playerList",playerList);
 		model.addAttribute("club", club);
 		model.addAttribute("csList", csList);
