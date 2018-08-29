@@ -8,7 +8,7 @@
 	<div class="wrapper">
 		<h1 id="title">클럽 상세 정보</h1>
 		<hr> 
-		<table border=1px class="table table-sm">
+		<table class="table table-bordered">
 			<tr>
 				<th>클럽명(풀네임)</th>
 				<td colspan="2">${ mngC.cname }</td>
@@ -26,15 +26,13 @@
 				<th>감독명</th>
 				<td colspan="2">${ mngC.cmanager }</td>
 			</tr>
-		</table>
-		<table border=1px class="table table-sm">
 			<tr>
-				<th>경기장</th>
+				<th>경기장명</th>
 				<td colspan="2">${ mngC.sname }</td>
 			</tr>
 			<tr>
-				<th>경기장 사진</th>
-				<td colspan="2"><img src="${url}/resources/sphoto/${ mngC.sphoto }" width=200 height=200></td>
+				<th width="250px">경기장 위치</th>
+				<td colspan="2" align="left">( ${ mngC.lat } , ${ mngC.lon } )</td>
 			</tr>
 			<tr>
 				<th>수용 가능 인원</th>

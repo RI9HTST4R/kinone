@@ -4,11 +4,15 @@ package com.project.kinone.controller;
 import java.io.File;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +35,8 @@ import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
+import com.project.kinone.model.Score;
+import com.project.kinone.model.Stadium;
 import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.util.Lineup;
@@ -38,7 +45,7 @@ import com.project.kinone.util.clubname;
 
 @Controller
 public class AdminController{
-
+	
 	@Autowired
 	private AdminServiceImpl adminService;
 
@@ -50,11 +57,12 @@ public class AdminController{
 
 	// 어드민 메인페이지
 	@RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
-	public String main(Model model) throws Exception{
+	public String main(Model model, HttpServletRequest req) throws Exception{
 		String seasoncode = adminService.getTopSeason();
+		List<String> seasonlist = adminService.getAllSeason();
 		Date sysdate = new Date();
-		
 		model.addAttribute("seasoncode", seasoncode);
+		model.addAttribute("seasonlist", seasonlist);
 		model.addAttribute("sysdate", sysdate);
 		return "admin/main";
 	}
@@ -72,6 +80,34 @@ public class AdminController{
 		}
 		model.addAttribute("loc", "/kinone/admin/main.do");
 		return "msg";
+	}
+	
+	// 시즌 삭제 시 체크하는 메소드
+	@RequestMapping(value="/admin/checkSeason.do", method=RequestMethod.POST)
+	public String checkSeason(@RequestParam String seasoncode, Model model) throws Exception{
+	//	System.out.println("season : "+ seasoncode);
+		boolean bool = adminService.checkSeason(seasoncode);
+		
+		if(bool) {
+			// 삭제 가능
+			model.addAttribute("ajax", "1");
+		}else {
+			// 삭제 불가능
+			model.addAttribute("ajax", "0");
+		}
+		
+		return "ajax";
+	}
+	
+	// 시즌 삭제
+	@RequestMapping(value="/admin/delSeason.do", method=RequestMethod.POST)
+	public String delSeason(@RequestParam String seasoncode, Model model) throws Exception{
+	//	System.out.println("season : "+ seasoncode);
+		int result = adminService.delSeason(seasoncode);
+		
+		model.addAttribute("ajax", result);
+		
+		return "ajax";
 	}
 
 	// 어드민 매치 등록 폼 페이지
@@ -188,6 +224,13 @@ public class AdminController{
 		// 라인업이 등록되었다면 그 등록된 라인업 선수 정보
 		Lineup lu = adminService.getMatchDetail(mcode);
 		
+		// 종료된 매치는 득점 정보도 같이 불러온다.
+		int mstatus = match.getMstatus();
+		if(mstatus == 1) {
+			List<Score> scoreInfo = adminService.getMatchScoreInfo(mcode);
+			model.addAttribute("scoreInfo", scoreInfo);
+		}
+		
 		model.addAttribute("match", match);
 		model.addAttribute("pList_home", pList_home);
 		model.addAttribute("pList_away", pList_away);
@@ -210,12 +253,27 @@ public class AdminController{
 	// 매치 종료 상태로 업데이트 및 스코어 입력
 	@RequestMapping(value="/admin/matchEnd.do", method=RequestMethod.POST)
 	public String matchEnd(Match match, Model model) throws Exception{
+		System.out.println(match.toString());
 		System.out.println("mcode : "+match.getMcode());
 		System.out.println("homescore : "+match.getHomescore());
 		System.out.println("awayscore : "+match.getAwayscore());
+		
 		int result = adminService.matchEnd(match);
+		
 		model.addAttribute("ajax", result);
 		
+		return "ajax";
+	}
+	
+	// 매치 종료 상태로 득점 및 도움, 실점 스탯 올리기
+	@RequestMapping(value="/admin/scoreInsert.do", method=RequestMethod.POST)
+	public String scoreInsert(Score score, Model model) throws Exception{
+		
+	//	System.out.println(score.toString());
+		
+		boolean result = adminService.insertScore(score);
+		
+		model.addAttribute("ajax", result);
 		return "ajax";
 	}
 
@@ -450,11 +508,14 @@ public class AdminController{
 		System.out.println("클럽 생성 서비스");
 
 		List<MultipartFile> fileList = mtfRequest.getFiles("file");
-
 		String epath = mtfRequest.getSession().getServletContext().getRealPath("resources/emblem");
-		String spath = mtfRequest.getSession().getServletContext().getRealPath("resources/sphoto");
+		Stadium st = new Stadium();
+		st.setSname(mngclub.getSname());
+		st.setCapacity(mngclub.getCapacity());
+		st.setLat(mngclub.getLat());
+		st.setLon(mngclub.getLon());
 		adminService.insertClub(mngclub, fileList, epath);
-		adminService.insertStadium(mngclub, fileList, spath);
+		adminService.insertStadium(st);
 
 		return "redirect:/admin/club_view.do";
 	}
@@ -521,10 +582,15 @@ public class AdminController{
 		List<MultipartFile> fileList = mtfRequest.getFiles("file");
 	
 		String epath = mtfRequest.getSession().getServletContext().getRealPath("resources/emblem");
-		String spath = mtfRequest.getSession().getServletContext().getRealPath("resources/sphoto");
+		Stadium st = new Stadium();
+		st.setCcode(mngClub.getCcode());
+		st.setSname(mngClub.getSname());
+		st.setCapacity(mngClub.getCapacity());
+		st.setLat(mngClub.getLat());
+		st.setLon(mngClub.getLon());
 
 		adminService.updateClub(mngClub, fileList, epath);
-		adminService.updateStadium(mngClub, fileList, spath);
+		adminService.updateStadium(st);
 
 		return "redirect:/admin/club_view.do";
 
@@ -625,8 +691,7 @@ public class AdminController{
 		//file upload처리
 		MultipartFile file = mhsr.getFile("file");
 		
-		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player");
-		
+		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player/"+player.getCcode());
 		//업로드 파일명을 위한 새 pcode 꺼내오기
 		String pcode;
 		if ((int)(Math.log10(Integer.parseInt(adminService.getnewpcode().substring(1))+1)+1)>3) {
@@ -738,7 +803,7 @@ public class AdminController{
 		
 		//file upload처리
 		MultipartFile file=mhsr.getFile("file");
-		String path= mhsr.getSession().getServletContext().getRealPath("resources/player");
+		String path= mhsr.getSession().getServletContext().getRealPath("resources/player/"+player.getCcode());
 		System.out.println("path="+path);
 		
 		

@@ -9,7 +9,7 @@
 </style>
 <link href='//fonts.googleapis.com/css?family=Kotta+One' rel='stylesheet' type='text/css'>
 <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
-<link href="${url}/resources/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="${url}/resources/css/reserve.css" rel="stylesheet" type="text/css" media="all" />
 <script src="${url}/resources/js/jquery.seat-charts.js"></script>
 
 <div class="pagetitle"><span>K In One 경기 예매</span></div>

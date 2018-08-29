@@ -5,7 +5,6 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!DOCTYPE>
-
 <html>
 <head>
 <meta content="text/html; charset=UTF-8">
@@ -323,6 +322,7 @@ $(function(){
 					console.log(data);
 					if(data!=null){
 						alert("비밀번호 재설정에 성공했습니다");
+						window.close();
 					}
 				}
 			})

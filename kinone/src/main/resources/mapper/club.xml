@@ -4,15 +4,14 @@
 <mapper namespace="clubmapper">
     
     <select id="clubList" resultType="club">
-    	select * from club where isbeing = 1
+    	select * from club where isbeing = 1 order by ccode
     </select>
     
     <select id="clubSeasonRankList" parameterType="java.util.HashMap" resultType="club_season">
-    	select C.cname_short, C.emblem, CS.* 
+    	select rank() over (order by (CS.win*3+CS.draw*1) desc,(CS.c_ggoal-CS.c_lgoal) desc, CS.c_ggoal desc, (CS.win+CS.draw+CS.lose) asc) rno,
+    		   C.cname_short, C.emblem, CS.* 
     	from club_season CS, club C 
-    	where CS.ccode = C.ccode and CS.seasoncode = #{seasoncode} and CS.lcode = #{lcode} 
-    	order by (CS.win*3+CS.draw*1) desc,(CS.c_ggoal-CS.c_lgoal) desc, CS.c_ggoal desc, (CS.win+CS.draw+CS.lose) asc
-    	
+    	where CS.ccode = C.ccode and CS.seasoncode = #{seasoncode} and CS.lcode = #{lcode}
     </select>
     <select id="getClub" parameterType="String" resultType="club">
     	select * from club where ccode = #{club_code}
@@ -27,7 +26,8 @@
     
     <select id="clubSeasonRank" parameterType="java.util.HashMap" resultType="java.lang.Integer">
     	select rno 
-    	from (select rownum rno, ccode from club_season where seasoncode = #{seasoncode} and lcode = #{lcode}
+    	from (select rank() over(order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc) rno,ccode
+    		  from club_season where seasoncode = #{seasoncode} and lcode = #{lcode}
 		order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc)
 		where ccode = #{ccode}
     </select>
@@ -35,10 +35,10 @@
     <select id="clubSeasonRankMini" parameterType="java.util.HashMap" resultType="club_season">
     	select *
     	from (select CS.*, C.cname_short, C.emblem
-    		  from (select rownum rno,ccode,lcode,win,draw,lose
+    		  from (select rank() over (order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc) rno,
+    		  			   ccode,lcode,win,draw,lose
     		  		from club_season
-    		  		where seasoncode = #{seasoncode} and lcode = #{lcode}
-					order by (win*3+draw*1) desc,(c_ggoal-c_lgoal) desc, c_ggoal desc, (win+draw+lose) asc) CS, club C
+    		  		where seasoncode = #{seasoncode} and lcode = #{lcode}) CS, club C
 			  where C.ccode = CS.ccode)
 		where rno <![CDATA[>]]>= #{start} and rno <![CDATA[<]]>= #{end}
 		order by rno

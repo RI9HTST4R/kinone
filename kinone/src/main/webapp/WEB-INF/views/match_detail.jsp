@@ -28,8 +28,9 @@
 	vertical-align: top;
 }
 #versus {
-	
-	line-height: 300px;
+	/* line-height: 300px; */
+	margin-top: 100px;
+	width: 100%;
 }
 .lineup-top {
 	margin-bottom: 70px;
@@ -78,6 +79,20 @@ span.MF {
 span.FW {
 	color: red;
 }
+.score-info {
+	display: inline-block;
+	/* border: 1px solid black; */
+	width: 50%;
+	min-height: 50px;
+	vertical-align: top;
+}
+.score-list {
+	list-style: none;
+	font-size: 6pt;
+	font-style:italic;
+	padding: 0;
+	margin: 0;
+}
 </style>
 <div class="pagetitle">
 	<c:if test='${match.lcode == "K1"}'>
@@ -104,16 +119,16 @@ span.FW {
 				<br/>
 			<c:forEach var="p" items="${lineup.hStarting}">
 				<div class="player" align="right">
-					<div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div><img class="pimage" src="${url}/resources/player/${p.pcode}.png"/>
+					<div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div><img class="pimage" src="${url}/resources/player/${p.ccode}/${p.pcode}.png"/>
 				</div>
 			</c:forEach>
 			</div>
 			<div class="sub-lineup">
-				<h5 align="right">후보 라인업</h5>
+				<h5 align="right" style="font-weight: bold;">후보 라인업</h5>
 				<br/>
 			<c:forEach var="p" items="${lineup.hSubstitute}">
 				<div class="player" align="right">
-					<div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div><img class="pimage" src="${url}/resources/player/${p.pcode}.png"/>
+					<div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div><img class="pimage" src="${url}/resources/player/${p.ccode}/${p.pcode}.png"/>
 				</div>
 			</c:forEach>
 			</div>
@@ -131,7 +146,33 @@ span.FW {
 					<span style="font-size: 40pt;">vs</span><br style="line-height: 5px;"/>
 					<span style="font-size: 10pt;"></span>
 				</c:if>
-				<c:if test="${match.mstatus == 1}"><span style="font-size: 40pt; font-weight: bold;">${match.homescore} : ${match.awayscore}</span></c:if>
+				<c:if test="${match.mstatus == 1}">
+					<span style="font-size: 40pt; font-weight: bold;">${match.homescore} : ${match.awayscore}</span><br/>
+					<c:if test="${not empty scoreInfo}">
+						<div class="score-info" align="left">
+							<ul class="score-list" style="text-align: left; <c:if test="${match.homescore >= match.awayscore}">border-right: 1px solid lightgray;</c:if>">
+								<c:forEach var="score" items="${scoreInfo}">
+								<c:if test='${score.ccode == match.ccode_home}'>
+								<li>
+									<span style="color: red; font-weight: bold;">${score.goaltime}'</span> ${score.pname}
+								</li>
+								</c:if>
+								</c:forEach>
+							</ul>
+						</div>
+						<div class="score-info" align="right">
+							<ul class="score-list" style="text-align: right; <c:if test="${match.homescore < match.awayscore}">border-left: 1px solid lightgray;</c:if>">
+								<c:forEach var="score" items="${scoreInfo}">
+								<c:if test='${score.ccode == match.ccode_away}'>
+								<li>
+									<span style="color: red; font-weight: bold;">${score.goaltime}'</span> ${score.pname}
+								</li>
+								</c:if>
+								</c:forEach>
+							</ul>
+						</div>
+					</c:if>
+				</c:if>
 			</span>
 		</div>
 	</div>
@@ -148,16 +189,16 @@ span.FW {
 				<br/>
 			<c:forEach var="p" items="${lineup.aStarting}">
 				<div class="player" align="left">
-					<img class="pimage" src="${url}/resources/player/${p.pcode}.png"/><div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div>
+					<img class="pimage" src="${url}/resources/player/${p.ccode}/${p.pcode}.png"/><div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div>
 				</div>
 			</c:forEach>
 			</div>
 			<div class="sub-lineup">
-				<h5 align="left">후보 라인업</h5>
+				<h5 align="left" style="font-weight: bold;">후보 라인업</h5>
 				<br/>
 			<c:forEach var="p" items="${lineup.aSubstitute}">
 				<div class="player" align="left">
-					<img class="pimage" src="${url}/resources/player/${p.pcode}.png"/><div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div>
+					<img class="pimage" src="${url}/resources/player/${p.ccode}/${p.pcode}.png"/><div class="pinfo">${p.pno}.${p.pname}<br/><span class="${p.position}">${p.position}</span></div>
 				</div>
 			</c:forEach>
 			</div>

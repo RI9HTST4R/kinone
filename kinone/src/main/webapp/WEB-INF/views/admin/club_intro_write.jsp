@@ -34,7 +34,7 @@
 
 <div class="container">
 	<div class="wrapper">
-		<h1 id="title">게시판 글 작성</h1>
+		<h1 id="title">클럽 소개글 등록</h1>
 		<hr>
 		<div class="form-container" align="right">
 			<form action="${url}/admin/club_intro_insert.do" method="post">
@@ -51,7 +51,7 @@
       		</select></td>
 					</tr>
 					<tr>
-						<td>내용</td>
+						<td style="font-weight: bold;">내용</td>
 						<td><textarea rows="20" cols="70" id="content" name="content" style="width:80%"></textarea></td>
 					</tr>
 				</table>

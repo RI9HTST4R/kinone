@@ -113,7 +113,7 @@
 </style>
 
 <div class="pagetitle">
-	<span>${seasonList[0]} 시즌 경기 예매</span><br/>
+	<span><i class="fas fa-ticket-alt"></i> ${seasonList[0]} 시즌 경기 예매</span><br/>
 	<a class="smenu menuselected" onClick="moveLeague(this,'K1')" style="color:white;cursor:pointer;">K리그 1</a>
 	<a class="smenu" onClick="moveLeague(this,'K2')" style="color:white;cursor:pointer;">K리그 2</a>
 </div>
@@ -261,6 +261,8 @@
 							}
 							content += '>경기예매 &gt;</button>';
 							
+						}else {
+							content += '<button class="btn btn-danger"type="button" disabled>경기종료</button>';
 						}
 						content += '</td></tr></table>';
 					}

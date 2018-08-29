@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberServiceInter{
 		// TODO Auto-generated method stub
 		return memberDAO.find_email(register_email);
 	}
-	public String emailfind(Member member) {
+	public Member emailfind(Member member) {
 		return memberDAO.emailfind(member);
 	}
 	////////////////////////////////////////////// /////////////////////////////////////////////////////////

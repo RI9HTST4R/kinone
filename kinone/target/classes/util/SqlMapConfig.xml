@@ -15,6 +15,7 @@
 		<typeAlias alias="stadium" type="com.project.kinone.model.Stadium" />
 		<typeAlias alias="reservation" type="com.project.kinone.model.Reservation" />
 		<typeAlias alias="board" type="com.project.kinone.model.Board" />
+		<typeAlias alias="score" type="com.project.kinone.model.Score" />
 		
 	</typeAliases>
 

@@ -20,12 +20,12 @@ public class PlayerServiceImpl implements PlayerServiceInter {
 	
 	// 선수들의 개인 순위(sort가 goal인지 assist인지에 따른)
 	@Override
-	public List<Player> getPlayerSeasonRankList(String seasoncode, String lcode, String sort, int rownum) {
+	public List<Player> getPlayerSeasonRankList(String seasoncode, String lcode, String sort, int rno) {
 		HashMap map = new HashMap();
 		map.put("seasoncode", seasoncode);
 		map.put("lcode", lcode);
 		map.put("sort", sort);
-		map.put("rownum", rownum);
+		map.put("rno", rno);
 		
 		return playerDao.getPlayerSeasonRankList(map);
 	}

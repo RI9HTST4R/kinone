@@ -16,6 +16,8 @@ import com.project.kinone.model.Match_detail;
 import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
+import com.project.kinone.model.Score;
+import com.project.kinone.model.Stadium;
 
 @Repository
 public class AdminDAOImpl implements AdminDAOInter {
@@ -29,6 +31,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 	// 시즌 추가
 	public int addSeason(String seasoncode) {
 		return session.insert("adminmapper.addSeason", seasoncode);
+	}
+	
+	// 시즌 삭제 시 체크 메소드
+	public int checkSeason(String seasoncode) {
+		return session.selectOne("adminmapper.checkSeason", seasoncode);
+	}
+	
+	// 시즌 삭제 
+	public int delSeason(String seasoncode) {
+		return session.delete("adminmapper.delSeason", seasoncode);
 	}
 	
 	// 등록된 모든 리그 리스트 가져옴
@@ -109,6 +121,22 @@ public class AdminDAOImpl implements AdminDAOInter {
 		int result = session.update("adminmapper.updateSeasonGrade", cs);
 		if(result == 1) System.out.println("시즌기록 수정 성공");
 	}
+	
+	// 스코어 테이블에 데이터 입력
+	public void insertScore(Score score) {
+		session.insert("adminmapper.insertScore", score);
+	}
+	
+	// 득점 정보를 통해 스텟 업데이트
+	public int updateStat(HashMap<String, Object> map) {
+		return session.update("adminmapper.updateStat", map);
+		
+	}
+	
+	// 해당 매치에 대한 득점 정보 가져오기
+	public List<Score> getMatchScoreInfo(String mcode) {
+		return session.selectList("adminmapper.matchScoreInfo", mcode);
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -125,10 +153,10 @@ public class AdminDAOImpl implements AdminDAOInter {
 		session.insert("adminmapper.mngInsertClub", mngClub);
 	}
 
-	public void insertStadium(Club mngClub) throws Exception {
+	public void insertStadium(Stadium st) throws Exception {
 		// TODO Auto-generated method stub
 
-		session.insert("adminmapper.mngInsertStadium", mngClub);
+		session.insert("adminmapper.mngInsertStadium", st);
 	}
 
 	public Club getClubCont(String ccode) throws Exception {
@@ -151,9 +179,9 @@ public class AdminDAOImpl implements AdminDAOInter {
 		session.update("adminmapper.mngUpdateClub", mngClub);
 	}
 
-	public void updateStadium(Club mngClub) throws Exception {
+	public void updateStadium(Stadium st) throws Exception {
 		// TODO Auto-generated method stub
-		session.update("adminmapper.mngUpdateStadium", mngClub);
+		session.update("adminmapper.mngUpdateStadium", st);
 	}
 
 
@@ -278,6 +306,16 @@ public class AdminDAOImpl implements AdminDAOInter {
 		// TODO Auto-generated method stub
 		return session.update("adminmapper.club_intro_insert",map);
 	}
+
+	
+
+	
+
+	
+
+	
+
+	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

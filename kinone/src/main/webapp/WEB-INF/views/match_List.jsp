@@ -113,7 +113,7 @@
 </style>
 
 <div class="pagetitle">
-	<span>매치 일정 / 결과</span><br/>
+	<span><i class="fas fa-calendar-alt"></i> 경기 일정 / 결과</span><br/>
 	<a class="smenu menuselected" onClick="moveLeague(this,'K1')" style="color:white;cursor:pointer;">K리그 1</a>
 	<a class="smenu" onClick="moveLeague(this,'K2')" style="color:white;cursor:pointer;">K리그 2</a>
 	<select id="seasoncode" name="seasoncode" onchange="changeSeason(this.value)">

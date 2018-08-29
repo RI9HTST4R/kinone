@@ -59,7 +59,7 @@ public class MatchServiceImpl implements MatchServiceInter {
 		//	int start = (pageNum - 1) * 3 + 1;
 		//	int end = start + 3 - 1;
 			int start = 1;
-			int end = 3;
+			int end = 100;
 			
 			// 3) 해당 날짜의 여러 정보들이 들어갈 map 생성 후 db에서 그 날짜에 해당하는 매치list를 가져온다.
 			HashMap inDayMap = new HashMap();

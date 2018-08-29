@@ -17,6 +17,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,10 @@ import com.project.kinone.model.Club_season;
 import com.project.kinone.model.Match;
 import com.project.kinone.model.Member;
 import com.project.kinone.model.Player;
+import com.project.kinone.model.Player_detail;
+import com.project.kinone.model.Player_season;
 import com.project.kinone.model.Reservation;
+import com.project.kinone.model.Score;
 import com.project.kinone.model.Seats;
 import com.project.kinone.model.Shopping;
 import com.project.kinone.model.Stadium;
@@ -40,6 +44,7 @@ import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.service.ReservServiceImpl;
 import com.project.kinone.util.Lineup;
 import com.project.kinone.util.Sha256;
+import com.project.kinone.util.clubname;
 
 @Controller
 public class FrontController {
@@ -109,10 +114,22 @@ public class FrontController {
 		// 리그 별 선수 순위 리스트
 		// 득점랭크
 		List<Player> k1PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g", 2);
+	//	for(Player p : k1PlayerSeasonGRankList) {
+	//		System.out.println(p.toString());
+	//	}
 		List<Player> k2PlayerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "g", 2);
+	//	for(Player p : k2PlayerSeasonGRankList) {
+	//		System.out.println(p.toString());
+	//	}
 		// 도움랭크
 		List<Player> k1PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 2);
+	//	for(Player p : k1PlayerSeasonARankList) {
+	//		System.out.println(p.toString());
+	//	}
 		List<Player> k2PlayerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K2", "a", 2);
+	//	for(Player p : k2PlayerSeasonARankList) {
+	//		System.out.println(p.toString());
+	//	}
 		
 		model.addAttribute("news_list", news_list);
 		model.addAttribute("clubList", clubList);
@@ -181,9 +198,9 @@ public class FrontController {
 		List<Player> playerSeasonGRankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "g", 10);
 		List<Player> playerSeasonARankList = playerService.getPlayerSeasonRankList(seasoncode, "K1", "a", 10);
 		
-		System.out.println("클럽갯수:" +clubSeasonRankList.size());
-		System.out.println("골 선수 명수:" +playerSeasonGRankList.size());
-		System.out.println("도움 선수 명수:" +playerSeasonARankList.size());
+	//	System.out.println("클럽갯수:" +clubSeasonRankList.size());
+	//	System.out.println("골 선수 명수:" +playerSeasonGRankList.size());
+	//	System.out.println("도움 선수 명수:" +playerSeasonARankList.size());
 		
 		model.addAttribute("clubSeasonRankList", clubSeasonRankList);
 		model.addAttribute("playerSeasonGRankList", playerSeasonGRankList);
@@ -234,30 +251,43 @@ public class FrontController {
 		Stadium stadium = clubService.getStadium(ccode);
 		
 		Lineup lineup = adminService.getMatchDetail(mcode);
+		List<Score> scoreInfo = adminService.getMatchScoreInfo(mcode);
 		
 		model.addAttribute("match", match);
 		model.addAttribute("stadium", stadium.getSname());
 		model.addAttribute("lineup", lineup);
+		model.addAttribute("scoreInfo", scoreInfo);
 		return "match_detail";
 	}
 	
 	// 클럽 리스트 페이지
 	@RequestMapping(value="/clubList.do", method=RequestMethod.GET)
-	public String clubList(Model model) throws Exception {
+	public String clubList( Model model) throws Exception {
 		List<Club> clubList = adminService.getMngClubList();
+		
+		
 		model.addAttribute("clubList", clubList);
 		return "club_List";
+		
 	}
 	
 	// 클럽 상세 정보 페이지
 	@RequestMapping(value="/clubDetail.do", method=RequestMethod.GET)
-	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, Model model) throws Exception {
+	public String clubDetail(@RequestParam(required=false) String ccode,HttpServletRequest request, 
+			String T, Model model) throws Exception {
+		
+		if (T == null || T.equals("")) {
+			T="0";
+		}
+		
+		
 		// 해당 페이지의 클럽 정보
 		Club club = adminService.getClubDetail(ccode);
-		System.out.println(club.toString());
+	//	System.out.println(club.toString());
 		String seasoncode = adminService.getTopSeason();
 		// 해당 클럽의 순위 정보
 		List<Club_season> csList = clubService.getClubSeasonRankMini(ccode, seasoncode);
+		System.out.println("리스트 몇개?"+csList.size());
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		// 해당 클럽의 이전 경기 결과
 		Match prevMatch = matchService.getPrevMatchInfo(ccode, ts);
@@ -272,13 +302,18 @@ public class FrontController {
 //		if (file.exists()) {
 //			t=1;
 //		}
+		//선수단 목록
+		List<Player> playerList=playerService.getPlayerListInClub(ccode);
+		
 		// 해당 클럽의 득점 순위
 		List<HashMap<String, Object>> psGList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "g", 5);
 		// 해당 클럽의 도움 순위
 		List<HashMap<String, Object>> psAList = playerService.getPlayerSeasonRankMini(seasoncode, ccode, "a", 5);
-		System.out.println(psGList.size());
-		System.out.println(psAList.size());
+	//	System.out.println(psGList.size());
+	//	System.out.println(psAList.size());
 		
+		model.addAttribute("T",T);
+		model.addAttribute("playerList",playerList);
 		model.addAttribute("club", club);
 		model.addAttribute("csList", csList);
 		model.addAttribute("prevMatch", prevMatch);
@@ -286,6 +321,26 @@ public class FrontController {
 		model.addAttribute("psGList", psGList);
 		model.addAttribute("psAList", psAList);
 		return "club_detail";
+	}
+	
+	//선수 상세 페이지
+	@RequestMapping(value="/player_detail.do", method=RequestMethod.GET)
+	public String playerdetail(Model model,@RequestParam("pcode") String pcode) throws Exception{
+		
+		System.out.println("프론트 playerdetail");
+		Player player = adminService.pselect(pcode);
+		Player_detail playerd = adminService.pselectd(pcode);
+		List<Player_season> players = adminService.pselects(pcode);
+		List<Club> clist=adminService.getMngClubList();
+		
+		HashMap<String,String> cn = clubname.insertcname(clist);
+		model.addAttribute("cn", cn);
+		model.addAttribute("player", player);
+		model.addAttribute("playerd", playerd);
+		model.addAttribute("players", players);
+		
+		
+		return"club_playerdetail";
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -339,15 +394,8 @@ public class FrontController {
 				session.setAttribute("name", om.getMname());
 				System.out.println("email="+om.getEmail());
 				
-				//admin이면 admin페이지로
-				if(om.getEmail().equals("admin")) {
-				System.out.println("admin");
-				return"redirect:/admin/main.do";
-				//일반 사용자는 일반 사용자 페이지로
-				}else {
 				System.out.println("not admin");
 				return "redirect:/main.do";
-				}
 			}
 		}
 		return null;
@@ -394,7 +442,7 @@ public class FrontController {
 		System.out.println(mbirthdate2);
 		member.setMbirthdate(Timestamp.valueOf(mbirthdate2));
 		
-		String em = memberService.emailfind(member);
+		Member em = memberService.emailfind(member);
 		
 		if (em==null) {
 			System.out.println("해당 성명/생년월일에 아이디 없음");
@@ -403,11 +451,17 @@ public class FrontController {
 			out.println("history.go(-1)");
 			out.println("</script>");
 			
+		}else if(em.getMstatus()==0){
+			out.println("<script>");
+			out.println("alert('탈퇴한 회원입니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+			
 		}else {
-			int t=em.length()-4;
+			int t=em.getMname().length()-4;
 			String p = "*";
 			String rp =new String(new char[t]).replace("\0", p);
-			String ttm=em.substring(0, 4);
+			String ttm=em.getMname().substring(0, 4);
 			String fem=ttm+rp;
 			System.out.println(fem);
 			
@@ -429,10 +483,20 @@ public class FrontController {
 	
 	//비번 찾기 이메일 맞나 확인
 	@RequestMapping(value = "/findemailchk.do")
-	public String findemailchk(@RequestParam("email") String email, Model model) {
+	public String findemailchk(@RequestParam("email") String email, Model model,HttpServletResponse response)throws  Exception {
 		System.out.println("findemailchk");
-		String em = memberService.find_email(email);
+		Member em = memberService.logincheck(email);
 		System.out.println("체크한 이메일 값="+em);
+		//출력객체
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		if (em.getMstatus()==0) {
+			out.println("<script>");
+			out.println("alert('탈퇴한 회원입니다')");
+			out.println("history.go(-1)");
+			out.println("</script>");
+		}
+		
 		model.addAttribute("ajax", em);
 		return "ajax";
 	}
@@ -444,8 +508,10 @@ public class FrontController {
 		
 		System.out.println(email1+email_number);
 		
+		
 		//이름 꺼내기용
 		Member om = memberService.logincheck(email1);
+		
 		
 		// Mail Server 설정
 		String charSet = "utf-8";
@@ -455,7 +521,7 @@ public class FrontController {
 
 		// 보내는 사람 EMail, 제목, 내용
 		String fromEmail = "babamandu@nate.com";
-		String fromName = om.getMname()+"씨에게";
+		String fromName = om.getMname();
 		String subject = "K In One 인증메일입니다.";
 
 		// 받는 사람 E-Mail 주소

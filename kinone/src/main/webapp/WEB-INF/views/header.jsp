@@ -1,3 +1,4 @@
+<iframe src="https://inbi.ai/builder/#/chatting?id=BB-b10-20180822140416-dtKw4GlwVu&userId=xCRirgN8t7epTj9Rq5abtdduT0i1&iframe=true&use=1" height="70px" width="70px" border="0" frameborder="0" id="qnabot-demo-iframe" sandbox="allow-same-origin allow-scripts allow-popups" allow="geolocation; microphone; camera" style="position: fixed; bottom: 50px; right: 18px; z-index: 99999; box-shadow: none;" onload="var self=this,_inbiData=!1;window.addEventListener('resize',function(e){window._inbiData?e.target.innerWidth<480?(self.height='100%',self.width='100%',self.style.bottom=0,self.style.right=0):(self.height=620,self.width=400,self.style.bottom='50px',self.style.right='0px'):(self.height=70,self.width=70,self.style.boxShadow='none',self.style.bottom='18px',self.style.right='18px')}),window.addEventListener('message',function(e){if(e.stopPropagation(),window._inbiData=e.data['iframe-bot'],e.data['iframe-bot'])window.innerWidth<480?(self.height='100%',self.width='100%',self.style.bottom=0,self.style.right=0):(self.height=620,self.width=400);else{if(void 0===e.data['iframe-bot'])return;self.height=70,self.width=70,self.style.boxShadow='none',self.style.bottom='50px',self.style.right='18px'}});"></iframe> 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -272,7 +273,7 @@ a#totalmatch {
 }
 
 .news-content>.news>.news-image {
-	/* border: 1px solid blue; */
+	border: 1px solid lightgray;
 	width: 95%;
 	height: 75%;
 	display: block;
@@ -310,11 +311,13 @@ a#totalmatch {
 
 .news-title>a {
 	color: #3e3e3e;
+	font-weight: bold;
 }
 
 .remain_right>.team-emblem {
 	/* border: 1px solid black; */
 	height: 20%;
+	margin-bottom: 40px;
 	box-sizing: border-box;
 }
 
@@ -458,8 +461,8 @@ a#totalmatch {
 }
 
 .nav-menu>li {
-	margin-left: 1.5em;
-	margin-right: 1.5em;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 .subject {
@@ -680,27 +683,37 @@ a#totalmatch {
 				id="navbar">
 				<div class="nav-wrapper" align="center">
 					<div class="nav-container">
-						<a class="navbar-brand nav-logo" href="main.do">K In One</a>
+						<a class="navbar-brand nav-logo" href="/kinone/main.do">K In One</a>
 						<ul class="navbar-nav nav-menu">
-							<li class="nav-item"><a class="nav-link" href="kleagueNews.do">K리그 소식</a></li>
-							<li class="nav-item"><a class="nav-link" href="matchList.do">경기일정/결과</a></li>
-							<li class="nav-item"><a class="nav-link" href="clubList.do">클럽정보</a></li>
-							<li class="nav-item"><a class="nav-link" href="reservation.do">티켓예매</a></li>
-							<li class="nav-item"><a class="nav-link" href="rank.do">리그순위</a></li>
+							<li class="nav-item"><a class="nav-link" href="kleagueNews.do"><i class="fas fa-newspaper"></i> K리그 소식</a></li>
+							<li class="nav-item"><a class="nav-link" href="matchList.do"><i class="fas fa-calendar-alt"></i> 경기일정/결과</a></li>
+							<li class="nav-item"><a class="nav-link" href="clubList.do"><i class="fas fa-futbol"></i> 클럽정보</a></li>
+							<li class="nav-item"><a class="nav-link" href="reservation.do"><i class="fas fa-ticket-alt"></i> 티켓예매</a></li>
+							<li class="nav-item"><a class="nav-link" href="rank.do"><i class="fas fa-th-list"></i> 리그순위</a></li>
 						</ul>
 						<div class="collapse navbar-collapse justify-content-end">
 							<ul class="navbar-nav navbar-right">
 							<c:if test="${not empty sessionScope.email}">
 								<li class="nav-item">
-									<span id="welcome" class="nav-link">${sessionScope.name}님, 환영합니다</span>
+									<span id="welcome" class="nav-link">
+									<c:if test='${sessionScope.email != "admin"}'>${sessionScope.name}님</c:if>
+									</span>
 								</li>
 							</c:if>
-								<li class="nav-item">
+								<li class="nav-item" style="margin-right: 10px;">
 								<c:if test="${empty sessionScope.email}">
-									<a class="nav-link nav-text" href="join_form.do">회원가입</a>
+									<a class="nav-link nav-text" href="join_form.do"><i class="fas fa-hand-point-right"></i> 회원가입</a>
 								</c:if>
 								<c:if test="${not empty sessionScope.email}">
-									<a class="nav-link nav-text" href="mypage.do">마이페이지</a>
+									<c:choose>
+									<c:when test='${sessionScope.email == "admin"}'>
+									<a class="nav-link nav-text" href="admin/main.do"><i class="fas fa-user-cog"></i> 관리자페이지</a>
+									</c:when>
+									<c:otherwise>
+									<a class="nav-link nav-text" href="mypage.do"><i class="fas fa-user"></i> 마이페이지</a>
+									</c:otherwise>
+									</c:choose>
+									
 								</c:if>
 								</li>
 								<li class="nav-item">
@@ -743,7 +756,7 @@ a#totalmatch {
 					<div id="K1match" class="tab-pane active">
 						<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡK리그1 일정ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
 
-
+						<!-- 날짜부분 -->
 						<div class="match-container" id="K1league" align="center">
 							<!-- Nav tabs -->
 							<ul class="nav match-date" role="tablist">
@@ -755,7 +768,7 @@ a#totalmatch {
 							</c:forEach>
 							</ul>
 
-							<!-- Tab panes -->
+							<!-- 슬라이드 내용 부분 -->
 							<div class="tab-content match-detail" id="K1matchday">
 								<c:forEach var="matchday" items="${k1MatchDays}" varStatus="s1">
 									<fmt:formatDate var="key" value="${matchday}" pattern="yyyy-MM-dd"/>
@@ -768,13 +781,14 @@ a#totalmatch {
 								<div id="K1${matchday}" class="tab-pane <c:if test="${s1.count == 4}">active</c:if> each-match">
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#">&lt;</a></c:when>
+										<c:when test="${totalPage > 1}"><a onClick="slidearrow('left', this)" style="cursor: pointer;">&lt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&lt;</span></c:when>
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
 									</div>
 									<c:forEach var="amatch" items="${inDayMap['list']}" begin="${begin}" end="${end}" varStatus="s2">
-									<div class="match <c:if test="${s2.count == 2}">match-center</c:if>">
+									<div class="match <c:if test="${s2.count == 2 or s2.count == 5}">match-center</c:if> amatch${s2.count}"
+									<c:if test="${s2.count >3}">style="display:none;"</c:if>>
 										<table class="match-table">
 											<tr class="match-top">
 												<td rowspan="2" class="match-team"><img src="${url}/resources/emblem/${amatch.ccode_home}.png" title="${amatch.cname_short_h}">
@@ -811,10 +825,12 @@ a#totalmatch {
 									</div>
 									</c:forEach>
 									
-									<c:if test="${fn:length(inDayMap['list']) < 3}">
-										<c:set var="idx" value="${3- fn:length(inDayMap['list'])}"/>
-										<c:if test="${idx == 1}">
-											<div class="match">
+									<c:if test="${fn:length(inDayMap['list'])%3 != 0}">
+					<%-- 					<c:set var="idx" value="${3- fn:length(inDayMap['list'])}"/> --%>
+										<%-- <c:if test="${idx == 1}"> --%>
+										<c:if test="${fn:length(inDayMap['list'])%3 == 2}">
+											<div class="match"
+											<c:if test="${fn:length(inDayMap['list']) > 3}">style="display:none;"</c:if>>
 												<table class="match-table">
 													<tr>
 														<td colspan="4" rowspan="4" style="color: lightgray;">
@@ -825,8 +841,10 @@ a#totalmatch {
 												</table>
 											</div>
 										</c:if>
-										<c:if test="${idx == 2}">
-											<div class="match match-center">
+										<%-- <c:if test="${idx == 2}"> --%>
+										<c:if test="${fn:length(inDayMap['list'])%3 == 1}">
+											<div class="match match-center"
+											<c:if test="${fn:length(inDayMap['list']) > 3}">style="display:none;"</c:if>>
 												<table class="match-table">
 													<tr>
 														<td colspan="4" rowspan="4" style="color: lightgray;">
@@ -836,7 +854,8 @@ a#totalmatch {
 													</tr>
 												</table>
 											</div>
-											<div class="match">
+											<div class="match"
+											<c:if test="${fn:length(inDayMap['list']) > 3}">style="display:none;"</c:if>>
 												<table class="match-table">
 													<tr>
 														<td colspan="4" rowspan="4" style="color: lightgray;">
@@ -851,7 +870,7 @@ a#totalmatch {
 									
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#">&gt;</a></c:when>
+										<c:when test="${totalPage > 1}"><a onClick="slidearrow('right', this)" style="cursor: pointer;">&gt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&gt;</span></c:when>
 										<c:otherwise><span>&gt;</span></c:otherwise>
 										</c:choose>
@@ -890,7 +909,7 @@ a#totalmatch {
 								<div id="K2${matchday}" class="tab-pane <c:if test="${s1.count == 4}">active</c:if> each-match">
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#">&lt;</a></c:when>
+										<c:when test="${currentPage != 1 and totalPage != 1}"><a href="#" onClick="slidearrow('left', this)">&lt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&lt;</span></c:when>
 										<c:otherwise><span>&lt;</span></c:otherwise>
 										</c:choose>
@@ -974,7 +993,7 @@ a#totalmatch {
 									
 									<div class="match-arrow">
 										<c:choose>
-										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#">&gt;</a></c:when>
+										<c:when test="${currentPage != totalPage and totalPage != 1}"><a href="#" onClick="slidearrow('right', this)">&gt;</a></c:when>
 										<c:when test="${totalPage <= 1}"><span>&gt;</span></c:when>
 										<c:otherwise><span>&gt;</span></c:otherwise>
 										</c:choose>
@@ -991,6 +1010,30 @@ a#totalmatch {
 			</div>
 		</div>
 		<!-- 매치 일정 슬라이드 끝 -->
+		
+		<script>
+			function slidearrow(direction, obj){
+				var mdaydiv = $(obj).parents().eq(1);
+				var idval = mdaydiv.attr("id");
+			//	alert("어느쪽?"+direction);
+			//	alert("아이디는?"+idval);
+				mdaydiv.find(".match").each(function(idx){
+					if(direction == 'right'){
+						if((idx+1) <= 3){
+							$(this).css("display", "none");
+						}else {
+							$(this).css("display", "inline-block");
+						}
+					}else {
+						if((idx+1) <= 3){
+							$(this).css("display", "inline-block");
+						}else {
+							$(this).css("display", "none");
+						}
+					}
+				});
+			}
+		</script>
 		
 		<!-- 페이지 내용 들어가는 부분 -->
 		<div class="wrap_page">

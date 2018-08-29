@@ -9,6 +9,14 @@
 		insert into season values(#{seasoncode})
 	</insert>
 	
+	<select id="checkSeason" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*) from match where to_char(mdate, 'yyyy') = #{seasoncode}
+	</select>
+	
+	<delete id="delSeason" parameterType="java.lang.String">
+		delete from season where seasoncode = #{seasoncode}
+	</delete>
+	
     <select id="allLeague" resultType="java.lang.String">
     	select * from league order by lcode
     </select>
@@ -116,6 +124,26 @@
     						   c_ggoal = c_ggoal + #{c_ggoal}, c_lgoal = c_lgoal + #{c_lgoal}
     	where ccode = #{ccode} and seasoncode = #{seasoncode} and lcode = #{lcode}
     </update>
+    
+    <insert id="insertScore" parameterType="score">
+    	<selectKey order="BEFORE" keyProperty="scoreno" resultType="java.lang.Integer">
+    		select nvl(max(scoreno),0)+1 from score
+    	</selectKey>
+    	insert into score values (#{scoreno}, #{mcode}, #{ccode}, #{pcode}, #{pname}, #{goaltime}, #{isas, jdbcType=VARCHAR}, #{asname, jdbcType=VARCHAR})
+    </insert>
+    
+    <update id="updateStat" parameterType="java.util.HashMap">
+    	update player_season set
+    	<if test='sort =="g"'> p_ggoal = p_ggoal + 1 </if>
+    	<if test='sort =="a"'> p_assist = p_assist + 1 </if>
+    	<if test='sort =="l"'> p_lgoal = p_lgoal + 1 </if>
+    	<if test='sort =="count"'> gamecount = gamecount + 1 </if>
+		where pcode = #{pcode} and seasoncode = #{seasoncode} and ccode = #{ccode}
+    </update>
+    
+    <select id="matchScoreInfo" parameterType="java.lang.String" resultType="score">
+    	select * from score where mcode = #{mcode} order by goaltime
+    </select>
 <!-- ############################################################################################# -->    
 
 
@@ -132,13 +160,13 @@
 	</insert>
 
 	<!-- 관리자 구단 경기장 생성 -->
-	<insert id="mngInsertStadium" parameterType="club">
+	<insert id="mngInsertStadium" parameterType="stadium">
 		<selectKey resultType="String" keyProperty="ccode"
 			order="BEFORE">
 			select 'K' || to_char(max(to_number(substr(ccode,2)))) from club
 		</selectKey>
-		insert into stadium (ccode, sname, sphoto, capacity)
-		values (#{ccode}, #{sname}, #{sphoto, jdbcType=VARCHAR}, #{capacity})
+		insert into stadium (ccode, sname, capacity, lat, lon)
+		values (#{ccode}, #{sname}, #{capacity}, #{lat}, #{lon})
 	</insert>
 
 	<select id="mngClubCont" parameterType="String"
@@ -158,7 +186,7 @@
 
 	<!-- 상세정보 -->
 	<select id="mngClubDetail" resultType="club" parameterType="String">
-		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, c.intro, s.sname, s.sphoto, s.capacity
+		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, c.intro, s.sname, s.capacity, s.lat, s.lon
 		from club c, stadium s 
 		where c.ccode = #{ccode} and c.ccode = s.ccode
 	</select>
@@ -172,9 +200,9 @@
 	</update>
 	
 	<!-- 관리자 경기장 수정 -->
-	<update id="mngUpdateStadium" parameterType="club">
+	<update id="mngUpdateStadium" parameterType="stadium">
 		update stadium 
-		set sname = #{sname}, sphoto = #{sphoto, jdbcType=VARCHAR}, capacity = #{capacity}
+		set sname = #{sname}, capacity = #{capacity}, lat = #{lat}, lon = #{lon}
 		where ccode = #{ccode}
 	</update>
 		

@@ -10,25 +10,22 @@
 		<table class="table table-hover">
 		<thead>
 			<tr align="center" valign="middle">
-				<td style="font-family: Tahoma; font-size: 11pt;" 
-					height="26">
-					<div align="center">글번호</div><!--Test_id-->
-				</td>
-				<td style="font-family: Tahoma; font-size: 11pt;" >
+				<th style="font-family: Tahoma; font-size: 11pt;" 
+					height="26" width="5%">
+					<div align="center"></div><!--Test_id-->
+				</th>
+				<th style="font-family: Tahoma; font-size: 11pt;" width="65%">
 					<div align="center">제목</div><!--desc-->
-				</td>
-				<td style="font-family: Tahoma; font-size: 11pt;" >
+				</th>
+				<th style="font-family: Tahoma; font-size: 11pt;" width="10%">
 					<div align="center">작성자</div><!-- writer -->
-				</td>
-				<!-- <td style="font-family: Tahoma; font-size: 11pt;" >
-					<div align="center">첨부파일</div>finished
-				</td> -->
-				<td style="font-family: Tahoma; font-size: 11pt;" >
+				</th>
+				<th style="font-family: Tahoma; font-size: 11pt;" width="10%">
 					<div align="center">작성 날짜</div><!--revised -->
-				</td>
-				<td style="font-family: Tahoma; font-size: 11pt;" >
+				</th>
+				<th style="font-family: Tahoma; font-size: 11pt;" width="10%">
 					<div align="center">조회수</div><!--revised -->
-				</td>
+				</th>
 			</tr>
 			</thead>
 
@@ -103,9 +100,6 @@
 				<li class="page-item"><a class="page-link" href="boardList.do?page=${page+1}">&gt;</a></li>
 			</c:if>			
 			</ul>
-		</div>
-		<div id="bbslist_w">
-			<button type="button" onclick="location='boardwrite.do?page=${page}'" class="btn btn-info">글쓰기</button>
 		</div>
 	</div>
 </div>
