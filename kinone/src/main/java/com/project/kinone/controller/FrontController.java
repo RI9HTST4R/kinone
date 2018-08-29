@@ -794,7 +794,10 @@ public class FrontController {
 		model.addAttribute("result", result);
 		return "delete_member_result";
 	}
-	
+	@RequestMapping(value = "/error404.do")
+	public String error404() {
+		return "error404";
+	}
 	
 	
 	

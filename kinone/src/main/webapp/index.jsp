@@ -10,6 +10,7 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 	$(window).load(function() {
+	//	location.href = "error404.do"
 		location.href = "main.do";
 	//	location.href = "rank.do"
 	//	location.href = "matchList.do"
