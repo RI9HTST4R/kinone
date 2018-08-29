@@ -101,9 +101,6 @@
 			</c:if>			
 			</ul>
 		</div>
-		<div id="bbslist_w">
-			<button type="button" onclick="location='boardwrite.do?page=${page}'" class="btn btn-info">글쓰기</button>
-		</div>
 	</div>
 </div>
 

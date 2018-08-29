@@ -11,6 +11,14 @@
 		vertical-align: middle;
 		text-align: center;
 	}
+	select.form-control {
+	display: inline-block;
+	width: 118px;
+	padding: 0px;
+	border-radius: 2px;
+	margin-bottom: 1rem;
+	height: 30px;
+	}
 </style>
 <div class="container">
 	<div class="wrapper">
@@ -25,22 +33,22 @@
 			<table class="table table-sm table-bordered">
 				<tr>
 					<th>선수 이름</th>
-					<th>소속 구단</th>
+					<th>소속팀</th>
 					<th>백넘버</th>
 					<th>포지션</th>
 					<th>사진</th>
 				</tr>
 				<tr>
 					<td><input type="text" name="pname"></td>
-					<td><select name="ccode">
-							<option value="">팀</option>
+					<td><select name="ccode" class="form-control">
+							<option value="">팀 선택</option>
 							<c:forEach var="i" items="${cn}">
 								<option value="${i.key }">${i.value }</option>
 							</c:forEach>
 					</select></td>
 					<td><input type="text" name="pno"></td>
-					<td><select name="position">
-							<option value="">포지션</option>
+					<td><select name="position" class="form-control">
+							<option value="">포지션 선택</option>
 							<option value="GK">GK</option>
 							<option value="DF">DF</option>
 							<option value="MF">MF</option>

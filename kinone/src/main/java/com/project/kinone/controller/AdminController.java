@@ -7,9 +7,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,6 +36,7 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.model.Score;
+import com.project.kinone.model.Stadium;
 import com.project.kinone.service.AdminServiceImpl;
 import com.project.kinone.service.PlayerServiceImpl;
 import com.project.kinone.util.Lineup;
@@ -41,7 +45,7 @@ import com.project.kinone.util.clubname;
 
 @Controller
 public class AdminController{
-
+	
 	@Autowired
 	private AdminServiceImpl adminService;
 
@@ -53,11 +57,10 @@ public class AdminController{
 
 	// 어드민 메인페이지
 	@RequestMapping(value = "/admin/main.do", method = RequestMethod.GET)
-	public String main(Model model) throws Exception{
+	public String main(Model model, HttpServletRequest req) throws Exception{
 		String seasoncode = adminService.getTopSeason();
 		List<String> seasonlist = adminService.getAllSeason();
 		Date sysdate = new Date();
-		
 		model.addAttribute("seasoncode", seasoncode);
 		model.addAttribute("seasonlist", seasonlist);
 		model.addAttribute("sysdate", sysdate);
@@ -505,11 +508,14 @@ public class AdminController{
 		System.out.println("클럽 생성 서비스");
 
 		List<MultipartFile> fileList = mtfRequest.getFiles("file");
-
 		String epath = mtfRequest.getSession().getServletContext().getRealPath("resources/emblem");
-		String spath = mtfRequest.getSession().getServletContext().getRealPath("resources/sphoto");
+		Stadium st = new Stadium();
+		st.setSname(mngclub.getSname());
+		st.setCapacity(mngclub.getCapacity());
+		st.setLat(mngclub.getLat());
+		st.setLon(mngclub.getLon());
 		adminService.insertClub(mngclub, fileList, epath);
-		adminService.insertStadium(mngclub, fileList, spath);
+		adminService.insertStadium(st);
 
 		return "redirect:/admin/club_view.do";
 	}
@@ -576,10 +582,15 @@ public class AdminController{
 		List<MultipartFile> fileList = mtfRequest.getFiles("file");
 	
 		String epath = mtfRequest.getSession().getServletContext().getRealPath("resources/emblem");
-		String spath = mtfRequest.getSession().getServletContext().getRealPath("resources/sphoto");
+		Stadium st = new Stadium();
+		st.setCcode(mngClub.getCcode());
+		st.setSname(mngClub.getSname());
+		st.setCapacity(mngClub.getCapacity());
+		st.setLat(mngClub.getLat());
+		st.setLon(mngClub.getLon());
 
 		adminService.updateClub(mngClub, fileList, epath);
-		adminService.updateStadium(mngClub, fileList, spath);
+		adminService.updateStadium(st);
 
 		return "redirect:/admin/club_view.do";
 
@@ -681,7 +692,6 @@ public class AdminController{
 		MultipartFile file = mhsr.getFile("file");
 		
 		String path = mhsr.getSession().getServletContext().getRealPath("/resources/player/"+player.getCcode());
-		
 		//업로드 파일명을 위한 새 pcode 꺼내오기
 		String pcode;
 		if ((int)(Math.log10(Integer.parseInt(adminService.getnewpcode().substring(1))+1)+1)>3) {

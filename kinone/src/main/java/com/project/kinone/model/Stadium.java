@@ -4,7 +4,6 @@ public class Stadium {
 
 	private String ccode;
 	private String sname;
-	private String sphoto;
 	private int capacity;
 	private double lat; // 위도
 	private double lon; // 경도
@@ -20,12 +19,6 @@ public class Stadium {
 	}
 	public void setSname(String sname) {
 		this.sname = sname;
-	}
-	public String getSphoto() {
-		return sphoto;
-	}
-	public void setSphoto(String sphoto) {
-		this.sphoto = sphoto;
 	}
 	public int getCapacity() {
 		return capacity;
@@ -47,7 +40,7 @@ public class Stadium {
 	}
 	@Override
 	public String toString() {
-		return "Stadium [ccode=" + ccode + ", sname=" + sname + ", sphoto=" + sphoto + ", capacity=" + capacity
+		return "Stadium [ccode=" + ccode + ", sname=" + sname + ", capacity=" + capacity
 				+ ", lat=" + lat + ", lon=" + lon + "]";
 	}
 	

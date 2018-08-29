@@ -17,6 +17,7 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.model.Score;
+import com.project.kinone.model.Stadium;
 
 @Repository
 public class AdminDAOImpl implements AdminDAOInter {
@@ -152,10 +153,10 @@ public class AdminDAOImpl implements AdminDAOInter {
 		session.insert("adminmapper.mngInsertClub", mngClub);
 	}
 
-	public void insertStadium(Club mngClub) throws Exception {
+	public void insertStadium(Stadium st) throws Exception {
 		// TODO Auto-generated method stub
 
-		session.insert("adminmapper.mngInsertStadium", mngClub);
+		session.insert("adminmapper.mngInsertStadium", st);
 	}
 
 	public Club getClubCont(String ccode) throws Exception {
@@ -178,9 +179,9 @@ public class AdminDAOImpl implements AdminDAOInter {
 		session.update("adminmapper.mngUpdateClub", mngClub);
 	}
 
-	public void updateStadium(Club mngClub) throws Exception {
+	public void updateStadium(Stadium st) throws Exception {
 		// TODO Auto-generated method stub
-		session.update("adminmapper.mngUpdateStadium", mngClub);
+		session.update("adminmapper.mngUpdateStadium", st);
 	}
 
 

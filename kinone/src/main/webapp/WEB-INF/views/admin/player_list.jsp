@@ -8,41 +8,51 @@
 		vertical-align: middle;
 		text-align: center;
 	}
+	#psearchdiv > span, #psearchdiv > select, #psearchdiv > form {
+		display: inline-block;
+	}
+	select.form-control {
+	display: inline-block;
+	width: 118px;
+	padding: 0px;
+	border-radius: 2px;
+	margin-bottom: 1rem;
+	height: 30px;
+	}
 </style>
 <div class="container">
 	<div class="wrapper">
 		<h1 id="title">선수 리스트</h1>
-		<hr> 
-			포지션 검색
-			<select name="sposition" id="sposition" >
-				<option value="">포지션</option>
+		<hr>
+			<h4>선수 검색</h4><br/>
+			<div id="psearchdiv">
+			<select name="sposition" id="sposition" class="form-control">
+				<option value="">포지션 선택</option>
 				<option value="GK">GK</option>
 				<option value="FW">FW</option>
 				<option value="MF">MF</option>
 				<option value="DF">DF</option>
 			</select>
-			팀 검색
-			<select name="teamcode" id="teamcode">
-				<option value="">팀</option>
+			<select name="teamcode" id="teamcode" class="form-control">
+				<option value="">팀 선택</option>
 				<c:forEach var="i" items="${cn}">
 				<option value="${i.key }">${i.value }</option>
 				</c:forEach>
 				
-			</select>
+			</select> 
 			<form action="/kinone/admin/plist.do" method="get">
-			선수 이름 검색
+			<span style="margin: 0 10px;">이름 :</span>
 			<input type="text" name="keyword" > 
 			<input type="submit" value="확인">
 			</form>
-
-
+			</div>
+<br/>
 <table class="table table-sm" style="width: 700px;">
 	<tr>
 	<th>선수 이름</th>
 	<th>소속 구단</th>
 	<th>포지션</th>
 	<th>선수번호</th>
-	<th>사진</th>
 	</tr>
 	<c:if test="${empty list }">
 		<tr>
@@ -58,8 +68,6 @@
 					<c:out value="${cn[key]}"/></td>
 			<td>${player.position }</td>
 			<td>${player.pno }</td>
-			<td><img src="/kinone/resources/player/${player.ccode}/${player.pcode}.png" width=60height=100/></td>
-			
 		</tr>
 	</c:forEach>
 	</c:if>

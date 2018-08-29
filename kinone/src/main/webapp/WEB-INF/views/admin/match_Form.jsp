@@ -13,7 +13,13 @@ h1#title {
 	margin-top: 0px;
 }
 
-#selleague {
+select.form-control {
+	display: inline-block;
+	width: 118px;
+	padding: 0px;
+	border-radius: 2px;
+	margin-bottom: 1rem;
+	height: 30px;
 	margin-top: 30px;
 	margin-left: 20px;
 }
@@ -164,7 +170,7 @@ h1#title {
 			<h1 id="title">매치 일정 등록</h1>
 			<hr>
 			<div id="selleague">
-				리그 : <select name="lcode" id="lcode">
+				리그 : <select name="lcode" id="lcode" class="form-control">
 					<option>K1</option>
 					<option>K2</option>
 				</select>

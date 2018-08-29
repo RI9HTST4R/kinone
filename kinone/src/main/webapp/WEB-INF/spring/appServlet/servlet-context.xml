@@ -32,6 +32,7 @@
 	</beans:bean>
 	
 	
+	
 	<!-- 인터셉터 설정 -->	
 	<beans:bean id="sessionChk" class="com.project.kinone.util.sessionchckr"/>	
 	 <interceptors>

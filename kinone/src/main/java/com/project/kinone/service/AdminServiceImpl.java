@@ -26,6 +26,7 @@ import com.project.kinone.model.Player;
 import com.project.kinone.model.Player_detail;
 import com.project.kinone.model.Player_season;
 import com.project.kinone.model.Score;
+import com.project.kinone.model.Stadium;
 import com.project.kinone.util.FileUpload;
 import com.project.kinone.util.FileUpload2;
 import com.project.kinone.util.Lineup;
@@ -388,16 +389,8 @@ public class AdminServiceImpl implements AdminServiceInter {
 		adminDao.insertClub(mngClub);
 	}
 
-	public void insertStadium(Club mngClub, List<MultipartFile> fileList, String spath) throws Exception {
-		// TODO Auto-generated method stub
-
-		// fileList의 1번 인덱스가 sphoto 이미지 파일
-		MultipartFile sfile = fileList.get(1);
-
-		String filePath = FileUpload.fileUpload(sfile, spath);
-
-		mngClub.setSphoto(filePath);
-		adminDao.insertStadium(mngClub);
+	public void insertStadium(Stadium st) throws Exception {
+		adminDao.insertStadium(st);
 	}
 
 	public int deleteClub(HttpServletResponse response, String ccode, String cname, String cmanager) throws Exception {
@@ -457,26 +450,10 @@ public class AdminServiceImpl implements AdminServiceInter {
 		adminDao.updateClub(mngClub);
 	}
 
-	public void updateStadium(Club mngClub, List<MultipartFile> fileList, String spath) throws Exception {
+	public void updateStadium(Stadium st) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("update service stadium : " + mngClub.getCcode() + ", spath : " + spath);
-
-		MultipartFile sfile = fileList.get(1);
-
-		System.out.println("updateclub service sfile : " + sfile);
-		String sphoto = FileUpload.fileUpload(sfile, spath);
-
-		if(sphoto.split("\\.").length==2) {
-			mngClub.setSphoto(sphoto);			
-		}else {
-			Club before = getClubDetail(mngClub.getCcode());
-			mngClub.setSphoto(before.getSphoto());
-		}
-		
-		System.out.println("sphoto : " + sphoto);
-		System.out.println("mngClub.sphoto : " + mngClub.getSphoto());
-
-		adminDao.updateStadium(mngClub);
+		System.out.println("update service stadium : " + st.getCcode());
+		adminDao.updateStadium(st);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////

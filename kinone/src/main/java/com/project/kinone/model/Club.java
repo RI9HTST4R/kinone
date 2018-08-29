@@ -10,7 +10,6 @@ public class Club {
 	private int isbeing;
 	// 경기장 생성
 	private String sname;
-	private String sphoto;
 	private int capacity;
 	private double lat; // 위도
 	private double lon; // 경도
@@ -63,12 +62,6 @@ public class Club {
 	public void setSname(String sname) {
 		this.sname = sname;
 	}
-	public String getSphoto() {
-		return sphoto;
-	}
-	public void setSphoto(String sphoto) {
-		this.sphoto = sphoto;
-	}
 	public int getCapacity() {
 		return capacity;
 	}
@@ -91,8 +84,8 @@ public class Club {
 	@Override
 	public String toString() {
 		return "Club [ccode=" + ccode + ", cname=" + cname + ", cname_short=" + cname_short + ", cmanager=" + cmanager
-				+ ", emblem=" + emblem + ", intro=" + intro + ", isbeing=" + isbeing + ", sname=" + sname + ", sphoto="
-				+ sphoto + ", capacity=" + capacity + ", lat=" + lat + ", lon=" + lon + "]";
+				+ ", emblem=" + emblem + ", intro=" + intro + ", isbeing=" + isbeing + ", sname=" + sname + 
+				", capacity=" + capacity + ", lat=" + lat + ", lon=" + lon + "]";
 	}
 	
 	

@@ -160,13 +160,13 @@
 	</insert>
 
 	<!-- 관리자 구단 경기장 생성 -->
-	<insert id="mngInsertStadium" parameterType="club">
+	<insert id="mngInsertStadium" parameterType="stadium">
 		<selectKey resultType="String" keyProperty="ccode"
 			order="BEFORE">
 			select 'K' || to_char(max(to_number(substr(ccode,2)))) from club
 		</selectKey>
-		insert into stadium (ccode, sname, sphoto, capacity)
-		values (#{ccode}, #{sname}, #{sphoto, jdbcType=VARCHAR}, #{capacity})
+		insert into stadium (ccode, sname, capacity, lat, lon)
+		values (#{ccode}, #{sname}, #{capacity}, #{lat}, #{lon})
 	</insert>
 
 	<select id="mngClubCont" parameterType="String"
@@ -186,7 +186,7 @@
 
 	<!-- 상세정보 -->
 	<select id="mngClubDetail" resultType="club" parameterType="String">
-		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, c.intro, s.sname, s.sphoto, s.capacity, s.lat, s.lon
+		select c.ccode, c.cname, c.cname_short, c.cmanager, c.emblem, c.intro, s.sname, s.capacity, s.lat, s.lon
 		from club c, stadium s 
 		where c.ccode = #{ccode} and c.ccode = s.ccode
 	</select>
@@ -200,9 +200,9 @@
 	</update>
 	
 	<!-- 관리자 경기장 수정 -->
-	<update id="mngUpdateStadium" parameterType="club">
+	<update id="mngUpdateStadium" parameterType="stadium">
 		update stadium 
-		set sname = #{sname}, sphoto = #{sphoto, jdbcType=VARCHAR}, capacity = #{capacity}
+		set sname = #{sname}, capacity = #{capacity}, lat = #{lat}, lon = #{lon}
 		where ccode = #{ccode}
 	</update>
 		

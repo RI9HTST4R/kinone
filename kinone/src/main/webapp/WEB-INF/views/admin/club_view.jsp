@@ -6,28 +6,29 @@
 		<h1 id="title">클럽 리스트</h1>
 		<hr>
 		<form>
-			<table class="table table-sm">
+			<table class="table" style="width: auto;">
 				<thead>
-					<th>목록</th>
-					<th>클럽명</th>
-					<th>감독명</th>
-					<th><input type="button" value="클럽 추가"
-				onclick="location.href='create_club.do'"></th>
+					<tr>
+						<th style="text-align: center;">클럽코드</th>
+						<th style="text-align: center;">클럽명</th>
+						<th style="text-align: center;">감독명</th>
+						<th style="text-align: center;"></th>
+					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="mngClub" items="${ mngClubList }"
 						varStatus="status">
 						<tr>
-							<td>${ mngClub.ccode }</td>
-							<td><a href="detail_club.do?ccode=${mngClub.ccode}">${ mngClub.cname }</a></td>
-							<td>${ mngClub.cmanager }</td>
-							<td><input type="button" value="삭제"
+							<td style="text-align: center;">${ mngClub.ccode }</td>
+							<td style="text-align: justify;"><a href="detail_club.do?ccode=${mngClub.ccode}">${ mngClub.cname }</a></td>
+							<td style="text-align: center;">${ mngClub.cmanager }</td>
+							<td style="text-align: center;"><input type="button" value="삭제"
 								onclick="location.href='delete_club.do?ccode=${mngClub.ccode}'"></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
-			
+
 		</form>
 	</div>
 </div>
